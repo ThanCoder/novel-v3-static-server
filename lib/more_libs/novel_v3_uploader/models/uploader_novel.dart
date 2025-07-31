@@ -1,3 +1,4 @@
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/server_file_services.dart';
 import 'package:than_pkg/services/map_services.dart';
 import 'package:uuid/uuid.dart';
 
@@ -36,13 +37,13 @@ class UploaderNovel {
     String mc = 'Unknown',
     String tags = '',
     String pageUrls = '',
-    String coverUrl = '',
     String desc = '',
     bool isAdult = false,
     bool isCompleted = false,
   }) {
+    final id = Uuid().v4();
     return UploaderNovel(
-      id: Uuid().v4(),
+      id: id,
       title: title,
       author: author,
       translator: translator,
@@ -50,7 +51,7 @@ class UploaderNovel {
       tags: tags,
       desc: desc,
       pageUrls: pageUrls,
-      coverUrl: coverUrl,
+      coverUrl: '${ServerFileServices.getImagePath()}/$id.png',
       date: DateTime.now(),
       isAdult: isAdult,
       isCompleted: isCompleted,
@@ -113,7 +114,7 @@ class UploaderNovel {
   }
 
   // new date
-  void newDate(){
+  void newDate() {
     date = DateTime.now();
   }
 }

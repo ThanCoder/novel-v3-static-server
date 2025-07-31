@@ -74,6 +74,7 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 15,
             children: [
+              TCoverChooser(coverPath: novel.coverUrl),
               TTextField(
                 label: Text('အမည်'),
                 controller: titleController,
@@ -94,10 +95,25 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
                 controller: mcController,
                 maxLines: 1,
               ),
-              TTextField(
-                label: Text('Cover Url'),
-                controller: coverUrlController,
-                maxLines: 1,
+              // adult
+              SwitchListTile.adaptive(
+                title: Text('Is Adult'),
+                value: novel.isAdult,
+                onChanged: (value) {
+                  setState(() {
+                    novel.isAdult = value;
+                  });
+                },
+              ),
+              // isComplted
+              SwitchListTile.adaptive(
+                title: Text('Is Completed'),
+                value: novel.isCompleted,
+                onChanged: (value) {
+                  setState(() {
+                    novel.isCompleted = value;
+                  });
+                },
               ),
               // tags
               TTagsWrapView(
