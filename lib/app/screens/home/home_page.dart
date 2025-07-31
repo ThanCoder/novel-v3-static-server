@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/components/novel_list_item.dart';
 import 'package:novel_v3_static_server/app/routes_helper.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/uploader_novel_services.dart';
 import 'package:provider/provider.dart';
-import 'package:t_widgets/widgets/t_loader.dart';
+import 'package:t_widgets/t_widgets.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,7 +33,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(title: Text('Home Page')),
       body: isLoading
-          ? TLoader()
+          ? Center(child: TLoaderRandom())
           : ListView.builder(
               itemCount: list.length,
               itemBuilder: (context, index) => NovelListItem(
@@ -42,6 +43,15 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final novel = UploaderNovel.create();
+          await context.read<UploaderNovelServices>().add(novel);
+          if (!context.mounted) return;
+          goEditNovelScreen(context, novel);
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }

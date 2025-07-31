@@ -58,13 +58,19 @@ class UploaderNovel {
     );
   }
 
+  factory UploaderNovel.fromMapWithUrl(Map<String, dynamic> map) {
+    final novel = UploaderNovel.fromMap(map);
+    novel.coverUrl = ServerFileServices.getImageUrl('${novel.id}.png');
+    return novel;
+  }
+
   factory UploaderNovel.fromMap(Map<String, dynamic> map) {
     final dateFromMillisecondsSinceEpoch = MapServices.get<int>(map, [
       'date',
     ], defaultValue: 0);
 
     return UploaderNovel(
-      id: Uuid().v4(),
+      id: MapServices.get(map, ['id'], defaultValue: ''),
       title: MapServices.get(map, ['title'], defaultValue: 'Untitled'),
       author: MapServices.get(map, ['author'], defaultValue: 'Unknown'),
       translator: MapServices.get(map, ['translator'], defaultValue: 'Unknown'),

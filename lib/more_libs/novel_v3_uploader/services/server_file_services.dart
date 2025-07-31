@@ -21,4 +21,8 @@ class ServerFileServices {
     var rootPath = absPath ? Directory.current.path : '';
     return PathUtil.createDir('$rootPath/server');
   }
+
+  static String getImageUrl(String name) {
+    return 'https://raw.githubusercontent.com/ThanCoder/novel-v3-static-server/refs/heads/main/server/images/$name';
+  }
 }
