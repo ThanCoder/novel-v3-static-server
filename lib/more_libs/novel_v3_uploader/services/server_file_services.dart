@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/constants.dart';
 import 'package:novel_v3_static_server/more_libs/setting/path_util.dart';
 
 class ServerFileServices {
@@ -23,6 +24,21 @@ class ServerFileServices {
   }
 
   static String getImageUrl(String name) {
-    return 'https://raw.githubusercontent.com/ThanCoder/novel-v3-static-server/refs/heads/main/server/images/$name';
+    return '$serverGithubImageUrl/$name';
+  }
+
+  static List<String> getAccessableConfigFiles(List<String> list){
+    
+    return list;
+  }
+
+  static List<String> getAccessableFiles(List<String> list){
+    list = list.where((e){
+      if(e.endsWith('.npz') || e.endsWith('.pdf')){
+        return true;
+      }
+      return false;
+    }).toList();
+    return list;
   }
 }

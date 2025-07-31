@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/screens/home/home_screen.dart';
+import 'package:novel_v3_static_server/more_libs/setting/app_notifier.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+    return ValueListenableBuilder(
+      valueListenable: appConfigNotifier,
+      builder: (context, config, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: config.isDarkTheme ? ThemeData.dark() : null,
+          home: HomeScreen(),
+        );
+      },
     );
   }
 }

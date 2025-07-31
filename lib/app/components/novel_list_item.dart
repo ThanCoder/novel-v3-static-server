@@ -6,12 +6,22 @@ import 'package:than_pkg/extensions/datetime_extension.dart';
 class NovelListItem extends StatelessWidget {
   UploaderNovel novel;
   void Function(UploaderNovel novel) onClicked;
-  NovelListItem({super.key, required this.novel, required this.onClicked});
+  void Function(UploaderNovel novel)? onRightClicked;
+  NovelListItem({
+    super.key,
+    required this.novel,
+    required this.onClicked,
+    this.onRightClicked,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => onClicked(novel),
+      onSecondaryTap: () {
+        if (onRightClicked == null) return;
+        onRightClicked!(novel);
+      },
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Card(

@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:novel_v3_static_server/more_libs/general_server/index.dart';
 import 'package:t_widgets/dialogs/index.dart';
+import 'package:t_widgets/functions/index.dart';
 import 'package:t_widgets/widgets/index.dart';
 import 'package:than_pkg/than_pkg.dart';
 
@@ -30,11 +32,13 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
   bool isChanged = false;
   bool isCustomPathTextControllerTextSelected = false;
   late AppConfigModel config;
-  TextEditingController customPathTextController = TextEditingController();
+  final customPathTextController = TextEditingController();
+  final forwardProxyController = TextEditingController();
 
   void init() async {
     customPathTextController.text = '${getAppExternalRootPath()}/.$appName';
     config = appConfigNotifier.value;
+    forwardProxyController.text = config.forwardProxyUrl;
   }
 
   void _saveConfig() async {
@@ -65,7 +69,8 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
       setState(() {
         isChanged = false;
       });
-      Navigator.pop(context);
+      showTSnackBar(context, 'Config Saved');
+      // Navigator.pop(context);
     } catch (e) {
       debugPrint('saveConfig: ${e.toString()}');
     }
@@ -101,9 +106,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
         _onBackpress();
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Setting'),
-        ),
+        appBar: AppBar(title: const Text('Setting')),
         body: ListView(
           children: [
             // theme
@@ -140,14 +143,35 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                       onPressed: () {
                         _saveConfig();
                       },
-                      icon: const Icon(
-                        Icons.save,
-                      ),
+                      icon: const Icon(Icons.save),
                     ),
                   )
-                : Container(),
-
-            //
+                : SizedBox.shrink(),
+            //proxy server
+            TListTileWithDesc(
+              title: 'Custom Proxy Server',
+              trailing: Switch.adaptive(
+                value: config.isUseProxyServer,
+                onChanged: (value) {
+                  setState(() {
+                    config.isUseProxyServer = value;
+                    isChanged = true;
+                  });
+                },
+              ),
+            ),
+            config.isUseProxyServer
+                ? ForwardProxyTTextField(
+                    controller: forwardProxyController,
+                    onChanged: (value) {
+                      config.forwardProxyUrl = value;
+                      isChanged = true;
+                      setState(() {
+                        
+                      });
+                    },
+                  )
+                : SizedBox.shrink(),
           ],
         ),
         floatingActionButton: isChanged

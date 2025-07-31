@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
+import 'package:novel_v3_static_server/more_libs/setting/path_util.dart';
 import 'package:t_widgets/widgets/index.dart';
 import 'package:than_pkg/extensions/datetime_extension.dart';
 
@@ -14,7 +15,6 @@ class OnlineNovelListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(novel.coverUrl);
     return GestureDetector(
       onTap: () => onClicked(novel),
       child: MouseRegion(
@@ -29,7 +29,10 @@ class OnlineNovelListItem extends StatelessWidget {
                 SizedBox(
                   width: 180,
                   height: 220,
-                  child: TImageUrl(url: novel.coverUrl),
+                  child: TCacheImage(
+                    url: novel.coverUrl,
+                    cachePath: PathUtil.getCachePath(),
+                  ),
                 ),
                 Column(
                   // mainAxisAlignment: MainAxisAlignment.start,

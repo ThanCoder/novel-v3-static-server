@@ -1,5 +1,19 @@
 [
  {
+  "id": "709bdeb9-e1e9-40e3-8fee-beefde670021",
+  "title": "သတ်ဖြတ်သူသွေးနတ်ဘုရား",
+  "author": "Unknown",
+  "translator": "Unknown",
+  "mc": "Unknown",
+  "tags": "",
+  "desc": "",
+  "pageUrls": "",
+  "coverUrl": "/home/than/projects/static_servers/novel_v3_static_server/server/images/709bdeb9-e1e9-40e3-8fee-beefde670021.png",
+  "date": 1753957263239,
+  "isAdult": false,
+  "isCompleted": true
+ },
+ {
   "id": "27e49991-ced9-4128-a01b-7ffb26be31c4",
   "title": "မြင်းထိန်းသမားလေးရဲ့နတ်ဘုရားမှတ်တမ်း",
   "author": "Unknown",
@@ -12,20 +26,6 @@
   "date": 1753956834974,
   "isAdult": false,
   "isCompleted": false
- },
- {
-  "id": "709bdeb9-e1e9-40e3-8fee-beefde670021",
-  "title": "သတ်ဖြတ်သူသွေးနတ်ဘုရား",
-  "author": "Unknown",
-  "translator": "Unknown",
-  "mc": "Unknown",
-  "tags": "",
-  "desc": "",
-  "pageUrls": "",
-  "coverUrl": "/home/than/projects/static_servers/novel_v3_static_server/server/images/709bdeb9-e1e9-40e3-8fee-beefde670021.png",
-  "date": 1753956550626,
-  "isAdult": false,
-  "isCompleted": true
  },
  {
   "id": "f13b5358-1a8f-4b98-bbf9-793ba654c7f7",

@@ -5,6 +5,13 @@ import 'app_notifier.dart';
 import 'constants.dart';
 
 class Setting {
+  static String getForwardProxyUrl(String url) {
+    if (appConfigNotifier.value.isUseProxyServer) {
+      return '${appConfigNotifier.value.forwardProxyUrl}?url=$url';
+    }
+    return url;
+  }
+
   static Future<void> initAppConfigService() async {
     try {
       final rootPath = await ThanPkg.platform.getAppRootPath();

@@ -24,6 +24,37 @@ class _HomePageState extends State<HomePage> {
     context.read<UploaderNovelServices>().initList();
   }
 
+  void _showMenu(UploaderNovel novel) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: 150),
+          child: Column(
+            spacing: 5,
+            children: [
+              ListTile(
+                title: Text(
+                  novel.title,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.edit_document),
+                title: Text('Edit'),
+                onTap: () {
+                  Navigator.pop(context);
+                  goEditNovelScreen(context, novel);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<UploaderNovelServices>();
@@ -39,8 +70,9 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) => NovelListItem(
                 novel: list[index],
                 onClicked: (novel) {
-                  goEditNovelScreen(context, novel);
+                  goEditNovelContentScreen(context, novel);
                 },
+                onRightClicked: _showMenu,
               ),
             ),
       floatingActionButton: FloatingActionButton(
