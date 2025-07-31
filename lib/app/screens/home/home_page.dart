@@ -1,0 +1,47 @@
+import 'package:flutter/material.dart';
+import 'package:novel_v3_static_server/app/components/novel_list_item.dart';
+import 'package:novel_v3_static_server/app/routes_helper.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/uploader_novel_services.dart';
+import 'package:provider/provider.dart';
+import 'package:t_widgets/widgets/t_loader.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((e) => init());
+    super.initState();
+  }
+
+  void init() async {
+    context.read<UploaderNovelServices>().initList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<UploaderNovelServices>();
+    final isLoading = provider.isLoading;
+    final list = provider.getList;
+
+    return Scaffold(
+      appBar: AppBar(title: Text('Home Page')),
+      body: isLoading
+          ? TLoader()
+          : ListView.builder(
+              itemCount: list.length,
+              itemBuilder: (context, index) => NovelListItem(
+                novel: list[index],
+                onClicked: (novel) {
+                  goEditNovelScreen(context, novel);
+                },
+              ),
+            ),
+    );
+  }
+}

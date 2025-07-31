@@ -1,0 +1,1 @@
+# novel v3 static server create app
