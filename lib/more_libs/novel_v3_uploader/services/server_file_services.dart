@@ -18,6 +18,13 @@ class ServerFileServices {
     return imagePath;
   }
 
+  static String getContentDBFilesPath({bool absPath = true}) {
+    final imagePath = PathUtil.createDir(
+      '${getRootPath(absPath: absPath)}/content_db',
+    );
+    return imagePath;
+  }
+
   static String getRootPath({bool absPath = true}) {
     var rootPath = absPath ? Directory.current.path : '';
     return PathUtil.createDir('$rootPath/server');
@@ -27,14 +34,13 @@ class ServerFileServices {
     return '$serverGithubImageUrl/$name';
   }
 
-  static List<String> getAccessableConfigFiles(List<String> list){
-    
+  static List<String> getAccessableConfigFiles(List<String> list) {
     return list;
   }
 
-  static List<String> getAccessableFiles(List<String> list){
-    list = list.where((e){
-      if(e.endsWith('.npz') || e.endsWith('.pdf')){
+  static List<String> getAccessableFiles(List<String> list) {
+    list = list.where((e) {
+      if (e.endsWith('.npz') || e.endsWith('.pdf')) {
         return true;
       }
       return false;

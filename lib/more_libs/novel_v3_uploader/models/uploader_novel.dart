@@ -12,6 +12,7 @@ class UploaderNovel {
   String mc;
   String pageUrls;
   String coverUrl;
+  String coverPath;
   DateTime date;
   bool isAdult;
   bool isCompleted;
@@ -25,6 +26,7 @@ class UploaderNovel {
     required this.mc,
     required this.pageUrls,
     required this.coverUrl,
+    required this.coverPath,
     required this.date,
     required this.isAdult,
     required this.isCompleted,
@@ -51,7 +53,8 @@ class UploaderNovel {
       tags: tags,
       desc: desc,
       pageUrls: pageUrls,
-      coverUrl: '${ServerFileServices.getImagePath()}/$id.png',
+      coverUrl: '${ServerFileServices.getImageUrl(id)}.png',
+      coverPath: '${ServerFileServices.getImagePath()}/$id.png',
       date: DateTime.now(),
       isAdult: isAdult,
       isCompleted: isCompleted,
@@ -79,6 +82,7 @@ class UploaderNovel {
       desc: MapServices.get(map, ['desc'], defaultValue: ''),
       pageUrls: MapServices.get(map, ['pageUrls'], defaultValue: ''),
       coverUrl: MapServices.get(map, ['coverUrl'], defaultValue: ''),
+      coverPath: MapServices.get(map, ['coverPath'], defaultValue: ''),
       date: DateTime.fromMillisecondsSinceEpoch(dateFromMillisecondsSinceEpoch),
       isAdult: MapServices.get(map, ['isAdult'], defaultValue: false),
       isCompleted: MapServices.get(map, ['isCompleted'], defaultValue: false),
@@ -95,6 +99,7 @@ class UploaderNovel {
     'desc': desc,
     'pageUrls': pageUrls,
     'coverUrl': coverUrl,
+    'coverPath': coverPath,
     'date': date.millisecondsSinceEpoch,
     'isAdult': isAdult,
     'isCompleted': isCompleted,

@@ -34,7 +34,7 @@ class NovelListItem extends StatelessWidget {
                 SizedBox(
                   width: 180,
                   height: 220,
-                  child: TImageFile(path: novel.coverUrl),
+                  child: TImageFile(path: novel.coverPath),
                 ),
                 Column(
                   // mainAxisAlignment: MainAxisAlignment.start,

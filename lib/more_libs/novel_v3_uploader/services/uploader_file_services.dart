@@ -4,7 +4,7 @@ import '../models/uploader_file.dart';
 
 import 'uploader_config_services.dart';
 
-class UploaderContentFileServices extends ChangeNotifier {
+class UploaderFileServices extends ChangeNotifier {
   static String dbName = 'uploader_file.db.json';
   final List<UploaderFile> _list = [];
 
@@ -28,22 +28,18 @@ class UploaderContentFileServices extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> add(UploaderFile file) async {
+  Future<void> add(String filepath, UploaderFile file) async {
     isLoading = true;
     notifyListeners();
     try {
-      // await Future.delayed(Duration(seconds: 1));
-      // check already exists title
-      final findedIndex = _list.indexWhere((e) => e.title == file.title);
-      if (findedIndex != -1) {
-        // ရှိနေလို့
-        throw Exception('title already exists!');
-      }
-
       _list.insert(0, file);
 
       final mapList = _list.map((e) => e.toMap).toList();
-      await UploaderConfigServices.setListConfig(mapList, isPrettyJson: true);
+      await UploaderConfigServices.setListConfig(
+        dbName: dbName,
+        mapList,
+        isPrettyJson: true,
+      );
     } catch (e) {
       debugPrint(e.toString());
     } finally {
@@ -66,7 +62,11 @@ class UploaderContentFileServices extends ChangeNotifier {
       _list.removeAt(findedIndex);
 
       final mapList = _list.map((e) => e.toMap).toList();
-      await UploaderConfigServices.setListConfig( dbName: dbName,mapList, isPrettyJson: true);
+      await UploaderConfigServices.setListConfig(
+        dbName: dbName,
+        mapList,
+        isPrettyJson: true,
+      );
     } catch (e) {
       debugPrint(e.toString());
     } finally {
@@ -92,7 +92,11 @@ class UploaderContentFileServices extends ChangeNotifier {
       _list.sortDate();
 
       final mapList = _list.map((e) => e.toMap).toList();
-      await UploaderConfigServices.setListConfig( dbName: dbName,mapList, isPrettyJson: true);
+      await UploaderConfigServices.setListConfig(
+        dbName: dbName,
+        mapList,
+        isPrettyJson: true,
+      );
     } catch (e) {
       debugPrint(e.toString());
     } finally {

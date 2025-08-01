@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/server_file_services.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/uploader_novel_services.dart';
 import 'package:provider/provider.dart';
+import 'package:t_widgets/extensions/index.dart';
 import 'package:t_widgets/t_widgets.dart';
 
 class EditNovelScreen extends StatefulWidget {
@@ -74,10 +76,21 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 15,
             children: [
-              TCoverChooser(coverPath: novel.coverUrl),
+              TCoverChooser(
+                coverPath: novel.coverPath,
+                onChanged: () {
+                  coverUrlController.text = ServerFileServices.getImageUrl(novel.coverPath.getName());
+                },
+              ),
               TTextField(
                 label: Text('အမည်'),
                 controller: titleController,
+                isSelectedAll: true,
+                maxLines: 1,
+              ),
+              TTextField(
+                label: Text('Cover Url'),
+                controller: coverUrlController,
                 maxLines: 1,
               ),
               TTextField(

@@ -10,7 +10,7 @@ class UploaderConfigServices {
     String dbName = 'main.db.json',
     bool isPrettyJson = false,
   }) async {
-    final fpath = File('${Directory.current.path}/$dbName');
+    final fpath = File('${Directory.current.path}/server/$dbName');
     await Isolate.run(() async {
       try {
         String content = jsonEncode(map);
@@ -28,7 +28,7 @@ class UploaderConfigServices {
     String dbName = 'main.db.json',
     bool isPrettyJson = false,
   }) async {
-    final fpath = File('${Directory.current.path}/$dbName');
+    final fpath = File('${Directory.current.path}/server/$dbName');
     if (!fpath.existsSync()) {
       return {};
     }
@@ -44,7 +44,7 @@ class UploaderConfigServices {
     String dbName = 'main.db.json',
     bool isPrettyJson = false,
   }) async {
-    final fpath = File('${Directory.current.path}/$dbName');
+    final fpath = File('${Directory.current.path}/server/$dbName');
     await Isolate.run(() async {
       try {
         String content = jsonEncode(mapList);
@@ -62,7 +62,7 @@ class UploaderConfigServices {
     String dbName = 'main.db.json',
     bool isPrettyJson = false,
   }) async {
-    final fpath = File('${Directory.current.path}/$dbName');
+    final fpath = File('${Directory.current.path}/server/$dbName');
     if (!fpath.existsSync()) {
       return [];
     }

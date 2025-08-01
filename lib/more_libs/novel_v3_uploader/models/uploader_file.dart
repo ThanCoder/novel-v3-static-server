@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_file_types.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/server_file_services.dart';
 import 'package:than_pkg/than_pkg.dart';
@@ -70,4 +72,10 @@ class UploaderFile {
     'type': type.name,
     'date': date.millisecondsSinceEpoch,
   };
+
+  String get getLocalSizeLable {
+    final file = File(content);
+    if(!file.existsSync()) return '';
+    return file.statSync().size.toDouble().toFileSizeLabel();
+  }
 }
