@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:novel_v3_static_server/app/components/novel_grid_item.dart';
 import 'package:novel_v3_static_server/app/components/novel_list_item.dart';
+import 'package:novel_v3_static_server/app/components/novel_see_all_view.dart';
 import 'package:novel_v3_static_server/app/routes_helper.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/see_all_screen.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/uploader_novel_search_screen.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/uploader_novel_services.dart';
 import 'package:provider/provider.dart';
 import 'package:t_widgets/t_widgets.dart';
@@ -20,6 +24,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  bool isListView = false;
+
   void init() async {
     context.read<UploaderNovelServices>().initList();
   }
@@ -32,6 +38,56 @@ class _HomePageState extends State<HomePage> {
         onSubmit: () {
           context.read<UploaderNovelServices>().delete(novel);
         },
+      ),
+    );
+  }
+
+  void _goSearchScreen() {
+    final list = context.read<UploaderNovelServices>().getList;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UploaderNovelSearchScreen(
+          list: list,
+          listItemBuilder: (context, novel) => NovelListItem(
+            novel: novel,
+            onClicked: (novel) => goEditNovelContentScreen(context, novel),
+          ),
+          onClicked: (title, resList) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SeeAllScreen<UploaderNovel>(
+                  title: Text(title),
+                  list: resList,
+                  gridItemBuilder: (context, item) => NovelGridItem(
+                    novel: item,
+                    onClicked: (novel) =>
+                        goEditNovelContentScreen(context, novel),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  void _goContentPage(UploaderNovel novel) {
+    goEditNovelContentScreen(context, novel);
+  }
+
+  void _goSeeAllScreen(String title, List<UploaderNovel> list) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SeeAllScreen(
+          title: Text(title),
+          list: list,
+          gridItemBuilder: (context, item) =>
+              NovelGridItem(novel: item, onClicked: _goContentPage),
+        ),
       ),
     );
   }
@@ -76,26 +132,115 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _getListWidget(List<UploaderNovel> list) {
+    return ListView.builder(
+      itemCount: list.length,
+      itemBuilder: (context, index) => NovelListItem(
+        novel: list[index],
+        onClicked: (novel) => goEditNovelContentScreen(context, novel),
+        onRightClicked: _showMenu,
+      ),
+    );
+  }
+
+  Widget _getGridWidget(List<UploaderNovel> list) {
+    final provider = context.watch<UploaderNovelServices>();
+    final list = provider.getList;
+
+    final completedList = list.where((e) => e.isCompleted).toList();
+    final ongoingList = list.where((e) => !e.isCompleted).toList();
+    final adultList = list.where((e) => e.isAdult).toList();
+    final randomList = List.of(list);
+    randomList.shuffle();
+
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: NovelSeeAllView(
+            title: 'ကျပန်း စာစဥ်များ',
+            titleColor: Colors.lime,
+            list: randomList,
+            showLines: 1,
+            onSeeAllClicked: _goSeeAllScreen,
+            onClicked: _goContentPage,
+            onRightClicked: _showMenu,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: NovelSeeAllView(
+            title: 'အသစ်များ',
+            titleColor: Colors.green,
+            list: list,
+            onSeeAllClicked: _goSeeAllScreen,
+            onClicked: _goContentPage,
+            onRightClicked: _showMenu,
+          ),
+        ),
+
+        SliverToBoxAdapter(
+          child: NovelSeeAllView(
+            title: 'ပြီးဆုံး',
+            titleColor: Colors.blue,
+            list: completedList,
+            onSeeAllClicked: _goSeeAllScreen,
+            onClicked: _goContentPage,
+            onRightClicked: _showMenu,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: NovelSeeAllView(
+            title: 'ဘာသာပြန်နေဆဲ',
+            titleColor: Colors.amber,
+            list: ongoingList,
+            onSeeAllClicked: _goSeeAllScreen,
+            onClicked: _goContentPage,
+            onRightClicked: _showMenu,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: NovelSeeAllView(
+            titleColor: Colors.red,
+            title: '18 နှစ်အထက်',
+            list: adultList,
+            onSeeAllClicked: _goSeeAllScreen,
+            onClicked: _goContentPage,
+            onRightClicked: _showMenu,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<UploaderNovelServices>();
-    final isLoading = provider.isLoading;
     final list = provider.getList;
+    final isLoading = provider.isLoading;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Home Page')),
+      appBar: AppBar(
+        title: Text('Local Page'),
+        actions: [
+          IconButton(onPressed: _goSearchScreen, icon: Icon(Icons.search)),
+        ],
+      ),
       body: isLoading
           ? Center(child: TLoaderRandom())
-          : ListView.builder(
-              itemCount: list.length,
-              itemBuilder: (context, index) => NovelListItem(
-                novel: list[index],
-                onClicked: (novel) {
-                  goEditNovelContentScreen(context, novel);
-                },
-                onRightClicked: _showMenu,
-              ),
-            ),
+          : isListView
+          ? _getListWidget(list)
+          : _getGridWidget(list),
+      // isLoading
+      //     ? Center(child: TLoaderRandom())
+      //     : ListView.builder(
+      //         itemCount: list.length,
+      //         itemBuilder: (context, index) => NovelListItem(
+      //           novel: list[index],
+      //           onClicked: (novel) {
+      //             goEditNovelContentScreen(context, novel);
+      //           },
+      //           onRightClicked: _showMenu,
+      //         ),
+      //       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final novel = UploaderNovel.create();

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class SeeAllScreen<T> extends StatelessWidget {
   Widget title;
   List<T> list;
-  Widget? Function(BuildContext context, int index) itemBuilder;
+  Widget? Function(BuildContext context, T item) gridItemBuilder;
   SeeAllScreen({
     super.key,
     required this.title,
     required this.list,
-    required this.itemBuilder,
+    required this.gridItemBuilder,
   });
 
   @override
@@ -16,13 +16,14 @@ class SeeAllScreen<T> extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: title),
       body: GridView.builder(
+        itemCount: list.length,
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 180,
           mainAxisExtent: 200,
           mainAxisSpacing: 5,
           crossAxisSpacing: 5,
         ),
-        itemBuilder: itemBuilder,
+        itemBuilder: (context, index) => gridItemBuilder(context, list[index]),
       ),
     );
   }

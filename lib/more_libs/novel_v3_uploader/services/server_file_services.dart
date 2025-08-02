@@ -61,4 +61,13 @@ class ServerFileServices {
     }).toList();
     return list;
   }
+  static List<String> getAccessableCoverFiles(List<String> list) {
+    list = list.where((e) {
+      if (e.endsWith('.png') || e.endsWith('.jpg')) {
+        return true;
+      }
+      return false;
+    }).toList();
+    return list;
+  }
 }

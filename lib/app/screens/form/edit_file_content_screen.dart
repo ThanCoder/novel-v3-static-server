@@ -75,7 +75,7 @@ class _EditFileContentScreenState extends State<EditFileContentScreen> {
                 label: Text('File Size'),
                 controller: fileSizeConstroller,
                 maxLines: 1,
-                isSelectedAll: true,
+                // isSelectedAll: true,
               ),
               // types
               UploaderFileChooser(
@@ -101,7 +101,7 @@ class _EditFileContentScreenState extends State<EditFileContentScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _onSaved,
+        onPressed:  _onSaved,
         child: Icon(Icons.save_as_rounded),
       ),
     );

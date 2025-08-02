@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
+import 'package:novel_v3_static_server/app/routes_helper.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/server_file_services.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/uploader_novel_services.dart';
@@ -23,6 +26,8 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
   final coverUrlController = TextEditingController();
   final descController = TextEditingController();
   late UploaderNovel novel;
+  String? errorTitle;
+  List<String> alreadyTitleList = [];
 
   @override
   void initState() {
@@ -34,14 +39,26 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
     mcController.text = novel.mc;
     coverUrlController.text = novel.coverUrl;
     descController.text = novel.desc;
+    WidgetsBinding.instance.addPostFrameCallback((e) => init());
+  }
+
+  void init() {
+    alreadyTitleList = context
+        .read<UploaderNovelServices>()
+        .getList
+        .where((e) => e.title != novel.title)
+        .map((e) => e.title)
+        .toList();
+
+    _checkAlreadyTitle();
   }
 
   void _onSaved() async {
     try {
-      novel.title = titleController.text;
-      novel.author = authorController.text;
-      novel.translator = translatorController.text;
-      novel.mc = mcController.text;
+      novel.title = titleController.text.trim();
+      novel.author = authorController.text.trim();
+      novel.translator = translatorController.text.trim();
+      novel.mc = mcController.text.trim();
       novel.desc = descController.text;
       novel.newDate();
 
@@ -51,10 +68,21 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
       if (!mounted) return;
 
       Navigator.pop(context);
+      // go conent page
+      goEditNovelContentScreen(context, novel);
     } catch (e) {
       if (!mounted) return;
       showTMessageDialogError(context, e.toString());
     }
+  }
+
+  void _checkAlreadyTitle() {
+    if (alreadyTitleList.contains(titleController.text)) {
+      errorTitle = 'title ရှိနေပြီးသားဖြစ်နေပါတယ်';
+    } else {
+      errorTitle = null;
+    }
+    setState(() {});
   }
 
   List<String> get _getAllTags {
@@ -69,10 +97,24 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
   void onDragDone(DropDoneDetails details) async {
     try {
       final files = details.files.map((e) => e.path).toList();
-      final filterFiles = ServerFileServices.getAccessableConfigFiles(files);
-      if (filterFiles.isEmpty) return;
+      final coverFiles = ServerFileServices.getAccessableCoverFiles(files);
+      if (coverFiles.isNotEmpty) {
+        final file = File(coverFiles.first);
+        final oldFile = File(novel.coverPath);
+        if (oldFile.existsSync()) {
+          oldFile.deleteSync();
+        }
+        file.renameSync(novel.coverPath);
+        coverUrlController.text = ServerFileServices.getImageUrl(
+          novel.coverPath.getName(),
+        );
+        setState(() {});
+        return;
+      }
+      final configFiles = ServerFileServices.getAccessableConfigFiles(files);
+      if (configFiles.isEmpty) return;
       // move file
-      final config = UploaderNovel.fromV3ConfigFile(filterFiles.first);
+      final config = UploaderNovel.fromV3ConfigFile(configFiles.first);
       //novel
       novel.isAdult = config.isAdult;
       novel.isCompleted = config.isCompleted;
@@ -85,6 +127,7 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
       descController.text = config.desc;
 
       setState(() {});
+      _checkAlreadyTitle();
 
       if (!mounted) return;
       showTSnackBar(context, 'config Added');
@@ -143,7 +186,11 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
                   label: Text('အမည်'),
                   controller: titleController,
                   isSelectedAll: true,
+                  errorText: errorTitle,
                   maxLines: 1,
+                  onChanged: (value) {
+                    _checkAlreadyTitle();
+                  },
                 ),
                 TTextField(
                   label: Text('Cover Url'),
@@ -218,10 +265,12 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _onSaved,
-          child: Icon(Icons.save_as_rounded),
-        ),
+        floatingActionButton: errorTitle != null
+            ? null
+            : FloatingActionButton(
+                onPressed: _onSaved,
+                child: Icon(Icons.save_as_rounded),
+              ),
       ),
     );
   }

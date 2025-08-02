@@ -21,7 +21,7 @@ class NovelContentScreen extends StatelessWidget {
           bottomNavigationBar: TabBar(
             tabs: [
               Tab(icon: Icon(Icons.home)),
-              Tab(icon: Icon(Icons.cloud_circle_rounded)),
+              Tab(icon: Icon(Icons.cloud_download_outlined)),
             ],
           ),
         ),

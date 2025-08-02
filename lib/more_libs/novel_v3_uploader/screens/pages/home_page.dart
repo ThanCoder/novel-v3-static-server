@@ -10,21 +10,24 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Card(
               child: Row(
                 // crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 8,
                 children: [
-                  SizedBox(
-                    width: 180,
-                    height: 220,
-                    child: TCacheImage(
-                      url: novel.coverUrl,
-                      // cachePath: PathUtil.getCachePath(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 180,
+                      height: 220,
+                      child: TCacheImage(
+                        url: novel.coverUrl,
+                        // cachePath: PathUtil.getCachePath(),
+                      ),
                     ),
                   ),
                   Column(
@@ -61,10 +64,11 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-          TTagsWrapView(values: novel.getTags),
-          Text(novel.desc),
-        ],
+            TTagsWrapView(values: novel.getTags),
+
+            SelectableText(novel.desc, style: TextStyle(fontSize: 16)),
+          ],
+        ),
       ),
     );
   }

@@ -103,14 +103,14 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen> {
     final isLoading = provider.isLoading;
     final list = provider.getList;
 
-    return DropTarget(
-      enable: true,
-      onDragDone: onDragDone,
-      child: Scaffold(
-        appBar: AppBar(title: Text(widget.novel.title)),
-        body: isLoading
-            ? Center(child: TLoaderRandom())
-            : CustomScrollView(
+    return Scaffold(
+      appBar: AppBar(title: Text(widget.novel.title)),
+      body: isLoading
+          ? Center(child: TLoaderRandom())
+          : DropTarget(
+              enable: true,
+              onDragDone: onDragDone,
+              child: CustomScrollView(
                 slivers: [
                   SliverList.builder(
                     itemCount: list.length,
@@ -139,25 +139,25 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen> {
                   ),
                 ],
               ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            goEditContentFileScreen(
-              context,
-              UploaderFile.createEmpty(novelId: widget.novel.id),
-              onUpdated: (file) async {
-                try {
-                  await context.read<UploaderFileServices>().add(file);
-                  if (!context.mounted) return;
-                  showTSnackBar(context, '${file.name} Added');
-                } catch (e) {
-                  if (!context.mounted) return;
-                  showTMessageDialogError(context, e.toString());
-                }
-              },
-            );
-          },
-          child: Icon(Icons.add),
-        ),
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          goEditContentFileScreen(
+            context,
+            UploaderFile.createEmpty(novelId: widget.novel.id),
+            onUpdated: (file) async {
+              try {
+                await context.read<UploaderFileServices>().add(file);
+                if (!context.mounted) return;
+                showTSnackBar(context, '${file.name} Added');
+              } catch (e) {
+                if (!context.mounted) return;
+                showTMessageDialogError(context, e.toString());
+              }
+            },
+          );
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
