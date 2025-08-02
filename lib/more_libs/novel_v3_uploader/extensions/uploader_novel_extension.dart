@@ -1,4 +1,4 @@
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
+import '../models/uploader_novel.dart';
 
 extension UploaderNovelExtension on List<UploaderNovel> {
   void sortDate({bool isNewestOrOld = true}) {

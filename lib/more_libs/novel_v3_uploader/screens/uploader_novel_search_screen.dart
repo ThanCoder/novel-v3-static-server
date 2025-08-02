@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/components/wrap_list_tile.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
 import 'package:t_widgets/widgets/t_search_field.dart';
+
+import '../components/wrap_list_tile.dart';
+import '../models/uploader_novel.dart';
 
 class UploaderNovelSearchScreen extends StatefulWidget {
   List<UploaderNovel> list;

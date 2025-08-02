@@ -3,9 +3,11 @@ import 'package:novel_v3_static_server/app/components/novel_grid_item.dart';
 import 'package:novel_v3_static_server/app/components/novel_list_item.dart';
 import 'package:novel_v3_static_server/app/components/novel_see_all_view.dart';
 import 'package:novel_v3_static_server/app/routes_helper.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/components/helper_see_all_view.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/see_all_screen.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/uploader_novel_search_screen.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/helper_services.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/uploader_novel_services.dart';
 import 'package:provider/provider.dart';
 import 'package:t_widgets/t_widgets.dart';
@@ -28,6 +30,8 @@ class _HomePageState extends State<HomePage> {
 
   void init() async {
     context.read<UploaderNovelServices>().initList();
+    context.read<HelperServices>().initLocalList();
+    setState(() {});
   }
 
   void _deleteNovelConfirm(UploaderNovel novel) {
@@ -146,6 +150,7 @@ class _HomePageState extends State<HomePage> {
   Widget _getGridWidget(List<UploaderNovel> list) {
     final provider = context.watch<UploaderNovelServices>();
     final list = provider.getList;
+    final helperList = context.watch<HelperServices>().getList;
 
     final completedList = list.where((e) => e.isCompleted).toList();
     final ongoingList = list.where((e) => !e.isCompleted).toList();
@@ -155,6 +160,18 @@ class _HomePageState extends State<HomePage> {
 
     return CustomScrollView(
       slivers: [
+        // helper
+        SliverToBoxAdapter(
+          child: HelperSeeAllView(
+            title: 'အကူအညီများ',
+            titleColor: Colors.deepOrange,
+            list: helperList,
+            showLines: 1,
+            onSeeAllClicked: (title, list) {},
+            onClicked: (helper) => goHelperEditScreen(context, helper),
+          ),
+        ),
+
         SliverToBoxAdapter(
           child: NovelSeeAllView(
             title: 'ကျပန်း စာစဥ်များ',
@@ -229,18 +246,6 @@ class _HomePageState extends State<HomePage> {
           : isListView
           ? _getListWidget(list)
           : _getGridWidget(list),
-      // isLoading
-      //     ? Center(child: TLoaderRandom())
-      //     : ListView.builder(
-      //         itemCount: list.length,
-      //         itemBuilder: (context, index) => NovelListItem(
-      //           novel: list[index],
-      //           onClicked: (novel) {
-      //             goEditNovelContentScreen(context, novel);
-      //           },
-      //           onRightClicked: _showMenu,
-      //         ),
-      //       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final novel = UploaderNovel.create();

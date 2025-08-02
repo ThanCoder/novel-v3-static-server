@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/components/online_novel_grid_item.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/components/online_novel_list_item.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/components/online_novel_see_all_view.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/novel_content_screen.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/see_all_screen.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/uploader_novel_search_screen.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/online_novel_services.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/components/index.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/helper_content_screen.dart';
 import 'package:t_widgets/widgets/index.dart';
+
+import '../models/index.dart';
+import '../services/index.dart';
+import 'novel_content_screen.dart';
+import 'see_all_screen.dart';
+import 'uploader_novel_search_screen.dart';
 
 class OnlineNovelHomeScreen extends StatefulWidget {
   const OnlineNovelHomeScreen({super.key});
@@ -26,6 +26,7 @@ class _OnlineNovelHomeScreenState extends State<OnlineNovelHomeScreen> {
   bool isLoading = false;
   bool isListView = false;
   List<UploaderNovel> list = [];
+  List<HelperFile> helperList = [];
 
   void init() async {
     try {
@@ -33,6 +34,7 @@ class _OnlineNovelHomeScreenState extends State<OnlineNovelHomeScreen> {
         isLoading = true;
       });
       list = await OnlineNovelServices.instance.getNovelList();
+      helperList = await HelperServices.getOnlineList();
       if (!mounted) return;
       setState(() {
         isLoading = false;
@@ -112,6 +114,25 @@ class _OnlineNovelHomeScreenState extends State<OnlineNovelHomeScreen> {
 
     return CustomScrollView(
       slivers: [
+        // helper
+        SliverToBoxAdapter(
+          child: HelperSeeAllView(
+            title: 'အကူအညီများ',
+            titleColor: Colors.lime,
+            list: helperList,
+            showLines: 1,
+            onSeeAllClicked: (title, list) {},
+            onClicked: (helper) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HelperContentScreen(helper: helper),
+                ),
+              );
+            },
+          ),
+        ),
+
         SliverToBoxAdapter(
           child: OnlineNovelSeeAllView(
             title: 'ကျပန်း စာစဥ်များ',
@@ -167,9 +188,12 @@ class _OnlineNovelHomeScreenState extends State<OnlineNovelHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Static Server'),
+        title: const Text('Static Server'),
         actions: [
-          IconButton(onPressed: _goSearchScreen, icon: Icon(Icons.search)),
+          IconButton(
+            onPressed: _goSearchScreen,
+            icon: const Icon(Icons.search),
+          ),
           IconButton(
             onPressed: () {
               isListView = !isListView;

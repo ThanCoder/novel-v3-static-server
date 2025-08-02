@@ -19,7 +19,7 @@ class NovelContentScreen extends StatelessWidget {
             UploaderFilePage(novel: novel),
           ]),
           bottomNavigationBar: TabBar(
-            tabs: [
+            tabs: const [
               Tab(icon: Icon(Icons.home)),
               Tab(icon: Icon(Icons.cloud_download_outlined)),
             ],

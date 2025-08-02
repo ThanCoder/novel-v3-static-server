@@ -6,3 +6,9 @@ const serverGithubFileUrl =
     'https://raw.githubusercontent.com/ThanCoder/novel-v3-static-server/refs/heads/main/server/files';
 const serverGithubContentDBUrl =
     'https://raw.githubusercontent.com/ThanCoder/novel-v3-static-server/refs/heads/main/server/content_db';
+
+// helper
+const serverGithubHelperDBUrl =
+    'https://raw.githubusercontent.com/ThanCoder/novel-v3-static-server/refs/heads/main/server/helper/db_files';
+const serverGithubHelperFilesUrl =
+    'https://raw.githubusercontent.com/ThanCoder/novel-v3-static-server/refs/heads/main/server/helper/files';

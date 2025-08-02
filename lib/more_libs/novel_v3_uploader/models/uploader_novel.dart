@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/server_file_services.dart';
 import 'package:than_pkg/services/map_services.dart';
 import 'package:uuid/uuid.dart';
+
+import '../services/server_file_services.dart';
 
 class UploaderNovel {
   String id;
@@ -46,7 +46,7 @@ class UploaderNovel {
     bool isAdult = false,
     bool isCompleted = false,
   }) {
-    final id = Uuid().v4();
+    final id = const Uuid().v4();
     return UploaderNovel(
       id: id,
       title: title,
@@ -82,7 +82,7 @@ class UploaderNovel {
     ], defaultValue: 0);
 
     return UploaderNovel(
-      id: MapServices.get(map, ['id'], defaultValue: Uuid().v4()),
+      id: MapServices.get(map, ['id'], defaultValue: const Uuid().v4()),
       title: MapServices.get(map, ['title'], defaultValue: 'Untitled'),
       author: MapServices.get(map, ['author'], defaultValue: 'Unknown'),
       translator: MapServices.get(map, ['translator'], defaultValue: 'Unknown'),

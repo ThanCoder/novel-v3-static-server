@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
-import 'package:novel_v3_static_server/more_libs/setting/path_util.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/extensions/datetime_extension.dart';
+
+import '../../setting/path_util.dart';
+import '../models/uploader_novel.dart';
 
 class OnlineNovelListItem extends StatelessWidget {
   UploaderNovel novel;

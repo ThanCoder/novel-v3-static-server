@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/constants.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_file.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/server_file_services.dart';
+
+import '../constants.dart';
+import '../models/uploader_file.dart';
+import '../models/uploader_novel.dart';
+import 'server_file_services.dart';
 
 class OnlineNovelServices {
   static final OnlineNovelServices instance = OnlineNovelServices._();
@@ -12,7 +13,7 @@ class OnlineNovelServices {
   factory OnlineNovelServices() => instance;
 
   Future<String> Function(String url)? onDownloadJson;
-  bool isShowDebugLog = false;
+  bool isShowDebugLog = true;
 
   Future<void> init({
     bool isShowDebugLog = true,
@@ -45,7 +46,6 @@ class OnlineNovelServices {
         throw Exception(_getInitLog);
       }
       final url = ServerFileServices.getContentDBUrl(novelId);
-      // print(url);
       final res = await onDownloadJson!(url);
       List<dynamic> resList = jsonDecode(res);
       list = resList.map((e) => UploaderFile.fromMap(e)).toList();

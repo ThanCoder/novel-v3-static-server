@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/components/online_file_list_item.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/than_pkg.dart';
 
+import '../../components/online_file_list_item.dart';
 import '../../models/uploader_file.dart';
 import '../../models/uploader_novel.dart';
 import '../../services/online_novel_services.dart';
@@ -58,7 +58,7 @@ class _UploaderFilePageState extends State<UploaderFilePage> {
     return ListView.separated(
       itemBuilder: (context, index) =>
           OnlineFileListItem(file: list[index], onClicked: _download),
-      separatorBuilder: (context, index) => Divider(),
+      separatorBuilder: (context, index) => const Divider(),
       itemCount: list.length,
     );
   }

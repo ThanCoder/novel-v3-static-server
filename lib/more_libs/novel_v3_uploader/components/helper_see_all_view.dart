@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import '../models/uploader_novel.dart';
-import 'online_novel_grid_item.dart';
+import '../models/helper_file.dart';
+import 'index.dart';
 import 'see_all_view.dart';
 
-class OnlineNovelSeeAllView extends StatelessWidget {
+class HelperSeeAllView extends StatelessWidget {
   String title;
-  List<UploaderNovel> list;
+  List<HelperFile> list;
   Color? titleColor;
   int? showLines;
-  void Function(String title, List<UploaderNovel> list) onSeeAllClicked;
-  void Function(UploaderNovel novel) onClicked;
-  OnlineNovelSeeAllView({
+  void Function(String title, List<HelperFile> list) onSeeAllClicked;
+  void Function(HelperFile helper) onClicked;
+  HelperSeeAllView({
     super.key,
     required this.title,
     required this.list,
@@ -22,14 +22,14 @@ class OnlineNovelSeeAllView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SeeAllView<UploaderNovel>(
+    return SeeAllView<HelperFile>(
       title: title,
       titleColor: titleColor,
       showLines: showLines,
       list: list,
       onSeeAllClicked: onSeeAllClicked,
       itemBuilder: (context, index) =>
-          OnlineNovelGridItem(novel: list[index], onClicked: onClicked),
+          HelperGridItem(helper: list[index], onClicked: onClicked),
     );
   }
 }

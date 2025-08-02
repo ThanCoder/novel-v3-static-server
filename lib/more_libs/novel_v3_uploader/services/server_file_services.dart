@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/constants.dart';
-import 'package:novel_v3_static_server/more_libs/setting/path_util.dart';
+import '../../setting/path_util.dart';
+import '../constants.dart';
 
 class ServerFileServices {
   static String getImagePath({bool absPath = true}) {
@@ -42,6 +42,25 @@ class ServerFileServices {
     return '$serverGithubContentDBUrl/$name.db.json';
   }
 
+  // helper
+  // local
+  static String getHelperDBLocalPath(String name) {
+    return '${getRootPath()}/helper/db_files/$name.db.json';
+  }
+
+  static String getHelperFileLocalPath(String name) {
+    return '${getRootPath()}/helper/files/$name';
+  }
+
+  // online
+  static String getHelperDBUrl(String name) {
+    return '$serverGithubHelperDBUrl/$name.db.json';
+  }
+
+  static String getHelperFileUrl(String name) {
+    return '$serverGithubHelperFilesUrl/$name';
+  }
+
   static List<String> getAccessableFiles(List<String> list) {
     list = list.where((e) {
       if (e.endsWith('.npz') || e.endsWith('.pdf')) {
@@ -61,6 +80,7 @@ class ServerFileServices {
     }).toList();
     return list;
   }
+
   static List<String> getAccessableCoverFiles(List<String> list) {
     list = list.where((e) {
       if (e.endsWith('.png') || e.endsWith('.jpg')) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_file.dart';
 import 'package:than_pkg/than_pkg.dart';
+
+import '../models/uploader_file.dart';
 
 class OnlineFileListItem extends StatelessWidget {
   UploaderFile file;

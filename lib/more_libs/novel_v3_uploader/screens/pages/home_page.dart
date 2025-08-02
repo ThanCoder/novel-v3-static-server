@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/than_pkg.dart';
+
+import '../../components/status_text.dart';
+import '../../models/uploader_novel.dart';
 
 class HomePage extends StatelessWidget {
   UploaderNovel novel;
@@ -39,25 +41,43 @@ class HomePage extends StatelessWidget {
                       Text('Author: ${novel.author}'),
                       Text('ဘာသာပြန်: ${novel.translator}'),
                       Text('MC: ${novel.mc}'),
-
-                      TChip(
-                        title: Text(
-                          novel.isCompleted ? 'isCompleted' : 'OnGoing',
-                          style: TextStyle(
-                            color: novel.isCompleted
-                                ? Colors.teal
-                                : Colors.grey,
+                      Row(
+                        spacing: 5,
+                        children: [
+                          StatusText(
+                            bgColor: novel.isCompleted
+                                ? StatusText.completedColor
+                                : StatusText.onGoingColor,
+                            text: novel.isCompleted ? 'Completed' : 'OnGoing',
                           ),
-                        ),
+                          novel.isAdult
+                              ? StatusText(
+                                  text: 'Adult',
+                                  bgColor: StatusText.adultColor,
+                                )
+                              : const SizedBox.shrink(),
+                        ],
                       ),
-                      novel.isAdult
-                          ? TChip(
-                              title: Text(
-                                'isAdult',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            )
-                          : SizedBox.shrink(),
+
+                      // TChip(
+                      //   title: Text(
+                      //     novel.isCompleted ? 'isCompleted' : 'OnGoing',
+                      //     style: TextStyle(
+                      //       color: novel.isCompleted
+                      //           ? Colors.teal
+                      //           : Colors.grey,
+                      //     ),
+                      //   ),
+                      // ),
+                      // novel.isAdult
+                      //     ? TChip(
+                      //         title: const Text(
+                      //           'isAdult',
+                      //           style: TextStyle(color: Colors.red),
+                      //         ),
+                      //       )
+                      //     : const SizedBox.shrink(),
+
                       Text('ရက်စွဲ: ${novel.date.toParseTime()}'),
                     ],
                   ),
@@ -65,8 +85,7 @@ class HomePage extends StatelessWidget {
               ),
             ),
             TTagsWrapView(values: novel.getTags),
-
-            SelectableText(novel.desc, style: TextStyle(fontSize: 16)),
+            SelectableText(novel.desc, style: const TextStyle(fontSize: 16)),
           ],
         ),
       ),

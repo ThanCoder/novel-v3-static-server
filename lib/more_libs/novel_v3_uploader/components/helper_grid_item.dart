@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:t_widgets/t_widgets.dart';
 
-import '../models/uploader_novel.dart';
-import 'status_text.dart';
+import '../models/helper_file.dart';
 
-class OnlineNovelGridItem extends StatelessWidget {
-  UploaderNovel novel;
-  void Function(UploaderNovel novel) onClicked;
-  OnlineNovelGridItem({
-    super.key,
-    required this.novel,
-    required this.onClicked,
-  });
+class HelperGridItem extends StatelessWidget {
+  HelperFile helper;
+  void Function(HelperFile helper) onClicked;
+  HelperGridItem({super.key, required this.helper, required this.onClicked});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onClicked(novel),
+      onTap: () => onClicked(helper),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Stack(
           children: [
             Positioned.fill(
               child: TImageUrl(
-                url: novel.coverUrl,
+                url: helper.imagesUrl.isEmpty ? '' : helper.imagesUrl.first,
                 fit: BoxFit.fill,
                 width: double.infinity,
               ),
@@ -44,7 +39,7 @@ class OnlineNovelGridItem extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  novel.title,
+                  helper.title,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
@@ -55,27 +50,6 @@ class OnlineNovelGridItem extends StatelessWidget {
                 ),
               ),
             ),
-
-            Positioned(
-              left: 0,
-              top: 0,
-              child: StatusText(
-                bgColor: novel.isCompleted
-                    ? StatusText.completedColor
-                    : StatusText.onGoingColor,
-                text: novel.isCompleted ? 'Completed' : 'OnGoing',
-              ),
-            ),
-            novel.isAdult
-                ? Positioned(
-                    right: 0,
-                    top: 0,
-                    child: StatusText(
-                      text: 'Adult',
-                      bgColor: StatusText.adultColor,
-                    ),
-                  )
-                : const SizedBox.shrink(),
           ],
         ),
       ),

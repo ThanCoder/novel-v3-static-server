@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/my_app.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/helper_services.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/online_novel_services.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/uploader_file_services.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/uploader_novel_services.dart';
@@ -32,6 +33,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => UploaderNovelServices()),
         ChangeNotifierProvider(create: (context) => UploaderFileServices()),
+        ChangeNotifierProvider(create: (context) => HelperServices()),
       ],
       child: const MyApp(),
     ),

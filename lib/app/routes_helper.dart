@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/screens/form/edit_file_content_screen.dart';
+import 'package:novel_v3_static_server/app/screens/form/edit_helper_screen.dart';
 import 'package:novel_v3_static_server/app/screens/form/edit_novel_content_screen.dart';
 import 'package:novel_v3_static_server/app/screens/form/edit_novel_screen.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/helper_file.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_file.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
 
@@ -18,6 +20,13 @@ void goEditNovelScreen(BuildContext context, UploaderNovel novel) async {
   Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => EditNovelScreen(novel: novel)),
+  );
+}
+
+void goHelperEditScreen(BuildContext context, HelperFile helper) async {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => EditHelperScreen(helper: helper)),
   );
 }
 

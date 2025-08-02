@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/extensions/uploader_novel_extension.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/uploader_config_services.dart';
+import '../extensions/uploader_novel_extension.dart';
 
 import '../models/uploader_novel.dart';
+import 'uploader_config_services.dart';
 
 class UploaderNovelServices extends ChangeNotifier {
   final List<UploaderNovel> _list = [];
@@ -55,7 +55,7 @@ class UploaderNovelServices extends ChangeNotifier {
     try {
       // await Future.delayed(Duration(seconds: 1));
       // check already exists title
-      final findedIndex = _list.indexWhere((e) => e.title == novel.title);
+      final findedIndex = _list.indexWhere((e) => e.id == novel.id);
       if (findedIndex == -1) {
         // ရှိနေလို့
         throw Exception('novel not found!');
@@ -80,7 +80,7 @@ class UploaderNovelServices extends ChangeNotifier {
     try {
       // await Future.delayed(Duration(seconds: 1));
       // check already exists title
-      final findedIndex = _list.indexWhere((e) => e.title == novel.title);
+      final findedIndex = _list.indexWhere((e) => e.id == novel.id);
       if (findedIndex == -1) {
         // ရှိနေလို့
         throw Exception('novel not found!');
