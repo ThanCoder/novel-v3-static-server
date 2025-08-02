@@ -51,7 +51,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
         outputLines.add("Running: git commit -m 'update'");
       });
 
-      var commitResult = await Process.run('git', ['commit', '-m', 'update'], workingDirectory: ServerFileServices.getRootPath());
+      var commitResult = await Process.run('git', ['commit', '-m', '"update"'], workingDirectory: ServerFileServices.getRootPath());
 
       setState(() {
         outputLines.add("git commit => ${commitResult.exitCode}");
