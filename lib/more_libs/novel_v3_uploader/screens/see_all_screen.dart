@@ -15,15 +15,18 @@ class SeeAllScreen<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: title),
-      body: GridView.builder(
-        itemCount: list.length,
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 180,
-          mainAxisExtent: 200,
-          mainAxisSpacing: 5,
-          crossAxisSpacing: 5,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GridView.builder(
+          itemCount: list.length,
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 180,
+            mainAxisExtent: 200,
+            mainAxisSpacing: 5,
+            crossAxisSpacing: 5,
+          ),
+          itemBuilder: (context, index) => gridItemBuilder(context, list[index]),
         ),
-        itemBuilder: (context, index) => gridItemBuilder(context, list[index]),
       ),
     );
   }

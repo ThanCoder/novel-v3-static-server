@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 3,
                     children: [
-                      Text(novel.title, maxLines: null),
+                      SelectableText(novel.title, maxLines: null),
                       Text('Author: ${novel.author}'),
                       Text('ဘာသာပြန်: ${novel.translator}'),
                       Text('MC: ${novel.mc}'),

@@ -7,6 +7,7 @@ class OnlineNovelSeeAllView extends StatelessWidget {
   String title;
   List<UploaderNovel> list;
   Color? titleColor;
+  int? showLines;
   void Function(String title, List<UploaderNovel> list) onSeeAllClicked;
   void Function(UploaderNovel novel) onClicked;
   OnlineNovelSeeAllView({
@@ -16,6 +17,7 @@ class OnlineNovelSeeAllView extends StatelessWidget {
     required this.onSeeAllClicked,
     required this.onClicked,
     this.titleColor,
+    this.showLines,
   });
 
   @override
@@ -23,6 +25,7 @@ class OnlineNovelSeeAllView extends StatelessWidget {
     return SeeAllView<UploaderNovel>(
       title: title,
       titleColor: titleColor,
+      showLines: showLines,
       list: list,
       onSeeAllClicked: onSeeAllClicked,
       itemBuilder: (context, index) =>

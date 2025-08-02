@@ -117,6 +117,7 @@ class _OnlineNovelHomeScreenState extends State<OnlineNovelHomeScreen> {
             title: 'ကျပန်း စာစဥ်များ',
             titleColor: Colors.lime,
             list: randomList,
+            showLines: 1,
             onSeeAllClicked: _goSeeAllScreen,
             onClicked: _goContentPage,
           ),
