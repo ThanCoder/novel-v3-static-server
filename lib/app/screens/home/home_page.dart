@@ -8,6 +8,7 @@ import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/upload
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/see_all_screen.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/uploader_novel_search_screen.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/helper_services.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/index.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/uploader_novel_services.dart';
 import 'package:provider/provider.dart';
 import 'package:t_widgets/t_widgets.dart';
@@ -96,6 +97,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _updateNovel(UploaderNovel novel) {
+    goEditNovelScreen(
+      context,
+      novel: novel,
+      onUpdated: (updatedNovel) async {
+        try {
+          await context.read<UploaderNovelServices>().update(updatedNovel);
+          if (!mounted) return;
+
+          showTSnackBar(context, '${updatedNovel.title} Updated');
+        } catch (e) {
+          if (!mounted) return;
+          showTMessageDialogError(context, e.toString());
+        }
+      },
+    );
+  }
+
   void _showMenu(UploaderNovel novel) {
     showModalBottomSheet(
       context: context,
@@ -117,7 +136,7 @@ class _HomePageState extends State<HomePage> {
                 title: Text('Edit'),
                 onTap: () {
                   Navigator.pop(context);
-                  goEditNovelScreen(context, novel);
+                  _updateNovel(novel);
                 },
               ),
               ListTile(
@@ -155,8 +174,7 @@ class _HomePageState extends State<HomePage> {
     final completedList = list.where((e) => e.isCompleted).toList();
     final ongoingList = list.where((e) => !e.isCompleted).toList();
     final adultList = list.where((e) => e.isAdult).toList();
-    final randomList = List.of(list);
-    randomList.shuffle();
+    final needDescList = list.where((e) => e.desc.isEmpty).toList();
 
     return CustomScrollView(
       slivers: [
@@ -174,9 +192,9 @@ class _HomePageState extends State<HomePage> {
 
         SliverToBoxAdapter(
           child: NovelSeeAllView(
-            title: 'ကျပန်း စာစဥ်များ',
+            title: 'Description မထည့်ရသေးသော Novel များ',
             titleColor: Colors.lime,
-            list: randomList,
+            list: needDescList,
             showLines: 1,
             onSeeAllClicked: _goSeeAllScreen,
             onClicked: _goContentPage,
@@ -234,6 +252,8 @@ class _HomePageState extends State<HomePage> {
     final list = provider.getList;
     final isLoading = provider.isLoading;
 
+    print(ServerFileServices.getRootPath());
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Local Page'),
@@ -247,11 +267,23 @@ class _HomePageState extends State<HomePage> {
           ? _getListWidget(list)
           : _getGridWidget(list),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final novel = UploaderNovel.create();
-          await context.read<UploaderNovelServices>().add(novel);
-          if (!context.mounted) return;
-          goEditNovelScreen(context, novel);
+        onPressed: () {
+          final newNovel = UploaderNovel.create();
+          goEditNovelScreen(
+            context,
+            novel: newNovel,
+            onUpdated: (novel) async {
+              try {
+                await context.read<UploaderNovelServices>().add(novel);
+                if (!context.mounted) return;
+
+                showTSnackBar(context, '${novel.title} Added');
+              } catch (e) {
+                if (!context.mounted) return;
+                showTMessageDialogError(context, e.toString());
+              }
+            },
+          );
         },
         child: Icon(Icons.add),
       ),

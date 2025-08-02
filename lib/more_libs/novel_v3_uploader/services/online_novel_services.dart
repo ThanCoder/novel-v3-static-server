@@ -12,15 +12,19 @@ class OnlineNovelServices {
   OnlineNovelServices._();
   factory OnlineNovelServices() => instance;
 
+  // init props
   Future<String> Function(String url)? onDownloadJson;
+  late String Function() getCustomServerPath;
   bool isShowDebugLog = true;
 
   Future<void> init({
     bool isShowDebugLog = true,
     Future<String> Function(String url)? onDownloadJson,
+    required String Function() getCustomServerPath,
   }) async {
     this.onDownloadJson = onDownloadJson;
     this.isShowDebugLog = isShowDebugLog;
+    this.getCustomServerPath = getCustomServerPath;
   }
 
   Future<List<UploaderNovel>> getNovelList() async {

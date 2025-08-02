@@ -30,11 +30,6 @@ class UploaderFileItem extends StatelessWidget {
               // crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 5,
               children: [
-                // SizedBox(
-                //   width: 180,
-                //   height: 220,
-                //   child: TImageFile(path: file.),
-                // ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

@@ -5,6 +5,8 @@ import 'app_notifier.dart';
 import 'constants.dart';
 
 class Setting {
+  static AppConfigModel get getAppConfig => appConfigNotifier.value;
+  
   static String getForwardProxyUrl(String url) {
     if (appConfigNotifier.value.isUseProxyServer) {
       return '${appConfigNotifier.value.forwardProxyUrl}?url=$url';

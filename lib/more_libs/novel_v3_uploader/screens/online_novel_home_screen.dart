@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/components/index.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/helper_content_screen.dart';
 import 'package:t_widgets/widgets/index.dart';
 
+import '../components/index.dart';
 import '../models/index.dart';
 import '../services/index.dart';
+import 'helper_content_screen.dart';
 import 'novel_content_screen.dart';
 import 'see_all_screen.dart';
 import 'uploader_novel_search_screen.dart';
@@ -190,6 +190,7 @@ class _OnlineNovelHomeScreenState extends State<OnlineNovelHomeScreen> {
       appBar: AppBar(
         title: const Text('Static Server'),
         actions: [
+          // AppHelpButton(),
           IconButton(
             onPressed: _goSearchScreen,
             icon: const Icon(Icons.search),

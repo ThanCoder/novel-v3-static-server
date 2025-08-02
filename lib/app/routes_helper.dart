@@ -16,10 +16,16 @@ void goEditNovelContentScreen(BuildContext context, UploaderNovel novel) async {
   );
 }
 
-void goEditNovelScreen(BuildContext context, UploaderNovel novel) async {
+void goEditNovelScreen(
+  BuildContext context, {
+  required UploaderNovel novel,
+  required void Function(UploaderNovel updatedNovel) onUpdated,
+}) async {
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => EditNovelScreen(novel: novel)),
+    MaterialPageRoute(
+      builder: (context) => EditNovelScreen(novel: novel, onUpdated: onUpdated),
+    ),
   );
 }
 

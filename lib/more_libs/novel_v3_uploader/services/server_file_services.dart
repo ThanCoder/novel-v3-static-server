@@ -1,9 +1,21 @@
 import 'dart:io';
 
-import '../../setting/path_util.dart';
+import '../services/index.dart';
+
+import '../../setting_v1.1.0/path_util.dart';
 import '../constants.dart';
 
 class ServerFileServices {
+  static String getRootPath({bool absPath = true}) {
+    // for custom server
+    final customServerDir = OnlineNovelServices.instance.getCustomServerPath();
+    if (customServerDir.isNotEmpty && Directory(customServerDir).existsSync()) {
+      return customServerDir;
+    }
+    var rootPath = absPath ? Directory.current.path : '';
+    return PathUtil.createDir('$rootPath/server');
+  }
+
   static String getImagePath({bool absPath = true}) {
     final imagePath = PathUtil.createDir(
       '${getRootPath(absPath: absPath)}/images',
@@ -23,11 +35,6 @@ class ServerFileServices {
       '${getRootPath(absPath: absPath)}/content_db',
     );
     return '$dirPath/$name.db.json';
-  }
-
-  static String getRootPath({bool absPath = true}) {
-    var rootPath = absPath ? Directory.current.path : '';
-    return PathUtil.createDir('$rootPath/server');
   }
 
   static String getImageUrl(String name) {

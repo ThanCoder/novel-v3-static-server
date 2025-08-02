@@ -34,11 +34,13 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
   late AppConfigModel config;
   final customPathTextController = TextEditingController();
   final forwardProxyController = TextEditingController();
+  final customServerPathController = TextEditingController();
 
   void init() async {
     customPathTextController.text = '${getAppExternalRootPath()}/.$appName';
     config = appConfigNotifier.value;
     forwardProxyController.text = config.forwardProxyUrl;
+    customServerPathController.text = config.serverDirPath;
   }
 
   void _saveConfig() async {
@@ -53,6 +55,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
       }
       //set custom path
       config.customPath = customPathTextController.text;
+      config.serverDirPath = customServerPathController.text;
 
       //save
       config.save();
@@ -107,72 +110,90 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
       },
       child: Scaffold(
         appBar: AppBar(title: const Text('Setting')),
-        body: ListView(
-          children: [
-            // theme
-            ThemeComponent(),
-            //custom path
-            TListTileWithDesc(
-              title: "custom path",
-              desc: "သင်ကြိုက်နှစ်သက်တဲ့ path ကို ထည့်ပေးပါ",
-              trailing: Checkbox(
-                value: config.isUseCustomPath,
-                onChanged: (value) {
-                  setState(() {
-                    config.isUseCustomPath = value!;
-                    isChanged = true;
-                  });
-                },
-              ),
-            ),
-            config.isUseCustomPath
-                ? TListTileWithDescWidget(
-                    widget1: TextField(
-                      controller: customPathTextController,
-                      onTap: () {
-                        if (!isCustomPathTextControllerTextSelected) {
-                          customPathTextController.selectAll();
-                          isCustomPathTextControllerTextSelected = true;
-                        }
-                      },
-                      onTapOutside: (event) {
-                        isCustomPathTextControllerTextSelected = false;
-                      },
-                    ),
-                    widget2: IconButton(
-                      onPressed: () {
-                        _saveConfig();
-                      },
-                      icon: const Icon(Icons.save),
-                    ),
-                  )
-                : SizedBox.shrink(),
-            //proxy server
-            TListTileWithDesc(
-              title: 'Custom Proxy Server',
-              trailing: Switch.adaptive(
-                value: config.isUseProxyServer,
-                onChanged: (value) {
-                  setState(() {
-                    config.isUseProxyServer = value;
-                    isChanged = true;
-                  });
-                },
-              ),
-            ),
-            config.isUseProxyServer
-                ? ForwardProxyTTextField(
-                    controller: forwardProxyController,
-                    onChanged: (value) {
-                      config.forwardProxyUrl = value;
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              // theme
+              ThemeComponent(),
+              //custom path
+              TListTileWithDesc(
+                title: "Config Custom Path",
+                desc: "သင်ကြိုက်နှစ်သက်တဲ့ path ကို ထည့်ပေးပါ",
+                trailing: Checkbox(
+                  value: config.isUseCustomPath,
+                  onChanged: (value) {
+                    setState(() {
+                      config.isUseCustomPath = value!;
                       isChanged = true;
-                      setState(() {
-                        
-                      });
-                    },
-                  )
-                : SizedBox.shrink(),
-          ],
+                    });
+                  },
+                ),
+              ),
+              // custom server path
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TTextField(
+                    label: Text('Empty ဆိုရင် auto disable ဖြစ်မယ်'),
+                    hintText: 'Custom Server Path',
+                    controller: customServerPathController,
+                    maxLines: 1,
+                    isSelectedAll: true,
+                    onChanged: (value) {
+                    setState(() {
+                      isChanged = true;
+                    });
+                  },
+                  ),
+                ),
+              ),
+              config.isUseCustomPath
+                  ? TListTileWithDescWidget(
+                      widget1: TextField(
+                        controller: customPathTextController,
+                        onTap: () {
+                          if (!isCustomPathTextControllerTextSelected) {
+                            customPathTextController.selectAll();
+                            isCustomPathTextControllerTextSelected = true;
+                          }
+                        },
+                        onTapOutside: (event) {
+                          isCustomPathTextControllerTextSelected = false;
+                        },
+                      ),
+                      widget2: IconButton(
+                        onPressed: () {
+                          _saveConfig();
+                        },
+                        icon: const Icon(Icons.save),
+                      ),
+                    )
+                  : SizedBox.shrink(),
+              //proxy server
+              TListTileWithDesc(
+                title: 'Custom Proxy Server',
+                trailing: Switch.adaptive(
+                  value: config.isUseProxyServer,
+                  onChanged: (value) {
+                    setState(() {
+                      config.isUseProxyServer = value;
+                      isChanged = true;
+                    });
+                  },
+                ),
+              ),
+              config.isUseProxyServer
+                  ? ForwardProxyTTextField(
+                      controller: forwardProxyController,
+                      onChanged: (value) {
+                        config.forwardProxyUrl = value;
+                        isChanged = true;
+                        setState(() {});
+                      },
+                    )
+                  : SizedBox.shrink(),
+            ],
+          ),
         ),
         floatingActionButton: isChanged
             ? FloatingActionButton(

@@ -171,4 +171,9 @@ class UploaderNovel {
       dbFile.deleteSync();
     }
   }
+
+  @override
+  String toString() {
+    return title;
+  }
 }

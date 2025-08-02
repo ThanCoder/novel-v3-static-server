@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/app/routes_helper.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/server_file_services.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/uploader_novel_services.dart';
@@ -12,7 +11,8 @@ import 'package:t_widgets/t_widgets.dart';
 
 class EditNovelScreen extends StatefulWidget {
   UploaderNovel novel;
-  EditNovelScreen({super.key, required this.novel});
+  void Function(UploaderNovel updatedNovel) onUpdated;
+  EditNovelScreen({super.key, required this.novel, required this.onUpdated});
 
   @override
   State<EditNovelScreen> createState() => _EditNovelScreenState();
@@ -33,6 +33,7 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
   void initState() {
     super.initState();
     novel = widget.novel;
+
     titleController.text = novel.title;
     authorController.text = novel.author;
     translatorController.text = novel.translator;
@@ -54,26 +55,16 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
   }
 
   void _onSaved() async {
-    try {
-      novel.title = titleController.text.trim();
-      novel.author = authorController.text.trim();
-      novel.translator = translatorController.text.trim();
-      novel.mc = mcController.text.trim();
-      novel.desc = descController.text;
-      novel.newDate();
+    novel.title = titleController.text.trim();
+    novel.author = authorController.text.trim();
+    novel.translator = translatorController.text.trim();
+    novel.mc = mcController.text.trim();
+    novel.desc = descController.text;
+    novel.newDate();
+    Navigator.pop(context);
 
-      // update
-      await context.read<UploaderNovelServices>().update(novel);
-
-      if (!mounted) return;
-
-      Navigator.pop(context);
-      // go conent page
-      goEditNovelContentScreen(context, novel);
-    } catch (e) {
-      if (!mounted) return;
-      showTMessageDialogError(context, e.toString());
-    }
+    // on update
+    widget.onUpdated(novel);
   }
 
   void _checkAlreadyTitle() {
