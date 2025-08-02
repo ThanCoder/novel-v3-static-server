@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_file.dart';
 import 'package:than_pkg/extensions/datetime_extension.dart';
+import 'package:than_pkg/than_pkg.dart';
 
 class UploaderFileItem extends StatelessWidget {
   UploaderFile file;
@@ -35,14 +36,19 @@ class UploaderFileItem extends StatelessWidget {
                 //   height: 220,
                 //   child: TImageFile(path: file.),
                 // ),
-                Column(
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(file.title),
-                    Text('Size: ${file.getLocalSizeLable}'),
-                    Text('ရက်စွဲ: ${file.date.toParseTime()}'),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 5,
+                    children: [
+                      Text(file.name),
+                      Text('Type: ${file.type.name.toCaptalize()}'),
+                      Text('Size: ${file.fileSize}'),
+                      Text('ရက်စွဲ: ${file.date.toParseTime()}'),
+                    ],
+                  ),
                 ),
               ],
             ),

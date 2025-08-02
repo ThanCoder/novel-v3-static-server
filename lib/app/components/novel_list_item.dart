@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
+import 'package:t_widgets/views/t_tags_wrap_view.dart';
 import 'package:t_widgets/widgets/index.dart';
 import 'package:than_pkg/extensions/datetime_extension.dart';
 
@@ -29,7 +30,7 @@ class NovelListItem extends StatelessWidget {
             padding: const EdgeInsets.all(5.0),
             child: Row(
               // crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 5,
+              spacing: 8,
               children: [
                 SizedBox(
                   width: 180,
@@ -39,14 +40,32 @@ class NovelListItem extends StatelessWidget {
                 Column(
                   // mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 3,
                   children: [
                     Text(novel.title),
                     Text('Author: ${novel.author}'),
                     Text('ဘာသာပြန်: ${novel.translator}'),
-                    Text('အထိက ဇောတ်ကောင်${novel.mc}'),
-                    Text('Tags: ${novel.tags}'),
-                    Text('isAdult: ${novel.isAdult.toString()}'),
-                    Text('isCompleted: ${novel.isCompleted.toString()}'),
+                    Text('MC: ${novel.mc}'),
+                    // Text('Tags: ${novel.tags}'),
+                    TTagsWrapView(title: 'Tags', values: novel.getTags),
+                    // Text('isAdult: ${novel.isAdult.toString()}'),
+                    // Text('isCompleted: ${novel.isCompleted.toString()}'),
+                    TChip(
+                      title: Text(
+                        novel.isCompleted ? 'isCompleted' : 'OnGoing',
+                        style: TextStyle(
+                          color: novel.isCompleted ? Colors.teal : Colors.grey,
+                        ),
+                      ),
+                    ),
+                    novel.isAdult
+                        ? TChip(
+                            title: Text(
+                              'isAdult',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          )
+                        : SizedBox.shrink(),
                     Text('ရက်စွဲ: ${novel.date.toParseTime()}'),
                   ],
                 ),

@@ -24,6 +24,18 @@ class _HomePageState extends State<HomePage> {
     context.read<UploaderNovelServices>().initList();
   }
 
+  void _deleteNovelConfirm(UploaderNovel novel) {
+    showDialog(
+      context: context,
+      builder: (context) => TConfirmDialog(
+        contentText: 'ဖျက်ချင်တာ သေချာပြီလား?',
+        onSubmit: () {
+          context.read<UploaderNovelServices>().delete(novel);
+        },
+      ),
+    );
+  }
+
   void _showMenu(UploaderNovel novel) {
     showModalBottomSheet(
       context: context,
@@ -46,6 +58,15 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.pop(context);
                   goEditNovelScreen(context, novel);
+                },
+              ),
+              ListTile(
+                iconColor: Colors.red,
+                leading: Icon(Icons.delete_forever),
+                title: Text('Delete'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _deleteNovelConfirm(novel);
                 },
               ),
             ],

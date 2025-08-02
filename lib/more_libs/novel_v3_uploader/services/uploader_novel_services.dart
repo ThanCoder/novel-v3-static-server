@@ -61,6 +61,8 @@ class UploaderNovelServices extends ChangeNotifier {
         throw Exception('novel not found!');
       }
       _list.removeAt(findedIndex);
+      // delete content file db file
+      novel.delete();
 
       final mapList = _list.map((e) => e.toMap).toList();
       await UploaderConfigServices.setListConfig(mapList, isPrettyJson: true);

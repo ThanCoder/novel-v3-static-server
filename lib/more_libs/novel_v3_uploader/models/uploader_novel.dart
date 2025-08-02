@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/server_file_services.dart';
 import 'package:than_pkg/services/map_services.dart';
 import 'package:uuid/uuid.dart';
@@ -66,7 +69,36 @@ class UploaderNovel {
     novel.coverUrl = ServerFileServices.getImageUrl('${novel.id}.png');
     return novel;
   }
+  // config file
+  factory UploaderNovel.fromV3ConfigFile(String path) {
+    final file = File(path);
+    final map = jsonDecode(file.readAsStringSync());
+    return UploaderNovel.fromV3Map(map);
+  }
 
+  factory UploaderNovel.fromV3Map(Map<String, dynamic> map) {
+    final dateFromMillisecondsSinceEpoch = MapServices.get<int>(map, [
+      'date',
+    ], defaultValue: 0);
+
+    return UploaderNovel(
+      id: MapServices.get(map, ['id'], defaultValue: Uuid().v4()),
+      title: MapServices.get(map, ['title'], defaultValue: 'Untitled'),
+      author: MapServices.get(map, ['author'], defaultValue: 'Unknown'),
+      translator: MapServices.get(map, ['translator'], defaultValue: 'Unknown'),
+      mc: MapServices.get(map, ['mc'], defaultValue: 'Unknown'),
+      tags: MapServices.get(map, ['tags'], defaultValue: ''),
+      desc: MapServices.get(map, ['content'], defaultValue: ''),
+      pageUrls: MapServices.get(map, ['page_link'], defaultValue: ''),
+      coverUrl: MapServices.get(map, ['coverUrl'], defaultValue: ''),
+      coverPath: MapServices.get(map, ['coverPath'], defaultValue: ''),
+      date: DateTime.fromMillisecondsSinceEpoch(dateFromMillisecondsSinceEpoch),
+      isAdult: MapServices.get(map, ['is_adult'], defaultValue: false),
+      isCompleted: MapServices.get(map, ['is_completed'], defaultValue: false),
+    );
+  }
+
+  // map
   factory UploaderNovel.fromMap(Map<String, dynamic> map) {
     final dateFromMillisecondsSinceEpoch = MapServices.get<int>(map, [
       'date',
@@ -78,7 +110,7 @@ class UploaderNovel {
       author: MapServices.get(map, ['author'], defaultValue: 'Unknown'),
       translator: MapServices.get(map, ['translator'], defaultValue: 'Unknown'),
       mc: MapServices.get(map, ['mc'], defaultValue: 'Unknown'),
-      tags: MapServices.get(map, ['tags'], defaultValue: 'Unknown'),
+      tags: MapServices.get(map, ['tags'], defaultValue: ''),
       desc: MapServices.get(map, ['desc'], defaultValue: ''),
       pageUrls: MapServices.get(map, ['pageUrls'], defaultValue: ''),
       coverUrl: MapServices.get(map, ['coverUrl'], defaultValue: ''),
@@ -127,5 +159,16 @@ class UploaderNovel {
   // new date
   void newDate() {
     date = DateTime.now();
+  }
+
+  String get getContentPath {
+    return ServerFileServices.getContentDBFilesPath(id);
+  }
+
+  void delete() {
+    final dbFile = File(getContentPath);
+    if (dbFile.existsSync()) {
+      dbFile.deleteSync();
+    }
   }
 }

@@ -1,17 +1,17 @@
 [
  {
-  "id": "aea58f95-f5f0-4fa8-8130-b2aac0d99983",
-  "title": "သတ်ဖြတ်သူသွေးနတ်ဘုရား",
+  "id": "462125bd-02d7-4eac-9fef-c21e91f53d07",
+  "title": "ကောင်းကင်ဘုံသို့ကြွလှမ်းစံမြန်းနေသည်",
   "author": "Unknown",
   "translator": "Unknown",
   "mc": "Unknown",
   "tags": "",
   "desc": "",
   "pageUrls": "",
-  "coverUrl": "https://raw.githubusercontent.com/ThanCoder/novel-v3-static-server/refs/heads/main/server/images/aea58f95-f5f0-4fa8-8130-b2aac0d99983.png",
-  "coverPath": "/home/than/projects/static_servers/novel_v3_static_server/server/images/aea58f95-f5f0-4fa8-8130-b2aac0d99983.png",
-  "date": 1754046585449,
+  "coverUrl": "https://raw.githubusercontent.com/ThanCoder/novel-v3-static-server/refs/heads/main/server/images/462125bd-02d7-4eac-9fef-c21e91f53d07.png",
+  "coverPath": "/home/than/projects/static_servers/novel_v3_static_server/server/images/462125bd-02d7-4eac-9fef-c21e91f53d07.png",
+  "date": 1754102888225,
   "isAdult": false,
-  "isCompleted": false
+  "isCompleted": true
  }
 ]

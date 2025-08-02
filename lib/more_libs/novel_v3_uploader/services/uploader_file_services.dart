@@ -5,19 +5,22 @@ import '../models/uploader_file.dart';
 import 'uploader_config_services.dart';
 
 class UploaderFileServices extends ChangeNotifier {
-  static String dbName = 'uploader_file.db.json';
+  static String getDBName(String novelId) {
+    return 'content_db/$novelId.db.json';
+  }
+
   final List<UploaderFile> _list = [];
 
   List<UploaderFile> get getList => _list;
   bool isLoading = false;
 
-  Future<void> initList() async {
+  Future<void> initList({required String novelId}) async {
     isLoading = true;
     notifyListeners();
     _list.clear();
 
     final configList = await UploaderConfigServices.getListConfig(
-      dbName: dbName,
+      dbName: getDBName(novelId),
     );
     for (var map in configList) {
       _list.add(UploaderFile.fromMap(map));
@@ -28,7 +31,7 @@ class UploaderFileServices extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> add(String filepath, UploaderFile file) async {
+  Future<void> add(UploaderFile file) async {
     isLoading = true;
     notifyListeners();
     try {
@@ -36,7 +39,7 @@ class UploaderFileServices extends ChangeNotifier {
 
       final mapList = _list.map((e) => e.toMap).toList();
       await UploaderConfigServices.setListConfig(
-        dbName: dbName,
+        dbName: getDBName(file.novelId),
         mapList,
         isPrettyJson: true,
       );
@@ -49,12 +52,12 @@ class UploaderFileServices extends ChangeNotifier {
   }
 
   Future<void> delete(UploaderFile file) async {
-    isLoading = true;
-    notifyListeners();
+    // isLoading = true;
+    // notifyListeners();
     try {
       // await Future.delayed(Duration(seconds: 1));
       // check already exists title
-      final findedIndex = _list.indexWhere((e) => e.title == file.title);
+      final findedIndex = _list.indexWhere((e) => e.name == file.name);
       if (findedIndex == -1) {
         // ရှိနေလို့
         throw Exception('file not found!');
@@ -63,14 +66,14 @@ class UploaderFileServices extends ChangeNotifier {
 
       final mapList = _list.map((e) => e.toMap).toList();
       await UploaderConfigServices.setListConfig(
-        dbName: dbName,
+        dbName: getDBName(file.novelId),
         mapList,
         isPrettyJson: true,
       );
     } catch (e) {
       debugPrint(e.toString());
     } finally {
-      isLoading = false;
+      // isLoading = false;
       notifyListeners();
     }
   }
@@ -81,7 +84,7 @@ class UploaderFileServices extends ChangeNotifier {
     try {
       // await Future.delayed(Duration(seconds: 1));
       // check already exists title
-      final findedIndex = _list.indexWhere((e) => e.title == file.title);
+      final findedIndex = _list.indexWhere((e) => e.name == file.name);
       if (findedIndex == -1) {
         // ရှိနေလို့
         throw Exception('file not found!');
@@ -93,7 +96,7 @@ class UploaderFileServices extends ChangeNotifier {
 
       final mapList = _list.map((e) => e.toMap).toList();
       await UploaderConfigServices.setListConfig(
-        dbName: dbName,
+        dbName: getDBName(file.novelId),
         mapList,
         isPrettyJson: true,
       );
