@@ -1,0 +1,128 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:t_widgets/t_widgets.dart';
+
+class TerminalScreen extends StatefulWidget {
+  const TerminalScreen({super.key});
+
+  @override
+  State<TerminalScreen> createState() => _TerminalScreenState();
+}
+
+class _TerminalScreenState extends State<TerminalScreen> {
+  bool isLoading = false;
+  List<String> outputLines = [];
+
+  Future<void> _startUpload() async {
+    try {
+      setState(() {
+        outputLines.clear();
+        outputLines.add("Running: git add .");
+      });
+
+      // Step 1: git add .
+      var addResult = await Process.run('git', ['add', '.']);
+
+      setState(() {
+        outputLines.add("git add . => ${addResult.exitCode}");
+        outputLines.add(addResult.stdout);
+        outputLines.add(addResult.stderr);
+      });
+
+      // Step 2: git commit -m 'update'
+      setState(() {
+        outputLines.add("Running: git commit -m 'update'");
+      });
+
+      var commitResult = await Process.run('git', ['commit', '-m', 'update']);
+
+      setState(() {
+        outputLines.add("git commit => ${commitResult.exitCode}");
+        outputLines.add(commitResult.stdout);
+        outputLines.add(commitResult.stderr);
+      });
+      // Step 3: git push -u origin main
+      var pushResult = await Process.run('git', [
+        'push',
+        '-u',
+        'origin',
+        'main',
+      ]);
+
+      setState(() {
+        outputLines.add("git push => ${pushResult.exitCode}");
+        outputLines.add(pushResult.stdout);
+        outputLines.add(pushResult.stderr);
+      });
+
+      if (!mounted) return;
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  void _startUploadConfirm() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => TConfirmDialog(
+        submitText: 'Upload',
+        contentText: 'Files တွေကို Upload ပြုလုပ်ချင်ပါသလား?',
+        onSubmit: _startUpload,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Terminal App'),
+        actions: [
+          IconButton(
+            onPressed: _startUploadConfirm,
+            icon: Icon(Icons.cloud_upload_outlined),
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  // loader
+                  isLoading ? LinearProgressIndicator() : SizedBox.shrink(),
+                  TListTileWithDesc(
+                    leading: Icon(Icons.check_box_outline_blank_rounded),
+                    title: 'Git Add',
+                    trailing: IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.send),
+                    ),
+                  ),
+                  // divider
+                  Divider(),
+                ],
+              ),
+            ),
+            SliverList.separated(
+              separatorBuilder: (context, index) => Divider(),
+              itemCount: outputLines.length,
+              itemBuilder: (context, index) => Text(outputLines[index]),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

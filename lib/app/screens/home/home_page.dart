@@ -7,9 +7,8 @@ import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/components/he
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/see_all_screen.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/uploader_novel_search_screen.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/helper_services.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/index.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/uploader_novel_services.dart';
+import 'package:novel_v3_static_server/more_libs/terminal_app/terminal_button.dart';
 import 'package:provider/provider.dart';
 import 'package:t_widgets/t_widgets.dart';
 
@@ -252,13 +251,12 @@ class _HomePageState extends State<HomePage> {
     final list = provider.getList;
     final isLoading = provider.isLoading;
 
-    print(ServerFileServices.getRootPath());
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Local Page'),
         actions: [
           IconButton(onPressed: _goSearchScreen, icon: Icon(Icons.search)),
+          TerminalButton(),
         ],
       ),
       body: isLoading
