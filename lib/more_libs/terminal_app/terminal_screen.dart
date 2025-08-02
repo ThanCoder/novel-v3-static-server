@@ -1,7 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/server_file_services.dart';
 import 'package:t_widgets/t_widgets.dart';
 
 class TerminalScreen extends StatefulWidget {
@@ -19,11 +19,26 @@ class _TerminalScreenState extends State<TerminalScreen> {
     try {
       setState(() {
         outputLines.clear();
-        outputLines.add("Running: git add .");
+        outputLines.add("Running: git status");
+      });
+
+      // Step 0: git status
+      var status = await Process.run('git', [
+        'status',
+      ], workingDirectory: ServerFileServices.getRootPath());
+
+      setState(() {
+        outputLines.add("git status => ${status.exitCode}");
+        outputLines.add(status.stdout);
+        outputLines.add(status.stderr);
       });
 
       // Step 1: git add .
-      var addResult = await Process.run('git', ['add', '.']);
+      setState(() {
+        outputLines.add("Running: git add .'");
+      });
+
+      var addResult = await Process.run('git', ['add', '.'], workingDirectory: ServerFileServices.getRootPath());
 
       setState(() {
         outputLines.add("git add . => ${addResult.exitCode}");
@@ -36,7 +51,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
         outputLines.add("Running: git commit -m 'update'");
       });
 
-      var commitResult = await Process.run('git', ['commit', '-m', 'update']);
+      var commitResult = await Process.run('git', ['commit', '-m', 'update'], workingDirectory: ServerFileServices.getRootPath());
 
       setState(() {
         outputLines.add("git commit => ${commitResult.exitCode}");
@@ -49,7 +64,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
         '-u',
         'origin',
         'main',
-      ]);
+      ], workingDirectory: ServerFileServices.getRootPath());
 
       setState(() {
         outputLines.add("git push => ${pushResult.exitCode}");
