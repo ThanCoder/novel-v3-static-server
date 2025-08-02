@@ -39,7 +39,7 @@ class ServerFileServices {
   }
 
   static String getContentDBUrl(String name) {
-    return '$serverGithubContentDBUrl/$name';
+    return '$serverGithubContentDBUrl/$name.db.json';
   }
 
   static List<String> getAccessableFiles(List<String> list) {

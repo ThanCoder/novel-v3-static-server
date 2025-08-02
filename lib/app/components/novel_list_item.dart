@@ -47,7 +47,7 @@ class NovelListItem extends StatelessWidget {
                     Text('ဘာသာပြန်: ${novel.translator}'),
                     Text('MC: ${novel.mc}'),
                     // Text('Tags: ${novel.tags}'),
-                    TTagsWrapView(title: 'Tags', values: novel.getTags),
+                    TTagsWrapView(values: novel.getTags),
                     // Text('isAdult: ${novel.isAdult.toString()}'),
                     // Text('isCompleted: ${novel.isCompleted.toString()}'),
                     TChip(

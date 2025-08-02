@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
 import 'package:novel_v3_static_server/more_libs/setting/path_util.dart';
 import 'package:t_widgets/t_widgets.dart';
-import 'package:t_widgets/widgets/index.dart';
 import 'package:than_pkg/extensions/datetime_extension.dart';
 
 class OnlineNovelListItem extends StatelessWidget {
@@ -45,7 +44,7 @@ class OnlineNovelListItem extends StatelessWidget {
                     Text('ဘာသာပြန်: ${novel.translator}'),
                     Text('MC: ${novel.mc}'),
                     // Text('Tags: ${novel.tags}'),
-                    TTagsWrapView(title: 'Tags', values: novel.getTags),
+                    TTagsWrapView(values: novel.getTags),
                     // Text('isAdult: ${novel.isAdult.toString()}'),
                     // Text('isCompleted: ${novel.isCompleted.toString()}'),
                     TChip(

@@ -36,7 +36,7 @@ class UploaderFile {
       filePath: '',
       fileUrl: '',
       isDirectLink: false,
-      fileSize: '',
+      fileSize: '0 MB',
     );
   }
 

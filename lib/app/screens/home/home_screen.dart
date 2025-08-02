@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/screens/home/home_page.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/pages/online_novel_page.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/online_novel_home_screen.dart';
 import 'package:novel_v3_static_server/more_libs/setting/app_setting_screen.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -10,7 +11,9 @@ class HomeScreen extends StatelessWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        body: TabBarView(children: [HomePage(), OnlineNovelPage(),AppSettingScreen()]),
+        body: TabBarView(
+          children: [HomePage(), OnlineNovelHomeScreen(), AppSettingScreen()],
+        ),
         bottomNavigationBar: TabBar(
           tabs: [
             Tab(icon: Icon(Icons.home)),

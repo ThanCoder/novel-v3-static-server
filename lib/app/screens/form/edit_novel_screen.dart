@@ -190,7 +190,7 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
                 ),
                 // tags
                 TTagsWrapView(
-                  title: 'Tags',
+                  title: Text('Tags'),
                   values: novel.getTags,
                   allTags: _getAllTags,
                   onApply: (values) {
@@ -201,7 +201,7 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
                 ),
                 // Page Urls
                 TTagsWrapView(
-                  title: 'Page Urls',
+                  title: Text('Page Urls'),
                   values: novel.getPageUrls,
                   onApply: (values) {
                     setState(() {

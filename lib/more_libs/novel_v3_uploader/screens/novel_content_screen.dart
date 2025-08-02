@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
+import '../models/uploader_novel.dart';
+import 'pages/home_page.dart';
+import 'pages/uploader_file_page.dart';
 
 class NovelContentScreen extends StatelessWidget {
   UploaderNovel novel;
@@ -8,8 +10,22 @@ class NovelContentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(novel.title)),
-      body: Placeholder(),
+      appBar: AppBar(title: Text('Content Page')),
+      body: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          body: TabBarView(children: [
+            HomePage(novel: novel),
+            UploaderFilePage(novel: novel),
+          ]),
+          bottomNavigationBar: TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.home)),
+              Tab(icon: Icon(Icons.cloud_circle_rounded)),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
