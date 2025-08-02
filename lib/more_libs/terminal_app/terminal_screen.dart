@@ -29,8 +29,8 @@ class _TerminalScreenState extends State<TerminalScreen> {
 
       setState(() {
         outputLines.add("git status => ${status.exitCode}");
-        outputLines.add(status.stdout);
-        outputLines.add(status.stderr);
+        outputLines.add('Log: ${status.stdout}');
+        outputLines.add('Error: ${status.stderr}');
       });
 
       // Step 1: git add .
@@ -38,12 +38,15 @@ class _TerminalScreenState extends State<TerminalScreen> {
         outputLines.add("Running: git add .'");
       });
 
-      var addResult = await Process.run('git', ['add', '.'], workingDirectory: ServerFileServices.getRootPath());
+      var addResult = await Process.run('git', [
+        'add',
+        '.',
+      ], workingDirectory: ServerFileServices.getRootPath());
 
       setState(() {
         outputLines.add("git add . => ${addResult.exitCode}");
-        outputLines.add(addResult.stdout);
-        outputLines.add(addResult.stderr);
+        outputLines.add('Log: ${addResult.stdout}');
+        outputLines.add('Error: ${addResult.stderr}');
       });
 
       // Step 2: git commit -m 'update'
@@ -51,12 +54,16 @@ class _TerminalScreenState extends State<TerminalScreen> {
         outputLines.add("Running: git commit -m 'update'");
       });
 
-      var commitResult = await Process.run('git', ['commit', '-m', '"update"'], workingDirectory: ServerFileServices.getRootPath());
+      var commitResult = await Process.run('git', [
+        'commit',
+        '-m',
+        '"update"',
+      ], workingDirectory: ServerFileServices.getRootPath());
 
       setState(() {
         outputLines.add("git commit => ${commitResult.exitCode}");
-        outputLines.add(commitResult.stdout);
-        outputLines.add(commitResult.stderr);
+        outputLines.add('Log: ${commitResult.stdout}');
+        outputLines.add('Error: ${commitResult.stderr}');
       });
       // Step 3: git push -u origin main
       var pushResult = await Process.run('git', [
@@ -68,8 +75,8 @@ class _TerminalScreenState extends State<TerminalScreen> {
 
       setState(() {
         outputLines.add("git push => ${pushResult.exitCode}");
-        outputLines.add(pushResult.stdout);
-        outputLines.add(pushResult.stderr);
+        outputLines.add('Log: ${pushResult.stdout}');
+        outputLines.add('Error: ${pushResult.stderr}');
       });
 
       if (!mounted) return;
