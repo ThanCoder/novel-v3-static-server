@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/screens/home/home_screen.dart';
-import 'package:novel_v3_static_server/more_libs/setting_v1.1.0/app_notifier.dart';
+import 'package:novel_v3_static_server/more_libs/setting_v1.2.0/app_notifier.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

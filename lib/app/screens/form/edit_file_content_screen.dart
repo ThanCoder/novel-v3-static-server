@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/components/uploader_file_chooser.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_file.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/models/uploader_file.dart';
 import 'package:t_widgets/t_widgets.dart';
 
 class EditFileContentScreen extends StatefulWidget {

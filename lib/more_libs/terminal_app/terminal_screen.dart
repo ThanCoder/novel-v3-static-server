@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/server_file_services.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/services/server_file_services.dart';
 import 'package:t_widgets/t_widgets.dart';
 
 class TerminalScreen extends StatefulWidget {

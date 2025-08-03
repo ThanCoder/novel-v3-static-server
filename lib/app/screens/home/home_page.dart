@@ -3,10 +3,10 @@ import 'package:novel_v3_static_server/app/components/novel_grid_item.dart';
 import 'package:novel_v3_static_server/app/components/novel_list_item.dart';
 import 'package:novel_v3_static_server/app/components/novel_see_all_view.dart';
 import 'package:novel_v3_static_server/app/routes_helper.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/see_all_screen.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/uploader_novel_search_screen.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/services/index.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/models/uploader_novel.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/screens/see_all_screen.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/screens/uploader_novel_search_screen.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/services/index.dart';
 import 'package:novel_v3_static_server/more_libs/terminal_app/terminal_button.dart';
 import 'package:provider/provider.dart';
 import 'package:t_widgets/t_widgets.dart';
@@ -55,6 +55,7 @@ class _HomePageState extends State<HomePage> {
           listItemBuilder: (context, novel) => NovelListItem(
             novel: novel,
             onClicked: (novel) => goEditNovelContentScreen(context, novel),
+            onRightClicked: _showMenu,
           ),
           onClicked: (title, resList) {
             Navigator.push(
@@ -67,6 +68,7 @@ class _HomePageState extends State<HomePage> {
                     novel: item,
                     onClicked: (novel) =>
                         goEditNovelContentScreen(context, novel),
+                        onRightClicked: _showMenu,
                   ),
                 ),
               ),

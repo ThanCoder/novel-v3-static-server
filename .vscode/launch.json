@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "name": "Flutter (lib/more_libs/novel_v3_uploader_v1.2.0/screens/novel_content_screen.dart)",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib/more_libs/novel_v3_uploader_v1.2.0/screens/novel_content_screen.dart"
+        }
+    ]
+}

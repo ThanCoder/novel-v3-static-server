@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:flutter/material.dart';
-import '../services/index.dart';
+import 'index.dart';
 
 class UploaderConfigServices {
   static Future<void> setConfig(

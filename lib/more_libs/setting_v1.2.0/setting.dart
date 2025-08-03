@@ -4,6 +4,8 @@ import 'app_config_model.dart';
 import 'app_notifier.dart';
 import 'constants.dart';
 
+export 'index.dart';
+
 class Setting {
   static AppConfigModel get getAppConfig => appConfigNotifier.value;
   

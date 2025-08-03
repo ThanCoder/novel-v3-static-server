@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/models/uploader_novel.dart';
 import 'package:t_widgets/views/t_tags_wrap_view.dart';
 import 'package:t_widgets/widgets/index.dart';
 import 'package:than_pkg/extensions/datetime_extension.dart';

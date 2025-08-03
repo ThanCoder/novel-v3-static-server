@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_file.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/models/uploader_file.dart';
 import 'package:than_pkg/than_pkg.dart';
 
 class UploaderFileItem extends StatelessWidget {
