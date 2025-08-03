@@ -10,6 +10,7 @@ import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/servic
 import 'package:novel_v3_static_server/more_libs/terminal_app/terminal_button.dart';
 import 'package:provider/provider.dart';
 import 'package:t_widgets/t_widgets.dart';
+import 'package:than_pkg/than_pkg.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -45,6 +46,23 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _goSeeAllScreen(String title, List<UploaderNovel> list) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SeeAllScreen<UploaderNovel>(
+          title: Text(title),
+          list: list,
+          gridItemBuilder: (context, item) => NovelGridItem(
+            novel: item,
+            onClicked: (novel) => goEditNovelContentScreen(context, novel),
+            onRightClicked: _showMenu,
+          ),
+        ),
+      ),
+    );
+  }
+
   void _goSearchScreen() {
     final list = context.read<UploaderNovelServices>().getList;
     Navigator.push(
@@ -57,23 +75,7 @@ class _HomePageState extends State<HomePage> {
             onClicked: (novel) => goEditNovelContentScreen(context, novel),
             onRightClicked: _showMenu,
           ),
-          onClicked: (title, resList) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SeeAllScreen<UploaderNovel>(
-                  title: Text(title),
-                  list: resList,
-                  gridItemBuilder: (context, item) => NovelGridItem(
-                    novel: item,
-                    onClicked: (novel) =>
-                        goEditNovelContentScreen(context, novel),
-                        onRightClicked: _showMenu,
-                  ),
-                ),
-              ),
-            );
-          },
+          onClicked: _goSeeAllScreen,
         ),
       ),
     );
@@ -81,20 +83,6 @@ class _HomePageState extends State<HomePage> {
 
   void _goContentPage(UploaderNovel novel) {
     goEditNovelContentScreen(context, novel);
-  }
-
-  void _goSeeAllScreen(String title, List<UploaderNovel> list) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SeeAllScreen(
-          title: Text(title),
-          list: list,
-          gridItemBuilder: (context, item) =>
-              NovelGridItem(novel: item, onClicked: _goContentPage),
-        ),
-      ),
-    );
   }
 
   void _updateNovel(UploaderNovel novel) {
@@ -117,41 +105,40 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showMenu(UploaderNovel novel) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: 150),
-          child: Column(
-            spacing: 5,
-            children: [
-              ListTile(
-                title: Text(
-                  novel.title,
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.edit_document),
-                title: Text('Edit'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _updateNovel(novel);
-                },
-              ),
-              ListTile(
-                iconColor: Colors.red,
-                leading: Icon(Icons.delete_forever),
-                title: Text('Delete'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _deleteNovelConfirm(novel);
-                },
-              ),
-            ],
+    showTModalBottomSheet(
+      context,
+      child: Column(
+        spacing: 5,
+        children: [
+          ListTile(
+            title: Text(novel.title, maxLines: 2, textAlign: TextAlign.center),
           ),
-        ),
+          ListTile(
+            leading: Icon(Icons.copy_all),
+            title: Text('Copy Title'),
+            onTap: () {
+              Navigator.pop(context);
+              ThanPkg.appUtil.copyText(novel.title);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.edit_document),
+            title: Text('Edit'),
+            onTap: () {
+              Navigator.pop(context);
+              _updateNovel(novel);
+            },
+          ),
+          ListTile(
+            iconColor: Colors.red,
+            leading: Icon(Icons.delete_forever),
+            title: Text('Delete'),
+            onTap: () {
+              Navigator.pop(context);
+              _deleteNovelConfirm(novel);
+            },
+          ),
+        ],
       ),
     );
   }

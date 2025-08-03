@@ -1,19 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/general_server/index.dart';
 import 'package:t_widgets/dialogs/index.dart';
 import 'package:t_widgets/functions/index.dart';
 import 'package:t_widgets/widgets/index.dart';
 import 'package:than_pkg/than_pkg.dart';
 
-import 'android_app_services.dart';
-import 'app_config_model.dart';
-import 'app_notifier.dart';
-import 'app_path_services.dart';
-import 'constants.dart';
+import '../general_server/index.dart';
 import 'setting.dart';
-import 'theme_component.dart';
 
 class AppSettingScreen extends StatefulWidget {
   const AppSettingScreen({super.key});

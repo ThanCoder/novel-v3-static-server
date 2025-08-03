@@ -216,16 +216,19 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
                   label: Text('ရေးသားသူ'),
                   controller: authorController,
                   maxLines: 1,
+                  isSelectedAll: true,
                 ),
                 TTextField(
                   label: Text('ဘာသာပြန်သူ'),
                   controller: translatorController,
                   maxLines: 1,
+                  isSelectedAll: true,
                 ),
                 TTextField(
                   label: Text('အထိက ဇောတ်ကောင်'),
                   controller: mcController,
                   maxLines: 1,
+                  isSelectedAll: true,
                 ),
                 // adult
                 SwitchListTile.adaptive(
@@ -262,11 +265,34 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
                 TTagsWrapView(
                   title: Text('Page Urls'),
                   values: novel.getPageUrls,
-                  onApply: (values) {
-                    setState(() {
-                      novel.setPageUrl(values);
-                    });
+                  onAddButtonClicked: () {
+                    showTReanmeDialog(
+                      context,
+                      barrierDismissible: false,
+                      autofocus: true,
+                      submitText: 'Add',
+                      cancelText: 'Close',
+                      text: '',
+                      onCheckIsError: (text) {
+                        if (!text.startsWith('http')) {
+                          return 'http url is required!';
+                        }
+                        return null;
+                      },
+                      onSubmit: (text) {
+                        setState(() {
+                          final values = novel.getPageUrls;
+                          values.insert(0, text);
+                          novel.setPageUrl(values);
+                        });
+                      },
+                    );
                   },
+                  // onApply: (values) {
+                  //   setState(() {
+                  //     novel.setPageUrl(values);
+                  //   });
+                  // },
                 ),
                 TTextField(
                   label: Text('အကြောင်းအရာ'),
