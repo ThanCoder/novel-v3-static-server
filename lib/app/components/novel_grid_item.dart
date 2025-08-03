@@ -61,26 +61,6 @@ class NovelGridItem extends StatelessWidget {
               ),
             ),
 
-            // Positioned(
-            //   left: 0,
-            //   top: 0,
-            //   child: StatusText(
-            //     bgColor: novel.isCompleted
-            //         ? StatusText.completedColor
-            //         : StatusText.onGoingColor,
-            //     text: novel.isCompleted ? 'Completed' : 'OnGoing',
-            //   ),
-            // ),
-            // novel.isAdult
-            //     ? Positioned(
-            //         right: 0,
-            //         top: 0,
-            //         child: StatusText(
-            //           text: 'Adult',
-            //           bgColor: StatusText.adultColor,
-            //         ),
-            //       )
-            //     : const SizedBox.shrink(),
           ],
         ),
       ),

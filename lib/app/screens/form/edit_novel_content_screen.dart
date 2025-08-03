@@ -148,8 +148,8 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen> {
             onUpdated: (file) async {
               try {
                 await context.read<UploaderFileServices>().add(file);
-                if (!context.mounted) return;
-                showTSnackBar(context, '${file.name} Added');
+                // if (!context.mounted) return;
+                // showTSnackBar(context, '${file.name} Added');
               } catch (e) {
                 if (!context.mounted) return;
                 showTMessageDialogError(context, e.toString());

@@ -3,7 +3,6 @@ import 'package:novel_v3_static_server/app/components/novel_grid_item.dart';
 import 'package:novel_v3_static_server/app/components/novel_list_item.dart';
 import 'package:novel_v3_static_server/app/components/novel_see_all_view.dart';
 import 'package:novel_v3_static_server/app/routes_helper.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/components/helper_see_all_view.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/models/uploader_novel.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/see_all_screen.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader/screens/uploader_novel_search_screen.dart';
@@ -104,6 +103,7 @@ class _HomePageState extends State<HomePage> {
         try {
           await context.read<UploaderNovelServices>().update(updatedNovel);
           if (!mounted) return;
+          // goEditNovelContentScreen(context, novel);
 
           showTSnackBar(context, '${updatedNovel.title} Updated');
         } catch (e) {
@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> {
   Widget _getGridWidget(List<UploaderNovel> list) {
     final provider = context.watch<UploaderNovelServices>();
     final list = provider.getList;
-    final helperList = context.watch<HelperServices>().getList;
+    // final helperList = context.watch<HelperServices>().getList;
 
     final completedList = list.where((e) => e.isCompleted).toList();
     final ongoingList = list.where((e) => !e.isCompleted).toList();
@@ -178,17 +178,16 @@ class _HomePageState extends State<HomePage> {
     return CustomScrollView(
       slivers: [
         // helper
-        SliverToBoxAdapter(
-          child: HelperSeeAllView(
-            title: 'အကူအညီများ',
-            titleColor: Colors.deepOrange,
-            list: helperList,
-            showLines: 1,
-            onSeeAllClicked: (title, list) {},
-            onClicked: (helper) => goHelperEditScreen(context, helper),
-          ),
-        ),
-
+        // SliverToBoxAdapter(
+        //   child: HelperSeeAllView(
+        //     title: 'အကူအညီများ',
+        //     titleColor: Colors.deepOrange,
+        //     list: helperList,
+        //     showLines: 1,
+        //     onSeeAllClicked: (title, list) {},
+        //     onClicked: (helper) => goHelperEditScreen(context, helper),
+        //   ),
+        // ),
         SliverToBoxAdapter(
           child: NovelSeeAllView(
             title: 'Description မထည့်ရသေးသော Novel များ',
@@ -257,6 +256,14 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(onPressed: _goSearchScreen, icon: Icon(Icons.search)),
           TerminalButton(),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                isListView = !isListView;
+              });
+            },
+            icon: Icon(isListView ? Icons.list : Icons.grid_view),
+          ),
         ],
       ),
       body: isLoading
@@ -265,23 +272,32 @@ class _HomePageState extends State<HomePage> {
           ? _getListWidget(list)
           : _getGridWidget(list),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final newNovel = UploaderNovel.create();
-          goEditNovelScreen(
-            context,
-            novel: newNovel,
-            onUpdated: (novel) async {
-              try {
-                await context.read<UploaderNovelServices>().add(novel);
-                if (!context.mounted) return;
+        onPressed: () async {
+          try {
+            final newNovel = UploaderNovel.create();
+            await context.read<UploaderNovelServices>().add(newNovel);
+            if (!context.mounted) return;
+            // go edit screen
+            goEditNovelScreen(
+              context,
+              novel: newNovel,
+              onUpdated: (novel) async {
+                try {
+                  await context.read<UploaderNovelServices>().update(novel);
+                  if (!context.mounted) return;
+                  goEditNovelContentScreen(context, novel);
 
-                showTSnackBar(context, '${novel.title} Added');
-              } catch (e) {
-                if (!context.mounted) return;
-                showTMessageDialogError(context, e.toString());
-              }
-            },
-          );
+                  showTSnackBar(context, '${novel.title} Updated');
+                } catch (e) {
+                  if (!context.mounted) return;
+                  showTMessageDialogError(context, e.toString());
+                }
+              },
+            );
+          } catch (e) {
+            if (!context.mounted) return;
+            showTMessageDialogError(context, e.toString());
+          }
         },
         child: Icon(Icons.add),
       ),

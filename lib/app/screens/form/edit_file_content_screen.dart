@@ -64,6 +64,7 @@ class _EditFileContentScreenState extends State<EditFileContentScreen> {
                 controller: nameConstroller,
                 maxLines: 1,
                 isSelectedAll: true,
+                autofocus: true,
               ),
               TTextField(
                 label: Text('File Url'),
@@ -76,6 +77,7 @@ class _EditFileContentScreenState extends State<EditFileContentScreen> {
                 controller: fileSizeConstroller,
                 maxLines: 1,
                 // isSelectedAll: true,
+                onSubmitted: (value) => _onSaved(),
               ),
               // types
               UploaderFileChooser(
@@ -101,7 +103,7 @@ class _EditFileContentScreenState extends State<EditFileContentScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed:  _onSaved,
+        onPressed: _onSaved,
         child: Icon(Icons.save_as_rounded),
       ),
     );

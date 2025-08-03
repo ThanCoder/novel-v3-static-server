@@ -88,6 +88,7 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
   void onDragDone(DropDoneDetails details) async {
     try {
       final files = details.files.map((e) => e.path).toList();
+      // cover files
       final coverFiles = ServerFileServices.getAccessableCoverFiles(files);
       if (coverFiles.isNotEmpty) {
         final file = File(coverFiles.first);
@@ -102,6 +103,7 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
         setState(() {});
         return;
       }
+      // config
       final configFiles = ServerFileServices.getAccessableConfigFiles(files);
       if (configFiles.isEmpty) return;
       // move file
@@ -116,9 +118,27 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
       mcController.text = config.mc;
       // coverUrlController.text = config.coverUrl;
       descController.text = config.desc;
+      // title ရှိနေပြီးသားလား စစ်ဆေးမယ်
+      if (alreadyTitleList.contains(titleController.text)) {
+        errorTitle = 'title ရှိနေပြီးသားဖြစ်နေပါတယ်';
+      } else {
+        errorTitle = null;
+      }
+      // error မရှိနေရင် cover file ကို move မယ်
+      final coverFile = File(config.coverPath);
+      if (coverFile.existsSync()) {
+        final oldFile = File(novel.coverPath);
+        if (oldFile.existsSync()) {
+          oldFile.deleteSync();
+        }
+        // coverFile.renameSync(novel.coverPath);
+        coverFile.copySync(novel.coverPath);
 
+        coverUrlController.text = ServerFileServices.getImageUrl(
+          novel.coverPath.getName(),
+        );
+      }
       setState(() {});
-      _checkAlreadyTitle();
 
       if (!mounted) return;
       showTSnackBar(context, 'config Added');
@@ -179,6 +199,7 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
                   isSelectedAll: true,
                   errorText: errorTitle,
                   maxLines: 1,
+                  autofocus: true,
                   onChanged: (value) {
                     _checkAlreadyTitle();
                   },
