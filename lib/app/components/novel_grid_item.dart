@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/models/uploader_novel.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/uploader_novel.dart';
 import 'package:t_widgets/t_widgets.dart';
 
 

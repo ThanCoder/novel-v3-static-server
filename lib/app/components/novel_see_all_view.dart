@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/components/novel_grid_item.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/components/see_all_view.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/models/uploader_novel.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/components/see_all_view.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/uploader_novel.dart';
 
 class NovelSeeAllView extends StatelessWidget {
   String title;

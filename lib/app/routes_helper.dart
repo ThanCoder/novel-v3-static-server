@@ -3,9 +3,9 @@ import 'package:novel_v3_static_server/app/screens/form/edit_file_content_screen
 import 'package:novel_v3_static_server/app/screens/form/edit_helper_screen.dart';
 import 'package:novel_v3_static_server/app/screens/form/edit_novel_content_screen.dart';
 import 'package:novel_v3_static_server/app/screens/form/edit_novel_screen.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/models/helper_file.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/models/uploader_file.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/models/uploader_novel.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/helper_file.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/uploader_file.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/uploader_novel.dart';
 
 void goEditNovelContentScreen(BuildContext context, UploaderNovel novel) async {
   Navigator.push(

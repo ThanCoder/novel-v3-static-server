@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/my_app.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/novel_v3_uploader.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/novel_v3_uploader.dart';
 import 'package:novel_v3_static_server/more_libs/setting_v1.2.0/setting.dart';
 import 'package:provider/provider.dart';
 import 'package:t_widgets/t_widgets.dart';

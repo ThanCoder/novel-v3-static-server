@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/models/uploader_novel.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/services/server_file_services.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.2.0/services/uploader_novel_services.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/uploader_novel.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/services/server_file_services.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/services/uploader_novel_services.dart';
 import 'package:provider/provider.dart';
 import 'package:t_widgets/extensions/index.dart';
 import 'package:t_widgets/t_widgets.dart';
@@ -288,11 +288,11 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
                       },
                     );
                   },
-                  // onApply: (values) {
-                  //   setState(() {
-                  //     novel.setPageUrl(values);
-                  //   });
-                  // },
+                  onApply: (values) {
+                    setState(() {
+                      novel.setPageUrl(values);
+                    });
+                  },
                 ),
                 TTextField(
                   label: Text('အကြောင်းအရာ'),

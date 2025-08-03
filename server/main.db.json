@@ -1,5 +1,20 @@
 [
  {
+  "id": "70837224-5ceb-4b64-9fa5-60d01ebb00ec",
+  "title": "စွမ်းအားကြီးလှသောဆရာဦးလေး",
+  "author": "Unknown",
+  "translator": "Unknown",
+  "mc": "စုရင်",
+  "tags": "Over Power,ကျင့်ကြံခြင်း,ရှန်းရှ,စနစ် စာစဥ်",
+  "desc": "",
+  "pageUrls": "https://t.me/mbw_team,https://www.facebook.com/profile.php?id=61556880726263&mibextid=LQQJ4d",
+  "coverUrl": "https://raw.githubusercontent.com/ThanCoder/novel-v3-static-server/refs/heads/main/server/images/70837224-5ceb-4b64-9fa5-60d01ebb00ec.png",
+  "coverPath": "/home/than/projects/static_servers/novel_v3_static_server/server/images/70837224-5ceb-4b64-9fa5-60d01ebb00ec.png",
+  "date": 1754202434419,
+  "isAdult": false,
+  "isCompleted": true
+ },
+ {
   "id": "8c2d55b9-c4c4-440d-a37d-a40d92057be3",
   "title": "စုန်းမလေးကိုလွှတ်လိုက်",
   "author": "Unknown",
@@ -191,21 +206,6 @@
   "coverUrl": "https://raw.githubusercontent.com/ThanCoder/novel-v3-static-server/refs/heads/main/server/images/8eda6a88-4e98-4f07-9f2a-7ae9ed044c83.png",
   "coverPath": "/home/than/projects/static_servers/novel_v3_static_server/server/images/8eda6a88-4e98-4f07-9f2a-7ae9ed044c83.png",
   "date": 1754187008730,
-  "isAdult": false,
-  "isCompleted": true
- },
- {
-  "id": "70837224-5ceb-4b64-9fa5-60d01ebb00ec",
-  "title": "စွမ်းအားကြီးလှသောဆရာဦးလေး",
-  "author": "Unknown",
-  "translator": "Unknown",
-  "mc": "စုရင်",
-  "tags": "",
-  "desc": "",
-  "pageUrls": "",
-  "coverUrl": "https://raw.githubusercontent.com/ThanCoder/novel-v3-static-server/refs/heads/main/server/images/70837224-5ceb-4b64-9fa5-60d01ebb00ec.png",
-  "coverPath": "/home/than/projects/static_servers/novel_v3_static_server/server/images/70837224-5ceb-4b64-9fa5-60d01ebb00ec.png",
-  "date": 1754186953056,
   "isAdult": false,
   "isCompleted": true
  },

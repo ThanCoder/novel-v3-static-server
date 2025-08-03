@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/than_pkg.dart';
 
-import '../../components/status_text.dart';
+import '../../components/index.dart';
 import '../../models/uploader_novel.dart';
 
 class HomePage extends StatelessWidget {
@@ -51,6 +51,8 @@ class HomePage extends StatelessWidget {
                                 bgColor: StatusText.adultColor,
                               )
                             : const SizedBox.shrink(),
+                      // page
+                      OnlineNovelPageButton(novel: novel),
                       ],
                     ),
                     Text('ရက်စွဲ: ${novel.date.toParseTime()}'),
@@ -59,6 +61,7 @@ class HomePage extends StatelessWidget {
               ),
             ),
             TTagsWrapView(values: novel.getTags),
+            novel.getTags.isEmpty ? SizedBox.shrink() : Divider(),
             SelectableText(novel.desc, style: const TextStyle(fontSize: 16)),
           ],
         ),
