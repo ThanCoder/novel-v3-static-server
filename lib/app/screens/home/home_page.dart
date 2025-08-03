@@ -34,6 +34,79 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<UploaderNovelServices>();
+    final list = provider.getList;
+    final isLoading = provider.isLoading;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Local Page'),
+        actions: [
+          IconButton(onPressed: _goSearchScreen, icon: Icon(Icons.search)),
+          TerminalButton(),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                isListView = !isListView;
+              });
+            },
+            icon: Icon(isListView ? Icons.list : Icons.grid_view),
+          ),
+        ],
+      ),
+      body: isLoading
+          ? Center(child: TLoaderRandom())
+          : Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: _getListStyle(list),
+            ),
+
+      floatingActionButton: _getFloatButton(),
+    );
+  }
+
+  Widget _getListStyle(List<UploaderNovel> list) {
+    if (isListView) {
+      return _getListWidget(list);
+    }
+    return _getGridWidget(list);
+  }
+
+  Widget _getFloatButton() {
+    return FloatingActionButton(
+      onPressed: () async {
+        try {
+          final newNovel = UploaderNovel.create();
+          await context.read<UploaderNovelServices>().add(newNovel);
+          if (!mounted) return;
+          // go edit screen
+          goEditNovelScreen(
+            context,
+            novel: newNovel,
+            onUpdated: (novel) async {
+              try {
+                await context.read<UploaderNovelServices>().update(novel);
+                if (!mounted) return;
+                goEditNovelContentScreen(context, novel);
+
+                showTSnackBar(context, '${novel.title} Updated');
+              } catch (e) {
+                if (!mounted) return;
+                showTMessageDialogError(context, e.toString());
+              }
+            },
+          );
+        } catch (e) {
+          if (!context.mounted) return;
+          showTMessageDialogError(context, e.toString());
+        }
+      },
+      child: Icon(Icons.add),
+    );
+  }
+
   void _deleteNovelConfirm(UploaderNovel novel) {
     showDialog(
       context: context,
@@ -155,10 +228,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _getGridWidget(List<UploaderNovel> list) {
-    final provider = context.watch<UploaderNovelServices>();
-    final list = provider.getList;
-    // final helperList = context.watch<HelperServices>().getList;
-
     final completedList = list.where((e) => e.isCompleted).toList();
     final ongoingList = list.where((e) => !e.isCompleted).toList();
     final adultList = list.where((e) => e.isAdult).toList();
@@ -188,6 +257,7 @@ class _HomePageState extends State<HomePage> {
             onRightClicked: _showMenu,
           ),
         ),
+        SliverToBoxAdapter(child: const SizedBox(height: 10)),
         SliverToBoxAdapter(
           child: NovelSeeAllView(
             title: 'အသစ်များ',
@@ -198,7 +268,7 @@ class _HomePageState extends State<HomePage> {
             onRightClicked: _showMenu,
           ),
         ),
-
+        SliverToBoxAdapter(child: const SizedBox(height: 10)),
         SliverToBoxAdapter(
           child: NovelSeeAllView(
             title: 'ပြီးဆုံး',
@@ -209,6 +279,7 @@ class _HomePageState extends State<HomePage> {
             onRightClicked: _showMenu,
           ),
         ),
+        SliverToBoxAdapter(child: const SizedBox(height: 10)),
         SliverToBoxAdapter(
           child: NovelSeeAllView(
             title: 'ဘာသာပြန်နေဆဲ',
@@ -219,6 +290,7 @@ class _HomePageState extends State<HomePage> {
             onRightClicked: _showMenu,
           ),
         ),
+        SliverToBoxAdapter(child: const SizedBox(height: 10)),
         SliverToBoxAdapter(
           child: NovelSeeAllView(
             titleColor: Colors.red,
@@ -230,66 +302,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final provider = context.watch<UploaderNovelServices>();
-    final list = provider.getList;
-    final isLoading = provider.isLoading;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Local Page'),
-        actions: [
-          IconButton(onPressed: _goSearchScreen, icon: Icon(Icons.search)),
-          TerminalButton(),
-          IconButton(
-            onPressed: () {
-              setState(() {
-                isListView = !isListView;
-              });
-            },
-            icon: Icon(isListView ? Icons.list : Icons.grid_view),
-          ),
-        ],
-      ),
-      body: isLoading
-          ? Center(child: TLoaderRandom())
-          : isListView
-          ? _getListWidget(list)
-          : _getGridWidget(list),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          try {
-            final newNovel = UploaderNovel.create();
-            await context.read<UploaderNovelServices>().add(newNovel);
-            if (!context.mounted) return;
-            // go edit screen
-            goEditNovelScreen(
-              context,
-              novel: newNovel,
-              onUpdated: (novel) async {
-                try {
-                  await context.read<UploaderNovelServices>().update(novel);
-                  if (!context.mounted) return;
-                  goEditNovelContentScreen(context, novel);
-
-                  showTSnackBar(context, '${novel.title} Updated');
-                } catch (e) {
-                  if (!context.mounted) return;
-                  showTMessageDialogError(context, e.toString());
-                }
-              },
-            );
-          } catch (e) {
-            if (!context.mounted) return;
-            showTMessageDialogError(context, e.toString());
-          }
-        },
-        child: Icon(Icons.add),
-      ),
     );
   }
 }

@@ -30,10 +30,14 @@ class NovelSeeAllView extends StatelessWidget {
       showLines: showLines,
       list: list,
       onSeeAllClicked: onSeeAllClicked,
-      itemBuilder: (context, index) => NovelGridItem(
-        novel: list[index],
-        onClicked: onClicked,
-        onRightClicked: onRightClicked,
+      gridItemBuilder: (context, item) => SizedBox(
+        width: 140,
+        height: 180,
+        child: NovelGridItem(
+          novel: item,
+          onClicked: onClicked,
+          onRightClicked: onRightClicked,
+        ),
       ),
     );
   }

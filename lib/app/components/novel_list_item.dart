@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/uploader_novel.dart';
-import 'package:t_widgets/views/t_tags_wrap_view.dart';
 import 'package:t_widgets/widgets/index.dart';
 import 'package:than_pkg/extensions/datetime_extension.dart';
+
+import '../../more_libs/novel_v3_uploader_v1.3.0/novel_v3_uploader.dart';
 
 class NovelListItem extends StatelessWidget {
   UploaderNovel novel;
@@ -33,41 +33,53 @@ class NovelListItem extends StatelessWidget {
               spacing: 8,
               children: [
                 SizedBox(
-                  width: 180,
-                  height: 220,
+                  width: 140,
+                  height: 160,
                   child: TImageFile(path: novel.coverPath),
                 ),
-                Column(
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 3,
-                  children: [
-                    Text(novel.title),
-                    Text('Author: ${novel.author}'),
-                    Text('ဘာသာပြန်: ${novel.translator}'),
-                    Text('MC: ${novel.mc}'),
-                    // Text('Tags: ${novel.tags}'),
-                    TTagsWrapView(values: novel.getTags),
-                    // Text('isAdult: ${novel.isAdult.toString()}'),
-                    // Text('isCompleted: ${novel.isCompleted.toString()}'),
-                    TChip(
-                      title: Text(
-                        novel.isCompleted ? 'isCompleted' : 'OnGoing',
-                        style: TextStyle(
-                          color: novel.isCompleted ? Colors.teal : Colors.grey,
-                        ),
+                Expanded(
+                  child: Column(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 3,
+                    children: [
+                      Text(
+                        novel.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 13),
                       ),
-                    ),
-                    novel.isAdult
-                        ? TChip(
-                            title: Text(
-                              'isAdult',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          )
-                        : SizedBox.shrink(),
-                    Text('ရက်စွဲ: ${novel.date.toParseTime()}'),
-                  ],
+                      Text(
+                        'Author: ${novel.author}',
+                        style: TextStyle(fontSize: 13),
+                      ),
+                      Text(
+                        'ဘာသာပြန်: ${novel.translator}',
+                        style: TextStyle(fontSize: 13),
+                      ),
+                      Text('MC: ${novel.mc}', style: TextStyle(fontSize: 13)),
+                      // TTagsWrapView(values: novel.getTags),
+                      TagWrapView(list: novel.getTags),
+                      Wrap(
+                        spacing: 5,
+                        children: [
+                          StatusText(
+                            bgColor: novel.isCompleted
+                                ? StatusText.completedColor
+                                : StatusText.onGoingColor,
+                            text: novel.isCompleted ? 'Completed' : 'OnGoing',
+                          ),
+                          novel.isAdult
+                              ? StatusText(
+                                  text: 'Adult',
+                                  bgColor: StatusText.adultColor,
+                                )
+                              : const SizedBox.shrink(),
+                        ],
+                      ),
+                      Text('ရက်စွဲ: ${novel.date.toParseTime()}'),
+                    ],
+                  ),
                 ),
               ],
             ),
