@@ -253,12 +253,14 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
                 // tags
                 TTagsWrapView(
                   title: Text('Tags'),
+                  
                   values: novel.getTags,
                   allTags: _getAllTags,
                   onApply: (values) {
                     setState(() {
                       novel.setTags(values);
                     });
+
                   },
                 ),
                 // Page Urls
