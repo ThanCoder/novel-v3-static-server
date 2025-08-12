@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/setting_v2.0.0/setting.dart';
-import 'package:novel_v3_static_server/more_libs/terminal_app/terminal_app.dart';
 import 'package:t_widgets/t_widgets.dart';
+
+import 'terminal_app.dart';
 
 class TerminalScreen extends StatefulWidget {
   const TerminalScreen({super.key});
