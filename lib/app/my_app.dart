@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/screens/home/home_screen.dart';
-import 'package:novel_v3_static_server/more_libs/setting_v1.2.0/app_notifier.dart';
+import 'package:novel_v3_static_server/more_libs/setting_v2.0.0/setting.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: appConfigNotifier,
+      valueListenable: Setting.getAppConfigNotifier,
       builder: (context, config, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,

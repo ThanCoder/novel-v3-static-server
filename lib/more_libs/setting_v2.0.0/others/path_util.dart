@@ -1,13 +1,12 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:than_pkg/than_pkg.dart';
-
-import 'app_notifier.dart';
-import 'constants.dart';
+import '../setting.dart';
 
 class PathUtil {
+  
+
   static Future<String> getAssetRealPathPath(String rootPath) async {
     final bytes = await rootBundle.load('assets/$rootPath');
     final name = rootPath.getName();
@@ -24,7 +23,7 @@ class PathUtil {
   }
 
   static String getHomePath() {
-    return createDir(appRootPathNotifier.value);
+    return createDir(Setting.appRootPath);
   }
 
   static String getConfigPath() {
@@ -44,7 +43,7 @@ class PathUtil {
   }
 
   static String getCachePath() {
-    String homeDir = createDir(appConfigPathNotifier.value);
+    String homeDir = createDir(Setting.appConfigPath);
     return createDir('$homeDir/cache');
   }
 
@@ -54,8 +53,8 @@ class PathUtil {
 
   static String getOutPath() {
     String download = createDir(
-        '${appExternalPathNotifier.value}/${Platform.isAndroid ? 'Download' : 'Downloads'}');
-    return createDir('$download/$appName');
+        '${Setting.appExternalPath}/${Platform.isAndroid ? 'Download' : 'Downloads'}');
+    return createDir('$download/${Setting.instance.appName}');
   }
 
   static String createDir(String path) {
@@ -66,7 +65,7 @@ class PathUtil {
         dir.createSync();
       }
     } catch (e) {
-      debugPrint('createDir: ${e.toString()}');
+      Setting.showDebugLog(e.toString(), tag: 'PathUtil:createDir');
     }
     return path;
   }

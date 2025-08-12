@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:novel_v3_static_server/more_libs/setting_v2.0.0/setting.dart';
 import 'package:t_widgets/t_widgets.dart';
 
 class TerminalScreen extends StatefulWidget {
@@ -16,12 +17,15 @@ class _TerminalScreenState extends State<TerminalScreen> {
 
   Future<void> _startUpload() async {
     try {
+      final serverRootPath = Setting.getAppConfig.serverRootPath;
+      final gitPath = Directory(serverRootPath).parent.path;
       // XFCE terminal ဖွင့်ပြီး git command run ခိုင်းမယ်
       await Process.run('xfce4-terminal', [
         '--hold', // command ပြီးသွားတာနဲ့ terminal ပိတ်မသွားအောင်
         '-e',
-        "bash -c \"git add . && git commit -m 'update' && git push -u origin main\"",
+        "bash -c \"cd $gitPath && git add . && git commit -m 'update' && git push -u origin main\"",
       ]);
+      // git "bash -c \"git add . && git commit -m 'update' && git push -u origin main\"",
     } catch (e) {
       if (!mounted) return;
       setState(() {

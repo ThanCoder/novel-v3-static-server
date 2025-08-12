@@ -16,8 +16,9 @@ class ThemeComponent extends StatelessWidget {
           trailing: Checkbox.adaptive(
             value: config.isDarkTheme,
             onChanged: (value) {
-              config.isDarkTheme = value!;
-              config.save();
+              appConfigNotifier.value =
+                  appConfigNotifier.value.copyWith(isDarkTheme: value);
+              appConfigNotifier.value.save();
             },
           ),
         );
