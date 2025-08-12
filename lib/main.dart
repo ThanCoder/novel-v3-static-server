@@ -26,7 +26,7 @@ void main() async {
       final res = await Dio().get(Setting.getForwardProxyUrl(url));
       return res.data.toString();
     },
-    getCustomServerPath: () => Setting.getAppConfig.customPath,
+    getCustomServerPath: () => Setting.getAppConfig.serverRootPath,
   );
 
   await TerminalApp.instance.init(

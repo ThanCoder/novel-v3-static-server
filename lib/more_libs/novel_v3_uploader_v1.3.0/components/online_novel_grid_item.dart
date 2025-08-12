@@ -55,10 +55,7 @@ class OnlineNovelGridItem extends StatelessWidget {
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 13,
-                  ),
+                  style: TextStyle(color: Colors.white, fontSize: 12),
                 ),
               ),
             ),

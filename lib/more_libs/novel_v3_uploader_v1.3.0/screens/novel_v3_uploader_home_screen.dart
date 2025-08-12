@@ -65,7 +65,7 @@ class _NovelV3UploaderHomeScreenState extends State<NovelV3UploaderHomeScreen> {
               isListView = !isListView;
               setState(() {});
             },
-            icon: Icon(isListView ? Icons.list : Icons.grid_on_sharp),
+            icon: Icon(isListView ? Icons.list : Icons.grid_view_outlined),
           ),
           // for desktop
           PlatformExtension.isDesktop()

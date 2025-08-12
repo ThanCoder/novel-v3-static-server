@@ -28,8 +28,8 @@ class NovelListItem extends StatelessWidget {
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(5.0),
-            child: Row(
-              // crossAxisAlignment: CrossAxisAlignment.start,
+            child: Wrap(
+              runSpacing: 8,
               spacing: 8,
               children: [
                 SizedBox(
