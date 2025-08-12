@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/services/server_file_services.dart';
 import 'package:t_widgets/t_widgets.dart';
 
 class TerminalScreen extends StatefulWidget {
@@ -17,72 +16,12 @@ class _TerminalScreenState extends State<TerminalScreen> {
 
   Future<void> _startUpload() async {
     try {
-      setState(() {
-        outputLines.clear();
-        outputLines.add("Running: git status");
-      });
-
-      // Step 0: git status
-      var status = await Process.run('git', [
-        'status',
-      ], workingDirectory: ServerFileServices.getRootPath());
-
-      setState(() {
-        outputLines.add("git status => ${status.exitCode}");
-        outputLines.add('Log: ${status.stdout}');
-        outputLines.add('Error: ${status.stderr}');
-      });
-
-      // Step 1: git add .
-      setState(() {
-        outputLines.add("Running: git add .'");
-      });
-
-      var addResult = await Process.run('git', [
-        'add',
-        '.',
-      ], workingDirectory: ServerFileServices.getRootPath());
-
-      setState(() {
-        outputLines.add("git add . => ${addResult.exitCode}");
-        outputLines.add('Log: ${addResult.stdout}');
-        outputLines.add('Error: ${addResult.stderr}');
-      });
-
-      // Step 2: git commit -m 'update'
-      setState(() {
-        outputLines.add("Running: git commit -m 'update'");
-      });
-
-      var commitResult = await Process.run('git', [
-        'commit',
-        '-m',
-        '"update"',
-      ], workingDirectory: ServerFileServices.getRootPath());
-
-      setState(() {
-        outputLines.add("git commit => ${commitResult.exitCode}");
-        outputLines.add('Log: ${commitResult.stdout}');
-        outputLines.add('Error: ${commitResult.stderr}');
-      });
-      // Step 3: git push -u origin main
-      var pushResult = await Process.run('git', [
-        'push',
-        '-u',
-        'origin',
-        'main',
-      ], workingDirectory: ServerFileServices.getRootPath());
-
-      setState(() {
-        outputLines.add("git push => ${pushResult.exitCode}");
-        outputLines.add('Log: ${pushResult.stdout}');
-        outputLines.add('Error: ${pushResult.stderr}');
-      });
-
-      if (!mounted) return;
-      setState(() {
-        isLoading = false;
-      });
+      // XFCE terminal ဖွင့်ပြီး git command run ခိုင်းမယ်
+      await Process.run('xfce4-terminal', [
+        '--hold', // command ပြီးသွားတာနဲ့ terminal ပိတ်မသွားအောင်
+        '-e',
+        "bash -c \"git add . && git commit -m 'update' && git push -u origin main\"",
+      ]);
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -126,9 +65,9 @@ class _TerminalScreenState extends State<TerminalScreen> {
                   isLoading ? LinearProgressIndicator() : SizedBox.shrink(),
                   TListTileWithDesc(
                     leading: Icon(Icons.check_box_outline_blank_rounded),
-                    title: 'Git Add',
+                    title: 'Git Push',
                     trailing: IconButton(
-                      onPressed: () {},
+                      onPressed: _startUploadConfirm,
                       icon: Icon(Icons.send),
                     ),
                   ),
