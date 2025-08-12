@@ -1,26 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/screens/home/home_page.dart';
+import 'package:novel_v3_static_server/app/screens/home/more_page.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/screens/novel_v3_uploader_home_screen.dart';
 import 'package:novel_v3_static_server/more_libs/setting_v2.0.0/setting.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<Widget> pages = [HomePage(), NovelV3UploaderHomeScreen(), MorePage()];
+  int index = 0;
+
+  @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        body: TabBarView(
-          children: [HomePage(), NovelV3UploaderHomeScreen(), Setting.getHomeScreen],
-        ),
-        bottomNavigationBar: TabBar(
-          tabs: [
-            Tab(icon: Icon(Icons.home)),
-            Tab(icon: Icon(Icons.online_prediction)),
-            Tab(icon: Icon(Icons.settings)),
-          ],
-        ),
+    return Scaffold(
+      body: pages[index],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: index,
+        selectedItemColor: Colors.blue,
+        onTap: (value) {
+          setState(() {
+            index = value;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(label: 'Local', icon: Icon(Icons.home)),
+          BottomNavigationBarItem(
+            label: 'Online',
+            icon: Icon(Icons.cloud_download),
+          ),
+          BottomNavigationBarItem(
+            label: 'More',
+            icon: Icon(Icons.grid_view_rounded),
+          ),
+        ],
       ),
     );
     // return Scaffold(
