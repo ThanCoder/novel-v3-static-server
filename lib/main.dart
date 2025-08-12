@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/my_app.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/novel_v3_uploader.dart';
+import 'package:novel_v3_static_server/more_libs/terminal_app/terminal_app.dart';
 import 'package:provider/provider.dart';
 import 'package:t_widgets/t_widgets.dart';
 
@@ -24,6 +27,15 @@ void main() async {
       return res.data.toString();
     },
     getCustomServerPath: () => Setting.getAppConfig.customPath,
+  );
+
+  await TerminalApp.instance.init(
+    getExecPath: () {
+      final serverRootPath = Setting.getAppConfig.serverRootPath;
+      return Directory(serverRootPath).parent.path;
+    },
+    getBashCommand: () =>
+        "git add . && git commit -m 'update' && git push -u origin main",
   );
 
   runApp(
