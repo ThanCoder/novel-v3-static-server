@@ -92,13 +92,13 @@ class UploaderNovel {
       translator: MapServices.get(map, ['translator'], defaultValue: 'Unknown'),
       mc: MapServices.get(map, ['mc'], defaultValue: 'Unknown'),
       tags: MapServices.get(map, ['tags'], defaultValue: ''),
-      desc: MapServices.get(map, ['content'], defaultValue: ''),
-      pageUrls: MapServices.get(map, ['page_link'], defaultValue: ''),
+      desc: MapServices.get(map, ['desc'], defaultValue: ''),
+      pageUrls: MapServices.get(map, ['pageUrls'], defaultValue: ''),
       coverUrl: MapServices.get(map, ['coverUrl'], defaultValue: ''),
       coverPath: MapServices.get(map, ['coverPath'], defaultValue: ''),
       date: DateTime.fromMillisecondsSinceEpoch(dateFromMillisecondsSinceEpoch),
-      isAdult: MapServices.get(map, ['is_adult'], defaultValue: false),
-      isCompleted: MapServices.get(map, ['is_completed'], defaultValue: false),
+      isAdult: MapServices.get(map, ['isAdult'], defaultValue: false),
+      isCompleted: MapServices.get(map, ['isCompleted'], defaultValue: false),
     );
   }
 

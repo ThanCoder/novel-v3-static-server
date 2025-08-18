@@ -7,8 +7,8 @@ import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/services/server_file_services.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/services/uploader_file_services.dart';
 import 'package:provider/provider.dart';
-import 'package:t_widgets/extensions/index.dart';
 import 'package:t_widgets/t_widgets.dart';
+import 'package:than_pkg/than_pkg.dart';
 
 class EditNovelContentScreen extends StatefulWidget {
   UploaderNovel novel;

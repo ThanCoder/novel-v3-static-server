@@ -6,8 +6,8 @@ import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/services/server_file_services.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/services/uploader_novel_services.dart';
 import 'package:provider/provider.dart';
-import 'package:t_widgets/extensions/index.dart';
 import 'package:t_widgets/t_widgets.dart';
+import 'package:than_pkg/than_pkg.dart';
 
 class EditNovelScreen extends StatefulWidget {
   UploaderNovel novel;
@@ -111,6 +111,8 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
       //novel
       novel.isAdult = config.isAdult;
       novel.isCompleted = config.isCompleted;
+      novel.tags = config.tags;
+      novel.pageUrls = config.pageUrls;
       // fields
       titleController.text = config.title;
       authorController.text = config.author;
@@ -253,14 +255,13 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
                 // tags
                 TTagsWrapView(
                   title: Text('Tags'),
-                  
+
                   values: novel.getTags,
                   allTags: _getAllTags,
                   onApply: (values) {
                     setState(() {
                       novel.setTags(values);
                     });
-
                   },
                 ),
                 // Page Urls

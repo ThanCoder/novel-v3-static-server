@@ -5,7 +5,6 @@ class ServerFileServices {
   static String getRootPath({bool absPath = true}) {
     // for custom server
     final customServerDir = NovelV3Uploader.instance.getCustomServerPath();
-    print(customServerDir);
     return customServerDir;
   }
 
