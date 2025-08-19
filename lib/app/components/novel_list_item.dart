@@ -37,49 +37,47 @@ class NovelListItem extends StatelessWidget {
                   height: 160,
                   child: TImageFile(path: novel.coverPath),
                 ),
-                Expanded(
-                  child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 3,
-                    children: [
-                      Text(
-                        novel.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 13),
-                      ),
-                      Text(
-                        'Author: ${novel.author}',
-                        style: TextStyle(fontSize: 13),
-                      ),
-                      Text(
-                        'ဘာသာပြန်: ${novel.translator}',
-                        style: TextStyle(fontSize: 13),
-                      ),
-                      Text('MC: ${novel.mc}', style: TextStyle(fontSize: 13)),
-                      // TTagsWrapView(values: novel.getTags),
-                      TagWrapView(list: novel.getTags),
-                      Wrap(
-                        spacing: 5,
-                        children: [
-                          StatusText(
-                            bgColor: novel.isCompleted
-                                ? StatusText.completedColor
-                                : StatusText.onGoingColor,
-                            text: novel.isCompleted ? 'Completed' : 'OnGoing',
-                          ),
-                          novel.isAdult
-                              ? StatusText(
-                                  text: 'Adult',
-                                  bgColor: StatusText.adultColor,
-                                )
-                              : const SizedBox.shrink(),
-                        ],
-                      ),
-                      Text('ရက်စွဲ: ${novel.date.toParseTime()}'),
-                    ],
-                  ),
+                Column(
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 3,
+                  children: [
+                    Text(
+                      novel.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 13),
+                    ),
+                    Text(
+                      'Author: ${novel.author}',
+                      style: TextStyle(fontSize: 13),
+                    ),
+                    Text(
+                      'ဘာသာပြန်: ${novel.translator}',
+                      style: TextStyle(fontSize: 13),
+                    ),
+                    Text('MC: ${novel.mc}', style: TextStyle(fontSize: 13)),
+                    // TTagsWrapView(values: novel.getTags),
+                    TagWrapView(list: novel.getTags),
+                    Wrap(
+                      spacing: 5,
+                      children: [
+                        StatusText(
+                          bgColor: novel.isCompleted
+                              ? StatusText.completedColor
+                              : StatusText.onGoingColor,
+                          text: novel.isCompleted ? 'Completed' : 'OnGoing',
+                        ),
+                        novel.isAdult
+                            ? StatusText(
+                                text: 'Adult',
+                                bgColor: StatusText.adultColor,
+                              )
+                            : const SizedBox.shrink(),
+                      ],
+                    ),
+                    Text('ရက်စွဲ: ${novel.date.toParseTime()}'),
+                  ],
                 ),
               ],
             ),
