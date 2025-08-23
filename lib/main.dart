@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:novel_v3_static_server/app/database/json_novel_database.dart';
 import 'package:novel_v3_static_server/app/my_app.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/novel_v3_uploader.dart';
 import 'package:novel_v3_static_server/more_libs/terminal_app/terminal_app.dart';
@@ -9,8 +10,11 @@ import 'package:provider/provider.dart';
 import 'package:t_widgets/t_widgets.dart';
 
 import 'more_libs/setting_v2.0.0/setting.dart';
+import 'app/services/novel_services.dart';
 
 void main() async {
+  final ns = NovelServices(dataSource: JsonNovelDatabase());
+
   await Setting.instance.initSetting(appName: 'novel_v3_static_server');
 
   await TWidgets.instance.init(
