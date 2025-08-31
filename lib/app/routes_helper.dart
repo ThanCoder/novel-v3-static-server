@@ -4,10 +4,10 @@ import 'package:novel_v3_static_server/app/screens/form/edit_helper_screen.dart'
 import 'package:novel_v3_static_server/app/screens/form/edit_novel_content_screen.dart';
 import 'package:novel_v3_static_server/app/screens/form/edit_novel_screen.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/helper_file.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/novel.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/uploader_file.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/uploader_novel.dart';
 
-void goEditNovelContentScreen(BuildContext context, UploaderNovel novel) async {
+void goEditNovelContentScreen(BuildContext context, Novel novel) async {
   Navigator.push(
     context,
     MaterialPageRoute(
@@ -18,8 +18,8 @@ void goEditNovelContentScreen(BuildContext context, UploaderNovel novel) async {
 
 void goEditNovelScreen(
   BuildContext context, {
-  required UploaderNovel novel,
-  required void Function(UploaderNovel updatedNovel) onUpdated,
+  required Novel novel,
+  required void Function(Novel updatedNovel) onUpdated,
 }) async {
   Navigator.push(
     context,

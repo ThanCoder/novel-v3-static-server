@@ -2,16 +2,14 @@ import 'dart:io';
 
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/uploader_novel.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/novel.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/services/server_file_services.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/services/uploader_novel_services.dart';
-import 'package:provider/provider.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/than_pkg.dart';
 
 class EditNovelScreen extends StatefulWidget {
-  UploaderNovel novel;
-  void Function(UploaderNovel updatedNovel) onUpdated;
+  Novel novel;
+  void Function(Novel updatedNovel) onUpdated;
   EditNovelScreen({super.key, required this.novel, required this.onUpdated});
 
   @override
@@ -25,7 +23,7 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
   final mcController = TextEditingController();
   final coverUrlController = TextEditingController();
   final descController = TextEditingController();
-  late UploaderNovel novel;
+  late Novel novel;
   String? errorTitle;
   List<String> alreadyTitleList = [];
 
@@ -44,12 +42,12 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
   }
 
   void init() {
-    alreadyTitleList = context
-        .read<UploaderNovelServices>()
-        .getList
-        .where((e) => e.title != novel.title)
-        .map((e) => e.title)
-        .toList();
+    // alreadyTitleList = context
+    //     .read<NovelServices>()
+    //     .getList
+    //     .where((e) => e.title != novel.title)
+    //     .map((e) => e.title)
+    //     .toList();
 
     _checkAlreadyTitle();
   }
@@ -77,7 +75,7 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
   }
 
   List<String> get _getAllTags {
-    final list = context.watch<UploaderNovelServices>().getList;
+    final list = [];
     List<String> allTags = [];
     for (var novel in list) {
       allTags.addAll(novel.getTags);
@@ -107,7 +105,7 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
       final configFiles = ServerFileServices.getAccessableConfigFiles(files);
       if (configFiles.isEmpty) return;
       // move file
-      final config = UploaderNovel.fromV3ConfigFile(configFiles.first);
+      final config = Novel.fromV3ConfigFile(configFiles.first);
       //novel
       novel.isAdult = config.isAdult;
       novel.isCompleted = config.isCompleted;

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import '../extensions/uploader_novel_extension.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/novel.dart';
+import '../extensions/novel_extension.dart';
 
-import '../models/uploader_novel.dart';
 import 'uploader_config_services.dart';
 
 class UploaderNovelServices extends ChangeNotifier {
-  final List<UploaderNovel> _list = [];
+  final List<Novel> _list = [];
 
-  List<UploaderNovel> get getList => _list;
+  List<Novel> get getList => _list;
   bool isLoading = false;
 
   Future<void> initList() async {
@@ -17,7 +17,7 @@ class UploaderNovelServices extends ChangeNotifier {
 
     final configList = await UploaderConfigServices.getListConfig();
     for (var map in configList) {
-      _list.add(UploaderNovel.fromMap(map));
+      _list.add(Novel.fromMap(map));
     }
     _list.sortDate();
 
@@ -25,7 +25,7 @@ class UploaderNovelServices extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> add(UploaderNovel novel) async {
+  Future<void> add(Novel novel) async {
     isLoading = true;
     notifyListeners();
     try {
@@ -49,7 +49,7 @@ class UploaderNovelServices extends ChangeNotifier {
     }
   }
 
-  Future<void> delete(UploaderNovel novel) async {
+  Future<void> delete(Novel novel) async {
     isLoading = true;
     notifyListeners();
     try {
@@ -74,7 +74,7 @@ class UploaderNovelServices extends ChangeNotifier {
     }
   }
 
-  Future<void> update(UploaderNovel novel) async {
+  Future<void> update(Novel novel) async {
     try {
       isLoading = true;
       notifyListeners();

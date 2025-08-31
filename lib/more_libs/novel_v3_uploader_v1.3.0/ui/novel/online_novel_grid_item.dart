@@ -1,36 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/ui/components/status_text.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/novel.dart';
+
 import 'package:t_widgets/t_widgets.dart';
 
-class NovelGridItem extends StatelessWidget {
+import '../../novel_v3_uploader.dart';
+
+class OnlineNovelGridItem extends StatelessWidget {
   Novel novel;
   void Function(Novel novel) onClicked;
-  void Function(Novel novel)? onRightClicked;
-  NovelGridItem({
+  OnlineNovelGridItem({
     super.key,
     required this.novel,
     required this.onClicked,
-    this.onRightClicked,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => onClicked(novel),
-      onSecondaryTap: () {
-        if (onRightClicked == null) return;
-        onRightClicked!(novel);
-      },
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Stack(
           children: [
             Positioned.fill(
-              child: TImageFile(
-                path: novel.coverPath,
-                fit: BoxFit.cover,
+              child: TCacheImage(
+                url: novel.coverUrl,
+                fit: BoxFit.fill,
                 width: double.infinity,
+                cachePath: NovelV3Uploader.instance.imageCachePath,
               ),
             ),
             Container(
@@ -59,13 +55,11 @@ class NovelGridItem extends StatelessWidget {
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 13
-                  ),
+                  style: TextStyle(color: Colors.white, fontSize: 12),
                 ),
               ),
             ),
+
             Positioned(
               left: 0,
               top: 0,

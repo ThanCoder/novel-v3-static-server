@@ -1,36 +1,50 @@
 import 'package:flutter/material.dart';
 
-export 'components/index.dart';
+import 'ui/home_screen.dart';
+
+export 'ui/components/index.dart';
 export 'models/index.dart';
 export 'services/index.dart';
 export 'extensions/index.dart';
+export 'core/index.dart';
+export 'database/index.dart';
+export 'controller/data_source_factory.dart';
 
 class NovelV3Uploader {
   static final NovelV3Uploader instance = NovelV3Uploader._();
   NovelV3Uploader._();
   factory NovelV3Uploader() => instance;
 
+  // static
+  static String appLabelText = 'Static Server';
+  static Widget get getHomeScreen => HomeScreen();
+
   // init props
   Future<String> Function(String url)? onDownloadJson;
   // init class
   // await NovelV3Uploader.instance.init
   late String Function() getCustomServerPath;
+  late String Function() getRootServerUrl;
   bool isShowDebugLog = true;
   String? imageCachePath;
   List<Widget> appBarActions = [];
 
   Future<void> init({
-    String Function()? getCustomServerPath,
+    required String Function() getCustomServerPath,
+    required String Function() getRootServerUrl,
     bool isShowDebugLog = true,
     Future<String> Function(String url)? onDownloadJson,
     String? imageCachePath,
     List<Widget> appBarActions = const [],
+    String appLabelText = 'Static Server',
   }) async {
     this.onDownloadJson = onDownloadJson;
     this.isShowDebugLog = isShowDebugLog;
-    this.getCustomServerPath = getCustomServerPath ?? () => '';
+    this.getCustomServerPath = getCustomServerPath;
+    this.getRootServerUrl = getRootServerUrl;
     this.imageCachePath = imageCachePath;
     this.appBarActions = appBarActions;
+    NovelV3Uploader.appLabelText = appLabelText;
   }
 
   void showLog(String msg) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/screens/home/home_page.dart';
 import 'package:novel_v3_static_server/app/screens/home/more_page.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/screens/novel_v3_uploader_home_screen.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/novel_v3_uploader.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,7 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Widget> pages = [HomePage(), NovelV3UploaderHomeScreen(), MorePage()];
+  List<Widget> pages = [HomePage(), NovelV3Uploader.getHomeScreen, MorePage()];
   int index = 0;
 
   @override
@@ -43,8 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
     //   body: DefaultTabController(length: 2, child: HomePage()),
     //   floatingActionButton: FloatingActionButton(
     //     onPressed: () {
-    //       final newNovel = UploaderNovel.create();
-    //       context.read<UploaderNovelServices>().add(newNovel);
+    //       final newNovel = Novel.create();
+    //       context.read<NovelServices>().add(newNovel);
     //     },
     //     child: Icon(Icons.add),
     //   ),

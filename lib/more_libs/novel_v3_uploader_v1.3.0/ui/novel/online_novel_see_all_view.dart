@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/app/components/novel_grid_item.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/ui/components/see_all_view.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/novel.dart';
+import 'online_novel_grid_item.dart';
+import '../components/see_all_view.dart';
 
-class NovelSeeAllView extends StatelessWidget {
+class OnlineNovelSeeAllView extends StatelessWidget {
   String title;
   List<Novel> list;
   Color? titleColor;
   int? showLines;
   void Function(String title, List<Novel> list) onSeeAllClicked;
   void Function(Novel novel) onClicked;
-  void Function(Novel novel)? onRightClicked;
-  NovelSeeAllView({
+  OnlineNovelSeeAllView({
     super.key,
     required this.title,
     required this.list,
     required this.onSeeAllClicked,
     required this.onClicked,
-    this.onRightClicked,
     this.titleColor,
     this.showLines,
   });
@@ -33,11 +31,7 @@ class NovelSeeAllView extends StatelessWidget {
       gridItemBuilder: (context, item) => SizedBox(
         width: 140,
         height: 180,
-        child: NovelGridItem(
-          novel: item,
-          onClicked: onClicked,
-          onRightClicked: onRightClicked,
-        ),
+        child: OnlineNovelGridItem(novel: item, onClicked: onClicked),
       ),
     );
   }

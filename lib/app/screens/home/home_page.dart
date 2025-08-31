@@ -3,12 +3,9 @@ import 'package:novel_v3_static_server/app/components/novel_grid_item.dart';
 import 'package:novel_v3_static_server/app/components/novel_list_item.dart';
 import 'package:novel_v3_static_server/app/components/novel_see_all_view.dart';
 import 'package:novel_v3_static_server/app/routes_helper.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/uploader_novel.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/screens/see_all_screen.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/screens/uploader_novel_search_screen.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/services/index.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/novel_v3_uploader.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/ui/components/see_all_screen.dart';
 import 'package:novel_v3_static_server/more_libs/terminal_app/terminal_button.dart';
-import 'package:provider/provider.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/than_pkg.dart';
 
@@ -19,27 +16,24 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with DataSourceChangeListener {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((e) => init());
+    // WidgetsBinding.instance.addPostFrameCallback((e) => init());
     super.initState();
+    NovelServices.getLocalDatabase().addListener(this);
+  }
+
+  @override
+  void dispose() {
+    NovelServices.getLocalDatabase().removeListener(this);
+    super.dispose();
   }
 
   bool isListView = false;
 
-  void init() async {
-    context.read<UploaderNovelServices>().initList();
-    context.read<HelperServices>().initLocalList();
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<UploaderNovelServices>();
-    final list = provider.getList;
-    final isLoading = provider.isLoading;
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Local Page'),
@@ -56,167 +50,34 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: isLoading
-          ? Center(child: TLoaderRandom())
-          : Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: _getListStyle(list),
-            ),
+      body: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: FutureBuilder(
+          future: NovelServices.getLocalList(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: TLoaderRandom());
+            }
+            if (snapshot.hasData) {
+              return _getListStyle(snapshot.data ?? []);
+            }
+            return Center(child: Text('Not Data...'));
+          },
+        ),
+      ),
 
       floatingActionButton: _getFloatButton(),
     );
   }
 
-  Widget _getListStyle(List<UploaderNovel> list) {
+  Widget _getListStyle(List<Novel> list) {
     if (isListView) {
       return _getListWidget(list);
     }
     return _getGridWidget(list);
   }
 
-  Widget _getFloatButton() {
-    return FloatingActionButton(
-      onPressed: () async {
-        try {
-          final newNovel = UploaderNovel.create();
-          await context.read<UploaderNovelServices>().add(newNovel);
-          if (!mounted) return;
-          // go edit screen
-          goEditNovelScreen(
-            context,
-            novel: newNovel,
-            onUpdated: (novel) async {
-              try {
-                await context.read<UploaderNovelServices>().update(novel);
-                if (!mounted) return;
-                goEditNovelContentScreen(context, novel);
-
-                showTSnackBar(context, '${novel.title} Updated');
-              } catch (e) {
-                if (!mounted) return;
-                showTMessageDialogError(context, e.toString());
-              }
-            },
-          );
-        } catch (e) {
-          if (!context.mounted) return;
-          showTMessageDialogError(context, e.toString());
-        }
-      },
-      child: Icon(Icons.add),
-    );
-  }
-
-  void _deleteNovelConfirm(UploaderNovel novel) {
-    showDialog(
-      context: context,
-      builder: (context) => TConfirmDialog(
-        contentText: 'ဖျက်ချင်တာ သေချာပြီလား?',
-        onSubmit: () {
-          context.read<UploaderNovelServices>().delete(novel);
-        },
-      ),
-    );
-  }
-
-  void _goSeeAllScreen(String title, List<UploaderNovel> list) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SeeAllScreen<UploaderNovel>(
-          title: Text(title),
-          list: list,
-          gridItemBuilder: (context, item) => NovelGridItem(
-            novel: item,
-            onClicked: (novel) => goEditNovelContentScreen(context, novel),
-            onRightClicked: _showMenu,
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _goSearchScreen() {
-    final list = context.read<UploaderNovelServices>().getList;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => UploaderNovelSearchScreen(
-          list: list,
-          listItemBuilder: (context, novel) => NovelListItem(
-            novel: novel,
-            onClicked: (novel) => goEditNovelContentScreen(context, novel),
-            onRightClicked: _showMenu,
-          ),
-          onClicked: _goSeeAllScreen,
-        ),
-      ),
-    );
-  }
-
-  void _goContentPage(UploaderNovel novel) {
-    goEditNovelContentScreen(context, novel);
-  }
-
-  void _updateNovel(UploaderNovel novel) {
-    goEditNovelScreen(
-      context,
-      novel: novel,
-      onUpdated: (updatedNovel) async {
-        try {
-          await context.read<UploaderNovelServices>().update(updatedNovel);
-          if (!mounted) return;
-          // goEditNovelContentScreen(context, novel);
-
-          showTSnackBar(context, '${updatedNovel.title} Updated');
-        } catch (e) {
-          if (!mounted) return;
-          showTMessageDialogError(context, e.toString());
-        }
-      },
-    );
-  }
-
-  void _showMenu(UploaderNovel novel) {
-    showTModalBottomSheet(
-      context,
-      child: Column(
-        spacing: 5,
-        children: [
-          ListTile(
-            title: Text(novel.title, maxLines: 2, textAlign: TextAlign.center),
-          ),
-          ListTile(
-            leading: Icon(Icons.copy_all),
-            title: Text('Copy Title'),
-            onTap: () {
-              Navigator.pop(context);
-              ThanPkg.appUtil.copyText(novel.title);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.edit_document),
-            title: Text('Edit'),
-            onTap: () {
-              Navigator.pop(context);
-              _updateNovel(novel);
-            },
-          ),
-          ListTile(
-            iconColor: Colors.red,
-            leading: Icon(Icons.delete_forever),
-            title: Text('Delete'),
-            onTap: () {
-              Navigator.pop(context);
-              _deleteNovelConfirm(novel);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _getListWidget(List<UploaderNovel> list) {
+  Widget _getListWidget(List<Novel> list) {
     return ListView.builder(
       itemCount: list.length,
       itemBuilder: (context, index) => NovelListItem(
@@ -227,7 +88,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _getGridWidget(List<UploaderNovel> list) {
+  Widget _getGridWidget(List<Novel> list) {
     final completedList = list.where((e) => e.isCompleted).toList();
     final ongoingList = list.where((e) => !e.isCompleted).toList();
     final adultList = list.where((e) => e.isAdult).toList();
@@ -235,17 +96,6 @@ class _HomePageState extends State<HomePage> {
 
     return CustomScrollView(
       slivers: [
-        // helper
-        // SliverToBoxAdapter(
-        //   child: HelperSeeAllView(
-        //     title: 'အကူအညီများ',
-        //     titleColor: Colors.deepOrange,
-        //     list: helperList,
-        //     showLines: 1,
-        //     onSeeAllClicked: (title, list) {},
-        //     onClicked: (helper) => goHelperEditScreen(context, helper),
-        //   ),
-        // ),
         SliverToBoxAdapter(
           child: NovelSeeAllView(
             title: 'Description မထည့်ရသေးသော Novel များ',
@@ -303,5 +153,155 @@ class _HomePageState extends State<HomePage> {
         ),
       ],
     );
+  }
+
+  Widget _getFloatButton() {
+    return FloatingActionButton(
+      onPressed: () async {
+        try {
+          final newNovel = Novel.create();
+          await NovelServices.getLocalDatabase().add(newNovel);
+
+          if (!mounted) return;
+          // go edit screen
+          goEditNovelScreen(
+            context,
+            novel: newNovel,
+            onUpdated: (novel) async {
+              try {
+                await NovelServices.getLocalDatabase().update(novel);
+                if (!mounted) return;
+                goEditNovelContentScreen(context, novel);
+
+                showTSnackBar(context, '${novel.title} Updated');
+              } catch (e) {
+                if (!mounted) return;
+                showTMessageDialogError(context, e.toString());
+              }
+            },
+          );
+        } catch (e) {
+          if (!context.mounted) return;
+          showTMessageDialogError(context, e.toString());
+        }
+      },
+      child: Icon(Icons.add),
+    );
+  }
+
+  void _deleteNovelConfirm(Novel novel) {
+    showDialog(
+      context: context,
+      builder: (context) => TConfirmDialog(
+        contentText: 'ဖျက်ချင်တာ သေချာပြီလား?',
+        onSubmit: () {
+          // context.read<NovelServices>().delete(novel);
+          NovelServices.getLocalDatabase().delete(novel);
+        },
+      ),
+    );
+  }
+
+  void _goSeeAllScreen(String title, List<Novel> list) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SeeAllScreen<Novel>(
+          title: Text(title),
+          list: list,
+          gridItemBuilder: (context, item) => NovelGridItem(
+            novel: item,
+            onClicked: (novel) => goEditNovelContentScreen(context, novel),
+            onRightClicked: _showMenu,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _goSearchScreen() {
+    // final list = context.read<NovelServices>().getList;
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => NovelSearchScreen(
+    //       list: list,
+    //       listItemBuilder: (context, novel) => NovelListItem(
+    //         novel: novel,
+    //         onClicked: (novel) => goEditNovelContentScreen(context, novel),
+    //         onRightClicked: _showMenu,
+    //       ),
+    //       onClicked: _goSeeAllScreen,
+    //     ),
+    //   ),
+    // );
+  }
+
+  void _goContentPage(Novel novel) {
+    goEditNovelContentScreen(context, novel);
+  }
+
+  void _updateNovel(Novel novel) {
+    goEditNovelScreen(
+      context,
+      novel: novel,
+      onUpdated: (updatedNovel) async {
+        try {
+          // await context.read<NovelServices>().update(updatedNovel);
+          if (!mounted) return;
+          // goEditNovelContentScreen(context, novel);
+
+          showTSnackBar(context, '${updatedNovel.title} Updated');
+        } catch (e) {
+          if (!mounted) return;
+          showTMessageDialogError(context, e.toString());
+        }
+      },
+    );
+  }
+
+  void _showMenu(Novel novel) {
+    showTModalBottomSheet(
+      context,
+      child: Column(
+        spacing: 5,
+        children: [
+          ListTile(
+            title: Text(novel.title, maxLines: 2, textAlign: TextAlign.center),
+          ),
+          ListTile(
+            leading: Icon(Icons.copy_all),
+            title: Text('Copy Title'),
+            onTap: () {
+              Navigator.pop(context);
+              ThanPkg.appUtil.copyText(novel.title);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.edit_document),
+            title: Text('Edit'),
+            onTap: () {
+              Navigator.pop(context);
+              _updateNovel(novel);
+            },
+          ),
+          ListTile(
+            iconColor: Colors.red,
+            leading: Icon(Icons.delete_forever),
+            title: Text('Delete'),
+            onTap: () {
+              Navigator.pop(context);
+              _deleteNovelConfirm(novel);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void onDataSourceChanged() {
+    if (!mounted) return;
+    setState(() {});
   }
 }

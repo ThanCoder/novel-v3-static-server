@@ -2,16 +2,14 @@ import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/components/uploader_file_item.dart';
 import 'package:novel_v3_static_server/app/routes_helper.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/novel.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/uploader_file.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/uploader_novel.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/services/server_file_services.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/services/uploader_file_services.dart';
-import 'package:provider/provider.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/than_pkg.dart';
 
 class EditNovelContentScreen extends StatefulWidget {
-  UploaderNovel novel;
+  Novel novel;
   EditNovelContentScreen({super.key, required this.novel});
 
   @override
@@ -25,8 +23,11 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen> {
     super.initState();
   }
 
+  bool isLoading = false;
+  List<UploaderFile> uploaderList = [];
+
   void init() async {
-    context.read<UploaderFileServices>().initList(novelId: widget.novel.id);
+    // context.read<UploaderFileServices>().initList(novelId: widget.novel.id);
   }
 
   void onDragDone(DropDoneDetails details) async {
@@ -42,7 +43,7 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen> {
         novelId: widget.novel.id,
         fileName: filterFiles.first.getName(),
       );
-      await context.read<UploaderFileServices>().add(uploadFile);
+      // await context.read<UploaderFileServices>().add(uploadFile);
 
       if (!mounted) return;
       showTSnackBar(context, '${uploadFile.name} Added');
@@ -58,7 +59,7 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen> {
       builder: (context) => TConfirmDialog(
         contentText: 'ဖျက်ချင်တာ သေချာပြီလား?',
         onSubmit: () {
-          context.read<UploaderFileServices>().delete(file);
+          // context.read<UploaderFileServices>().delete(file);
         },
       ),
     );
@@ -99,10 +100,6 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<UploaderFileServices>();
-    final isLoading = provider.isLoading;
-    final list = provider.getList;
-
     return Scaffold(
       appBar: AppBar(title: Text(widget.novel.title)),
       body: isLoading
@@ -113,18 +110,18 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen> {
               child: CustomScrollView(
                 slivers: [
                   SliverList.builder(
-                    itemCount: list.length,
+                    itemCount: uploaderList.length,
                     itemBuilder: (context, index) => UploaderFileItem(
-                      file: list[index],
+                      file: uploaderList[index],
                       onClicked: (file) {
                         goEditContentFileScreen(
                           context,
                           file,
                           onUpdated: (file) async {
                             try {
-                              await context.read<UploaderFileServices>().update(
-                                file,
-                              );
+                              // await context.read<UploaderFileServices>().update(
+                              //   file,
+                              // );
                               if (!context.mounted) return;
                               showTSnackBar(context, '${file.name} Updated');
                             } catch (e) {
@@ -147,7 +144,7 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen> {
             UploaderFile.createEmpty(novelId: widget.novel.id),
             onUpdated: (file) async {
               try {
-                await context.read<UploaderFileServices>().add(file);
+                // await context.read<UploaderFileServices>().add(file);
                 // if (!context.mounted) return;
                 // showTSnackBar(context, '${file.name} Added');
               } catch (e) {

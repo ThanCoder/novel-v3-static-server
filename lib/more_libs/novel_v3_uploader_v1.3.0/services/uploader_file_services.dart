@@ -1,11 +1,25 @@
-import 'package:flutter/cupertino.dart';
-import '../extensions/uploader_file_extension.dart';
-import '../models/uploader_file.dart';
+import '../novel_v3_uploader.dart';
 
-import 'uploader_config_services.dart';
+class UploaderFileServices {
+  static Future<List<UploaderFile>> getLocalList({
+    required String novelId,
+  }) async {
+    final list = await DataSourceFactory.getLocal<UploaderFile>().getAll(
+      novelId: novelId,
+    );
+    return list;
+  }
 
-class UploaderFileServices extends ChangeNotifier {
-  static String getDBName(String novelId) {
+  static Future<List<UploaderFile>> getOnlineList({
+    required String novelId,
+  }) async {
+    final list = await DataSourceFactory.getOnline<UploaderFile>().getAll(
+      novelId: novelId,
+    );
+    return list;
+  }
+
+  /*static String getDBName(String novelId) {
     return 'content_db/$novelId.db.json';
   }
 
@@ -107,4 +121,6 @@ class UploaderFileServices extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+*/
 }
