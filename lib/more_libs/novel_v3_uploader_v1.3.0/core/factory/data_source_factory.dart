@@ -1,4 +1,4 @@
-import '../novel_v3_uploader.dart';
+import '../../novel_v3_uploader.dart';
 
 class DataSourceFactory {
   static DataSource<T> getLocal<T>() {
@@ -15,7 +15,7 @@ class DataSourceFactory {
       final source = UploaderFileLocalDataSource(
         FileWriterIO.instance,
         fileSource: LocalFileSource(
-          root: NovelV3Uploader.instance.getCustomServerPath(),
+          root: '${NovelV3Uploader.instance.getCustomServerPath()}/content_db',
         ),
       );
       return source as DataSource<T>;
@@ -23,6 +23,7 @@ class DataSourceFactory {
     throw UnsupportedError('not found data source: $T');
   }
 
+  // online
   static DataSource<T> getOnline<T>() {
     if (T == Novel) {
       final source = NovelOnlineDataSource(
@@ -35,7 +36,7 @@ class DataSourceFactory {
     if (T == UploaderFile) {
       final source = UploaderFileOnlineDataSource(
         fileSource: OnlineFileSource(
-          root: NovelV3Uploader.instance.getRootServerUrl(),
+          root: '${NovelV3Uploader.instance.getRootServerUrl()}/content_db',
         ),
       );
       return source as DataSource<T>;

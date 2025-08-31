@@ -34,8 +34,9 @@ class OnlineNovelListItem extends StatelessWidget {
                     cachePath: NovelV3Uploader.instance.imageCachePath,
                   ),
                 ),
-                Wrap(
+                Column(
                   // mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 3,
                   children: [
                     Text(

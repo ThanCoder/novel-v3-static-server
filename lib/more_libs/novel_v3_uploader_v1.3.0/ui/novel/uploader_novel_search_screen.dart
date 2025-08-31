@@ -6,7 +6,6 @@ import 'package:t_widgets/widgets/t_search_field.dart';
 
 import '../components/wrap_list_tile.dart';
 
-
 class NovelSearchScreen extends StatefulWidget {
   List<Novel> list;
   void Function(String title, List<Novel> list) onClicked;
@@ -25,6 +24,7 @@ class NovelSearchScreen extends StatefulWidget {
 class _NovelSearchScreenState extends State<NovelSearchScreen> {
   List<Novel> resultList = [];
   bool isSearched = false;
+  bool isSearching = false;
   Timer? _delaySearchTimer;
 
   @override
@@ -35,46 +35,76 @@ class _NovelSearchScreenState extends State<NovelSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: TSearchField(
-          autofocus: false,
-          onChanged: (text) {
-            if (_delaySearchTimer?.isActive ?? false) {
-              _delaySearchTimer?.cancel();
-            }
-            _delaySearchTimer = Timer(
-              Duration(milliseconds: 500),
-              () => _onSearch(text),
-            );
-          },
-          onCleared: () {
+    return Scaffold(appBar: _getAppbar(), body: _searchChanged());
+  }
+
+  AppBar _getAppbar() {
+    return AppBar(
+      title: TSearchField(
+        autofocus: false,
+        onChanged: (text) {
+          if (!isSearching) {
             setState(() {
-              isSearched = false;
+              isSearching = true;
             });
-          },
-        ),
+          }
+          if (_delaySearchTimer?.isActive ?? false) {
+            _delaySearchTimer?.cancel();
+          }
+          _delaySearchTimer = Timer(Duration(milliseconds: 1200), () {
+            if (isSearching) {
+              setState(() {
+                isSearching = false;
+              });
+            }
+            _onSearch(text);
+          });
+        },
+        onSubmitted: (text) {
+          if (!isSearching) {
+            setState(() {
+              isSearching = true;
+            });
+          }
+          _onSearch(text);
+        },
+        onCleared: () {
+          setState(() {
+            isSearched = false;
+          });
+        },
       ),
-      body: _searchChanged(),
     );
   }
 
-  Widget _getResultList() {
-    return ListView.separated(
-      itemBuilder: (context, index) =>
-          widget.listItemBuilder(context, resultList[index]),
-      separatorBuilder: (context, index) => Divider(),
-      itemCount: resultList.length,
+  Widget _getSliverResultList() {
+    return CustomScrollView(
+      slivers: [
+        // is searching
+        SliverToBoxAdapter(
+          child: isSearching ? LinearProgressIndicator() : null,
+        ),
+        SliverList.separated(
+          itemCount: resultList.length,
+          itemBuilder: (context, index) =>
+              widget.listItemBuilder(context, resultList[index]),
+          separatorBuilder: (context, index) => Divider(),
+        ),
+      ],
     );
   }
 
-  Widget _getHomeList() {
+  Widget _getSliverHomeList() {
     final authorList = widget.list.map((e) => e.author).toSet().toList();
     final transList = widget.list.map((e) => e.translator).toSet().toList();
     final mcList = widget.list.map((e) => e.mc).toSet().toList();
     final tagsList = widget.list.expand((e) => e.getTags).toSet().toList();
     return CustomScrollView(
       slivers: [
+        // is searching
+        SliverToBoxAdapter(
+          child: isSearching ? LinearProgressIndicator() : null,
+        ),
         // author
         SliverToBoxAdapter(
           child: WrapListTile(
@@ -133,9 +163,9 @@ class _NovelSearchScreenState extends State<NovelSearchScreen> {
       if (resultList.isEmpty) {
         return Center(child: Text('မတွေ့ပါ....'));
       }
-      return _getResultList();
+      return _getSliverResultList();
     }
-    return _getHomeList();
+    return _getSliverHomeList();
   }
 
   void _onSearch(String text) {
@@ -145,24 +175,36 @@ class _NovelSearchScreenState extends State<NovelSearchScreen> {
       });
       return;
     }
+
     // search
     resultList = widget.list.where((e) {
       // search title
-      if (e.title.toLowerCase().contains(text.toLowerCase())) {
+      final searchText = text.toLowerCase().trim();
+      final title = e.title.toLowerCase().trim();
+      final author = e.author.toLowerCase().trim();
+      final translator = e.translator.toLowerCase().trim();
+      final mc = e.mc.toLowerCase().trim();
+
+      if (title.contains(searchText)) {
         return true;
       }
       // search author
-      if (e.author.toLowerCase().contains(text.toLowerCase())) {
+      if (author.contains(searchText)) {
+        return true;
+      }
+      // translator
+      if (translator.contains(searchText)) {
         return true;
       }
       // search mc
-      if (e.mc.toLowerCase().contains(text.toLowerCase())) {
+      if (mc.contains(searchText)) {
         return true;
       }
       return false;
     }).toList();
     setState(() {
       isSearched = true;
+      isSearching = false;
     });
   }
 }

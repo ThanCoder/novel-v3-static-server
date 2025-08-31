@@ -5,6 +5,7 @@ import 'package:novel_v3_static_server/app/components/novel_see_all_view.dart';
 import 'package:novel_v3_static_server/app/routes_helper.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/novel_v3_uploader.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/ui/components/see_all_screen.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/ui/novel/uploader_novel_search_screen.dart';
 import 'package:novel_v3_static_server/more_libs/terminal_app/terminal_button.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/than_pkg.dart';
@@ -20,8 +21,8 @@ class _HomePageState extends State<HomePage> with DataSourceChangeListener {
   @override
   void initState() {
     // WidgetsBinding.instance.addPostFrameCallback((e) => init());
-    super.initState();
     NovelServices.getLocalDatabase().addListener(this);
+    super.initState();
   }
 
   @override
@@ -219,22 +220,23 @@ class _HomePageState extends State<HomePage> with DataSourceChangeListener {
     );
   }
 
-  void _goSearchScreen() {
-    // final list = context.read<NovelServices>().getList;
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => NovelSearchScreen(
-    //       list: list,
-    //       listItemBuilder: (context, novel) => NovelListItem(
-    //         novel: novel,
-    //         onClicked: (novel) => goEditNovelContentScreen(context, novel),
-    //         onRightClicked: _showMenu,
-    //       ),
-    //       onClicked: _goSeeAllScreen,
-    //     ),
-    //   ),
-    // );
+  void _goSearchScreen() async {
+    final list = await NovelServices.getLocalList();
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NovelSearchScreen(
+          list: list,
+          listItemBuilder: (context, novel) => NovelListItem(
+            novel: novel,
+            onClicked: (novel) => goEditNovelContentScreen(context, novel),
+            onRightClicked: _showMenu,
+          ),
+          onClicked: _goSeeAllScreen,
+        ),
+      ),
+    );
   }
 
   void _goContentPage(Novel novel) {

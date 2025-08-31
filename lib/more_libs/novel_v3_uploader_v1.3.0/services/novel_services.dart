@@ -2,6 +2,9 @@ import '../novel_v3_uploader.dart';
 
 class NovelServices {
   static final Map<String, DataSource<Novel>> _dbCache = {};
+  static void clearDBCache() {
+    _dbCache.clear();
+  }
 
   static DataSource<Novel> getLocalDatabase() {
     if (_dbCache['local-novel'] == null) {
@@ -12,7 +15,7 @@ class NovelServices {
 
   static DataSource<Novel> getOnlineDatabase() {
     if (_dbCache['online-novel'] == null) {
-      _dbCache['online-novel'] = DataSourceFactory.getLocal<Novel>();
+      _dbCache['online-novel'] = DataSourceFactory.getOnline<Novel>();
     }
     return _dbCache['online-novel']!;
   }

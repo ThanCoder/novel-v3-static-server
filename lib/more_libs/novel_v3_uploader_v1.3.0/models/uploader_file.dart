@@ -6,7 +6,6 @@ import 'package:uuid/uuid.dart';
 import '../services/server_file_services.dart';
 import 'uploader_file_types.dart';
 
-
 class UploaderFile {
   String id;
   String novelId;
@@ -104,7 +103,7 @@ class UploaderFile {
     );
   }
 
-  Map<String, dynamic> get toMap => {
+  Map<String, dynamic> toMap() => {
     'id': id,
     'novelId': novelId,
     'name': name,

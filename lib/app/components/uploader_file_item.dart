@@ -40,6 +40,7 @@ class UploaderFileItem extends StatelessWidget {
                       Text(file.name),
                       Text('Type: ${file.type.name.toCaptalize()}'),
                       Text('Size: ${file.fileSize}'),
+                      Text('Direct Url: ${file.isDirectLink}'),
                       Text('ရက်စွဲ: ${file.date.toParseTime()}'),
                     ],
                   ),

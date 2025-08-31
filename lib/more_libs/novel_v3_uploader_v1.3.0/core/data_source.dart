@@ -10,7 +10,7 @@ abstract class DataSource<T> {
   DataSource({required this.fileSource, this.isPretty = true});
 
   Future<void> add(T value);
-  Future<List<T>> getAll({String? novelId});
+  Future<List<T>> getAll({String? id});
   Future<void> update(T value);
   Future<void> delete(T value);
   // event listener

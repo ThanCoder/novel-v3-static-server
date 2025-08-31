@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'ui/home_screen.dart';
+import 'models/index.dart';
 
 export 'ui/components/index.dart';
 export 'models/index.dart';
@@ -8,7 +8,10 @@ export 'services/index.dart';
 export 'extensions/index.dart';
 export 'core/index.dart';
 export 'database/index.dart';
-export 'controller/data_source_factory.dart';
+export 'core/factory/data_source_factory.dart';
+
+typedef OnDownloadUploaderFileCallback =
+    void Function(BuildContext context, UploaderFile file);
 
 class NovelV3Uploader {
   static final NovelV3Uploader instance = NovelV3Uploader._();
@@ -28,12 +31,14 @@ class NovelV3Uploader {
   bool isShowDebugLog = true;
   String? imageCachePath;
   List<Widget> appBarActions = [];
+  OnDownloadUploaderFileCallback? onDownloadUploaderFile;
 
   Future<void> init({
     required String Function() getCustomServerPath,
     required String Function() getRootServerUrl,
-    bool isShowDebugLog = true,
     Future<String> Function(String url)? onDownloadJson,
+    OnDownloadUploaderFileCallback? onDownloadUploaderFile,
+    bool isShowDebugLog = true,
     String? imageCachePath,
     List<Widget> appBarActions = const [],
     String appLabelText = 'Static Server',
@@ -44,6 +49,7 @@ class NovelV3Uploader {
     this.getRootServerUrl = getRootServerUrl;
     this.imageCachePath = imageCachePath;
     this.appBarActions = appBarActions;
+    this.onDownloadUploaderFile = onDownloadUploaderFile;
     NovelV3Uploader.appLabelText = appLabelText;
   }
 

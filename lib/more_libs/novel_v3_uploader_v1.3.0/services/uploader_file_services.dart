@@ -1,126 +1,33 @@
 import '../novel_v3_uploader.dart';
 
 class UploaderFileServices {
+  static final Map<String, DataSource<UploaderFile>> _dbCache = {};
+
+  static DataSource<UploaderFile> getLocalDatabase() {
+    if (_dbCache['local'] == null) {
+      _dbCache['local'] = DataSourceFactory.getLocal<UploaderFile>();
+    }
+    return _dbCache['local']!;
+  }
+
+  static DataSource<UploaderFile> getOnlineDatabase() {
+    if (_dbCache['online'] == null) {
+      _dbCache['online'] = DataSourceFactory.getOnline<UploaderFile>();
+    }
+    return _dbCache['online']!;
+  }
+
   static Future<List<UploaderFile>> getLocalList({
     required String novelId,
   }) async {
-    final list = await DataSourceFactory.getLocal<UploaderFile>().getAll(
-      novelId: novelId,
-    );
+    final list = await getLocalDatabase().getAll(id: novelId);
     return list;
   }
 
   static Future<List<UploaderFile>> getOnlineList({
     required String novelId,
   }) async {
-    final list = await DataSourceFactory.getOnline<UploaderFile>().getAll(
-      novelId: novelId,
-    );
+    final list = await getOnlineDatabase().getAll(id: novelId);
     return list;
   }
-
-  /*static String getDBName(String novelId) {
-    return 'content_db/$novelId.db.json';
-  }
-
-  final List<UploaderFile> _list = [];
-
-  List<UploaderFile> get getList => _list;
-  bool isLoading = false;
-
-  Future<void> initList({required String novelId}) async {
-    isLoading = true;
-    notifyListeners();
-    _list.clear();
-
-    final configList = await UploaderConfigServices.getListConfig(
-      dbName: getDBName(novelId),
-    );
-    for (var map in configList) {
-      _list.add(UploaderFile.fromMap(map));
-    }
-    _list.sortDate();
-
-    isLoading = false;
-    notifyListeners();
-  }
-
-  Future<void> add(UploaderFile file) async {
-    isLoading = true;
-    notifyListeners();
-    try {
-      _list.insert(0, file);
-
-      final mapList = _list.map((e) => e.toMap).toList();
-      await UploaderConfigServices.setListConfig(
-        dbName: getDBName(file.novelId),
-        mapList,
-        isPrettyJson: true,
-      );
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> delete(UploaderFile file) async {
-    // isLoading = true;
-    // notifyListeners();
-    try {
-      // await Future.delayed(Duration(seconds: 1));
-      // check already exists title
-      final findedIndex = _list.indexWhere((e) => e.name == file.name);
-      if (findedIndex == -1) {
-        // ရှိနေလို့
-        throw Exception('file not found!');
-      }
-      _list.removeAt(findedIndex);
-
-      final mapList = _list.map((e) => e.toMap).toList();
-      await UploaderConfigServices.setListConfig(
-        dbName: getDBName(file.novelId),
-        mapList,
-        isPrettyJson: true,
-      );
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      // isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> update(UploaderFile file) async {
-    isLoading = true;
-    notifyListeners();
-    try {
-      // await Future.delayed(Duration(seconds: 1));
-      // check already exists title
-      final findedIndex = _list.indexWhere((e) => e.name == file.name);
-      if (findedIndex == -1) {
-        // ရှိနေလို့
-        throw Exception('file not found!');
-      }
-      _list[findedIndex] = file;
-
-      // sort
-      _list.sortDate();
-
-      final mapList = _list.map((e) => e.toMap).toList();
-      await UploaderConfigServices.setListConfig(
-        dbName: getDBName(file.novelId),
-        mapList,
-        isPrettyJson: true,
-      );
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
-
-*/
 }

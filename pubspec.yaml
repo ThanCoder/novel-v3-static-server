@@ -2,7 +2,7 @@ name: novel_v3_static_server
 description: "Novel V3 Uploader Manager"
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+1
+version: 1.5.0
 
 environment:
   sdk: ^3.8.0
@@ -12,7 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   uuid: ^4.5.1
   provider: ^6.1.5
-  than_pkg: ^3.0.4
+  than_pkg: ^3.6.0
   t_widgets: ^1.1.2
   dio: ^5.8.0+1
   desktop_drop: ^0.6.1

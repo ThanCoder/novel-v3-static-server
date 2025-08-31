@@ -4,6 +4,9 @@ import 'package:than_pkg/than_pkg.dart';
 import 'others/index.dart';
 export 'others/index.dart';
 
+typedef OnSettingMessageCallback =
+    void Function(BuildContext context, String message);
+
 class Setting {
   // singleton
   static final Setting instance = Setting._();
@@ -30,12 +33,14 @@ class Setting {
   static bool isShowDebugLog = true;
   static bool isAppRefreshConfigPathChanged = true;
   late String appName;
-  void Function(BuildContext context, String message)? onShowMessage;
+  OnSettingMessageCallback? onShowMessage;
+  OnSettingMessageCallback? onSettingSaved;
 
   Future<void> initSetting({
     required String appName,
     bool isShowDebugLog = true,
-    void Function(BuildContext context, String message)? onShowMessage,
+    OnSettingMessageCallback? onShowMessage,
+    OnSettingMessageCallback? onSettingSaved,
     bool isAppRefreshConfigPathChanged = false,
   }) async {
     try {
@@ -43,6 +48,7 @@ class Setting {
       Setting.isAppRefreshConfigPathChanged = isAppRefreshConfigPathChanged;
       this.appName = appName;
       this.onShowMessage = onShowMessage;
+      this.onSettingSaved = onSettingSaved;
 
       final rootPath = await ThanPkg.platform.getAppRootPath();
       final externalPath = await ThanPkg.platform.getAppExternalPath();

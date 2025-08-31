@@ -14,7 +14,7 @@ abstract class LocalDataSource<T> extends DataSource<T> {
   Map<String, dynamic> toMap(T value);
 
   @override
-  Future<List<T>> getAll({String? novelId}) async {
+  Future<List<T>> getAll({String? id}) async {
     final source = await io.read(await fileSource.getMainDBPath());
     if (source.isEmpty) return [];
     List<dynamic> jsonList = jsonDecode(source);

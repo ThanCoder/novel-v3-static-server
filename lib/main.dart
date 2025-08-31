@@ -12,7 +12,13 @@ import 'package:t_widgets/t_widgets.dart';
 import 'more_libs/setting_v2.0.0/setting.dart';
 
 void main() async {
-  await Setting.instance.initSetting(appName: 'novel_v3_static_server');
+  await Setting.instance.initSetting(
+    appName: 'novel_v3_static_server',
+    onSettingSaved: (context, message) {
+      showTSnackBar(context, message);
+      NovelServices.clearDBCache();
+    },
+  );
 
   await TWidgets.instance.init(
     defaultImageAssetsPath: 'assets/cover.png',
@@ -29,6 +35,7 @@ void main() async {
     },
     getCustomServerPath: () => Setting.getAppConfig.serverRootPath,
     getRootServerUrl: () => serverGitubRootUrl,
+    // imageCachePath: PathUtil.getCachePath(),
   );
 
   await TerminalApp.instance.init(
