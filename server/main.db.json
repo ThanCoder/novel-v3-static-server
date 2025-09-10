@@ -1,5 +1,35 @@
 [
  {
+  "id": "e5498a11-4a54-4af1-b014-b82cb8d49b18",
+  "title": "လောကအားလုံးရဲ့ သခင်",
+  "author": "Unknown",
+  "translator": "ဟိန်းထက်",
+  "mc": "နီရန်",
+  "tags": "",
+  "desc": "",
+  "pageUrls": "",
+  "coverUrl": "https://raw.githubusercontent.com/ThanCoder/novel-v3-static-server/refs/heads/main/server/images/e5498a11-4a54-4af1-b014-b82cb8d49b18.png",
+  "coverPath": "/home/than/projects/static_servers/novel_v3_static_server/server/images/e5498a11-4a54-4af1-b014-b82cb8d49b18.png",
+  "date": 1757493028299,
+  "isAdult": false,
+  "isCompleted": true
+ },
+ {
+  "id": "66fa15e5-5b1f-44e4-8b05-a49ab139d59f",
+  "title": "ကောင်းကင်ဘုံသို့ စစ်ပြိုင်ခြင်း",
+  "author": "Unknown",
+  "translator": "ဟိန်းထက်",
+  "mc": "ရှောင်ရန်",
+  "tags": "အခြား ကမ္ဘာ,ရှန်းရှ,သိုင်း,Action,Mystery,Adventure,Drama",
+  "desc": "",
+  "pageUrls": "",
+  "coverUrl": "https://raw.githubusercontent.com/ThanCoder/novel-v3-static-server/refs/heads/main/server/images/66fa15e5-5b1f-44e4-8b05-a49ab139d59f.png",
+  "coverPath": "/home/than/projects/static_servers/novel_v3_static_server/server/images/66fa15e5-5b1f-44e4-8b05-a49ab139d59f.png",
+  "date": 1757492983178,
+  "isAdult": false,
+  "isCompleted": true
+ },
+ {
   "id": "ea434968-2367-4332-8799-c35eac0650c1",
   "title": "အချိန်ဓါးသခင်",
   "author": "Unknown",
