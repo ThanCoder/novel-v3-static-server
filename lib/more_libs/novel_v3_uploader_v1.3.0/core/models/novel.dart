@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:t_widgets/extensions/string_extension.dart';
-import 'package:than_pkg/services/map_services.dart';
+import 'package:than_pkg/than_pkg.dart';
 import 'package:uuid/uuid.dart';
 
-import '../services/server_file_services.dart';
+import '../../services/server_file_services.dart';
 
 class Novel {
   String id;
@@ -125,7 +124,7 @@ class Novel {
     );
   }
 
-  Map<String, dynamic> get toMap => {
+  Map<String, dynamic> toMap() => {
     'id': id,
     'title': title,
     'author': author,

@@ -15,22 +15,22 @@ class EditNovelContentScreen extends StatefulWidget {
 }
 
 class _EditNovelContentScreenState extends State<EditNovelContentScreen>
-    with DataSourceChangeListener {
+    with DatabaseListener {
   @override
   void initState() {
-    UploaderFileServices.getLocalDatabase().addListener(this);
+    UploaderFileServices.getLocalDatabase.addListener(this);
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((e) => init());
   }
 
   @override
   void dispose() {
-    UploaderFileServices.getLocalDatabase().removeListener(this);
+    UploaderFileServices.getLocalDatabase.removeListener(this);
     super.dispose();
   }
 
   @override
-  void onDataSourceChanged() {
+  void onDatabaseChanged(String? id, DatabaseListenerTypes listenerType) {
     if (!mounted) return;
     init();
   }
@@ -82,9 +82,9 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen>
                   file,
                   onUpdated: (file) async {
                     try {
-                      await UploaderFileServices.getLocalDatabase().update(
-                        file,
-                      );
+                      // await UploaderFileServices.getLocalDatabase().update(
+                      //   file,
+                      // );
                       if (!context.mounted) return;
                       showTSnackBar(context, '${file.name} Updated');
                     } catch (e) {
@@ -110,7 +110,7 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen>
           UploaderFile.createEmpty(novelId: widget.novel.id),
           onUpdated: (file) async {
             try {
-              await UploaderFileServices.getLocalDatabase().add(file);
+              await UploaderFileServices.getLocalDatabase.add(file);
               if (!mounted) return;
               showTSnackBar(context, '${file.name} Added');
             } catch (e) {
@@ -155,7 +155,7 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen>
         submitText: 'Delete Forever',
         onSubmit: () {
           // context.read<UploaderFileServices>().delete(file);
-          UploaderFileServices.getLocalDatabase().delete(file);
+          // UploaderFileServices.getLocalDatabase().delete(file);
         },
       ),
     );

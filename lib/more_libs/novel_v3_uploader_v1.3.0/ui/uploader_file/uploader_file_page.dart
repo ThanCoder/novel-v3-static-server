@@ -3,6 +3,7 @@ import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/than_pkg.dart';
 
 import '../../novel_v3_uploader.dart';
+import '../novel/online_file_list_item.dart';
 
 class UploaderFilePage extends StatefulWidget {
   Novel novel;
@@ -26,7 +27,7 @@ class _UploaderFilePageState extends State<UploaderFilePage> {
     setState(() {
       isLoading = true;
     });
-    list = await UploaderFileServices.getOnlineList(novelId: widget.novel.id);
+    list = await UploaderFileServices.getApiList(novelId: widget.novel.id);
     if (!mounted) return;
     setState(() {
       isLoading = false;

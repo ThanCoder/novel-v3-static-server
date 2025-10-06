@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:t_widgets/widgets/t_cache_image.dart';
 
-import '../../models/helper_file.dart';
+import '../../core/models/helper_file.dart';
 
 class HelperContentScreen extends StatelessWidget {
   HelperFile helper;

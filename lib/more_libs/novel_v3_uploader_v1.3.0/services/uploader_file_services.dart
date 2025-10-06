@@ -1,18 +1,22 @@
 import '../novel_v3_uploader.dart';
 
 class UploaderFileServices {
-  static final Map<String, DataSource<UploaderFile>> _dbCache = {};
+  static final Map<String, DatabaseInterface<UploaderFile>> _dbCache = {};
 
-  static DataSource<UploaderFile> getLocalDatabase() {
+  static DatabaseInterface<UploaderFile> get getLocalDatabase {
     if (_dbCache['local'] == null) {
-      _dbCache['local'] = DataSourceFactory.getLocal<UploaderFile>();
+      _dbCache['local'] = DatabaseFactory.create<UploaderFile>(
+        DatabaseTypes.local,
+      );
     }
     return _dbCache['local']!;
   }
 
-  static DataSource<UploaderFile> getOnlineDatabase() {
+  static DatabaseInterface<UploaderFile> get getApiDatabase {
     if (_dbCache['online'] == null) {
-      _dbCache['online'] = DataSourceFactory.getOnline<UploaderFile>();
+      _dbCache['online'] = DatabaseFactory.create<UploaderFile>(
+        DatabaseTypes.api,
+      );
     }
     return _dbCache['online']!;
   }
@@ -20,14 +24,14 @@ class UploaderFileServices {
   static Future<List<UploaderFile>> getLocalList({
     required String novelId,
   }) async {
-    final list = await getLocalDatabase().getAll(id: novelId);
+    final list = await getLocalDatabase.getAll(query: {'id': novelId});
     return list;
   }
 
-  static Future<List<UploaderFile>> getOnlineList({
+  static Future<List<UploaderFile>> getApiList({
     required String novelId,
   }) async {
-    final list = await getOnlineDatabase().getAll(id: novelId);
+    final list = await getApiDatabase.getAll(query: {'id': novelId});
     return list;
   }
 }

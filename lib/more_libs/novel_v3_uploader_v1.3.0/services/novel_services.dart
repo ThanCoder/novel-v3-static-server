@@ -1,32 +1,31 @@
 import '../novel_v3_uploader.dart';
 
 class NovelServices {
-  static final Map<String, DataSource<Novel>> _dbCache = {};
+  static final Map<String, DatabaseInterface<Novel>> _dbCache = {};
   static void clearDBCache() {
     _dbCache.clear();
   }
 
-  static DataSource<Novel> getLocalDatabase() {
-    if (_dbCache['local-novel'] == null) {
-      _dbCache['local-novel'] = DataSourceFactory.getLocal<Novel>();
+  static DatabaseInterface<Novel> get getLocalDatabase {
+    if (_dbCache['local'] == null) {
+      _dbCache['local'] = DatabaseFactory.create<Novel>(DatabaseTypes.local);
     }
-    return _dbCache['local-novel']!;
+    return _dbCache['local']!;
   }
 
-  static DataSource<Novel> getOnlineDatabase() {
-    if (_dbCache['online-novel'] == null) {
-      _dbCache['online-novel'] = DataSourceFactory.getOnline<Novel>();
+  static DatabaseInterface<Novel> get getApiDatabase {
+    if (_dbCache['api'] == null) {
+      _dbCache['api'] = DatabaseFactory.create<Novel>(DatabaseTypes.api);
     }
-    return _dbCache['online-novel']!;
+    return _dbCache['api']!;
   }
 
   static Future<List<Novel>> getLocalList() async {
-    final database = getLocalDatabase();
-    return await database.getAll();
+    return await getLocalDatabase.getAll();
   }
 
   static Future<List<Novel>> getOnlineList() async {
-    final database = getOnlineDatabase();
+    final database = getApiDatabase;
     return await database.getAll();
   }
 }

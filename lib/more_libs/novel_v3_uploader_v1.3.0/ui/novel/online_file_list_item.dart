@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:than_pkg/than_pkg.dart';
 
-import '../../models/uploader_file.dart';
+import '../../core/models/uploader_file.dart';
 
 class OnlineFileListItem extends StatelessWidget {
   UploaderFile file;

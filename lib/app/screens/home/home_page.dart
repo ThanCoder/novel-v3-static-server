@@ -17,18 +17,24 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with DataSourceChangeListener {
+class _HomePageState extends State<HomePage> with DatabaseListener {
   @override
   void initState() {
     // WidgetsBinding.instance.addPostFrameCallback((e) => init());
-    NovelServices.getLocalDatabase().addListener(this);
+    NovelServices.getLocalDatabase.addListener(this);
     super.initState();
   }
 
   @override
   void dispose() {
-    NovelServices.getLocalDatabase().removeListener(this);
+    NovelServices.getLocalDatabase.removeListener(this);
     super.dispose();
+  }
+
+  @override
+  void onDatabaseChanged(String? id, DatabaseListenerTypes listenerType) {
+    if (!mounted) return;
+    setState(() {});
   }
 
   bool isListView = false;
@@ -161,7 +167,7 @@ class _HomePageState extends State<HomePage> with DataSourceChangeListener {
       onPressed: () async {
         try {
           final newNovel = Novel.create();
-          await NovelServices.getLocalDatabase().add(newNovel);
+          await NovelServices.getLocalDatabase.add(newNovel);
 
           if (!mounted) return;
           // go edit screen
@@ -170,7 +176,7 @@ class _HomePageState extends State<HomePage> with DataSourceChangeListener {
             novel: newNovel,
             onUpdated: (novel) async {
               try {
-                await NovelServices.getLocalDatabase().update(novel);
+                await NovelServices.getLocalDatabase.update(novel.id,novel);
                 if (!mounted) return;
                 goEditNovelContentScreen(context, novel);
 
@@ -197,7 +203,7 @@ class _HomePageState extends State<HomePage> with DataSourceChangeListener {
         contentText: 'ဖျက်ချင်တာ သေချာပြီလား?',
         onSubmit: () {
           // context.read<NovelServices>().delete(novel);
-          NovelServices.getLocalDatabase().delete(novel);
+          NovelServices.getLocalDatabase.delete(novel.id);
         },
       ),
     );
@@ -299,11 +305,5 @@ class _HomePageState extends State<HomePage> with DataSourceChangeListener {
         ],
       ),
     );
-  }
-
-  @override
-  void onDataSourceChanged() {
-    if (!mounted) return;
-    setState(() {});
   }
 }

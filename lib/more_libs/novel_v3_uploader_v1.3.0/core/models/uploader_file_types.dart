@@ -12,14 +12,15 @@ enum UploaderFileTypes {
     }
     return v3Data;
   }
+
   static UploaderFileTypes getTypeString(String type) {
-    if(type == v3Data.name){
+    if (type == v3Data.name) {
       return v3Data;
     }
-    if(type == chapter.name){
+    if (type == chapter.name) {
       return chapter;
     }
-    if(type == pdf.name){
+    if (type == pdf.name) {
       return pdf;
     }
     return v3Data;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:t_widgets/t_widgets.dart';
 
 import '../../novel_v3_uploader.dart';
+import '../components/status_text.dart';
 
 class OnlineNovelGridItem extends StatelessWidget {
   Novel novel;

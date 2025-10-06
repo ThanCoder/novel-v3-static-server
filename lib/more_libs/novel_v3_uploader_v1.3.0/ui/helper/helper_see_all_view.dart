@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../models/helper_file.dart';
+import '../../core/models/helper_file.dart';
 import '../components/index.dart';
 
 class HelperSeeAllView extends StatelessWidget {

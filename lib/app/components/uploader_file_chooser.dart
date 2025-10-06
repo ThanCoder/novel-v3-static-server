@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/uploader_file_types.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/core/models/uploader_file_types.dart';
 import 'package:than_pkg/than_pkg.dart';
 
 class UploaderFileChooser extends StatelessWidget {

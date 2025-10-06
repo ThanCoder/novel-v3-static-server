@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:t_widgets/t_widgets.dart';
 
-import '../../models/helper_file.dart';
+import '../../core/models/helper_file.dart';
 
 class HelperGridItem extends StatelessWidget {
   HelperFile helper;

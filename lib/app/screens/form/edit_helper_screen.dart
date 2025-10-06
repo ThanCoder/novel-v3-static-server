@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/models/helper_file.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/core/models/helper_file.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/services/helper_services.dart';
 import 'package:provider/provider.dart';
 import 'package:t_widgets/dialogs/t_rename_dialog.dart';

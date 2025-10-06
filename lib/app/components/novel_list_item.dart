@@ -3,6 +3,8 @@ import 'package:t_widgets/widgets/index.dart';
 import 'package:than_pkg/extensions/datetime_extension.dart';
 
 import '../../more_libs/novel_v3_uploader_v1.3.0/novel_v3_uploader.dart';
+import '../../more_libs/novel_v3_uploader_v1.3.0/ui/components/status_text.dart';
+import '../../more_libs/novel_v3_uploader_v1.3.0/ui/components/tag_wrap_view.dart';
 
 class NovelListItem extends StatelessWidget {
   Novel novel;

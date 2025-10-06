@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:than_pkg/than_pkg.dart';
 import 'package:uuid/uuid.dart';
 
-import '../services/server_file_services.dart';
+import '../../services/server_file_services.dart';
 import 'uploader_file_types.dart';
 
 class UploaderFile {
