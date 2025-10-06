@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:t_widgets/functions/index.dart';
 import 'package:t_widgets/widgets/index.dart';
 import 'package:than_pkg/than_pkg.dart';
 
@@ -190,12 +191,18 @@ class _HomeScreenState extends State<HomeScreen> {
         SliverToBoxAdapter(child: SizedBox(height: 10)),
 
         // uploader file history list
-        SliverToBoxAdapter(child: UploaderFileHistoryPage(isApiList: true)),
+        SliverToBoxAdapter(
+          child: UploaderFileHistoryPage(
+            isApiList: true,
+            onClicked: _onParseAndGoContentPage,
+          ),
+        ),
         SliverToBoxAdapter(child: SizedBox(height: 10)),
+        // Random
         SliverToBoxAdapter(
           child: OnlineNovelSeeAllView(
             title: 'ကျပန်း စာစဥ်များ',
-            titleColor: Colors.lime,
+            // titleColor: Colors.lime,
             list: randomList,
             showLines: 1,
             onSeeAllClicked: _goSeeAllScreen,
@@ -207,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
         SliverToBoxAdapter(
           child: OnlineNovelSeeAllView(
             title: 'အသစ်များ',
-            titleColor: Colors.green,
+            // titleColor: Colors.green,
             list: list,
             onSeeAllClicked: _goSeeAllScreen,
             onClicked: _goContentPage,
@@ -217,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
         SliverToBoxAdapter(
           child: OnlineNovelSeeAllView(
             title: 'ပြီးဆုံး',
-            titleColor: Colors.blue,
+            // titleColor: Colors.blue,
             list: completedList,
             onSeeAllClicked: _goSeeAllScreen,
             onClicked: _goContentPage,
@@ -227,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
         SliverToBoxAdapter(
           child: OnlineNovelSeeAllView(
             title: 'ဘာသာပြန်နေဆဲ',
-            titleColor: Colors.amber,
+            // titleColor: Colors.amber,
             list: ongoingList,
             onSeeAllClicked: _goSeeAllScreen,
             onClicked: _goContentPage,
@@ -236,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
         SliverToBoxAdapter(child: SizedBox(height: 10)),
         SliverToBoxAdapter(
           child: OnlineNovelSeeAllView(
-            titleColor: Colors.red,
+            // titleColor: Colors.red,
             title: '18 နှစ်အထက်',
             list: adultList,
             onSeeAllClicked: _goSeeAllScreen,
@@ -252,5 +259,15 @@ class _HomeScreenState extends State<HomeScreen> {
       return _getListWidget();
     }
     return _getGridWidget();
+  }
+
+  void _onParseAndGoContentPage(UploaderFile file) async {
+    final novel = await NovelServices.getApiDatabase.getById(file.novelId);
+    if (!mounted) return;
+    if (novel == null) {
+      showTMessageDialogError(context, 'Novel မရှိပါ!');
+      return;
+    }
+    _goContentPage(novel);
   }
 }

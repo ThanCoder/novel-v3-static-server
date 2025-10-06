@@ -67,11 +67,16 @@ class _UploaderFilePageState extends State<UploaderFilePage> {
   }
 
   void _download(UploaderFile file) async {
-    if (NovelV3Uploader.instance.onDownloadUploaderFile != null) {
-      NovelV3Uploader.instance.onDownloadUploaderFile?.call(context, file);
-      return;
-    }
     try {
+      if (file.fileUrl.isEmpty) {
+        showTMessageDialogError(context, 'File Download Url မရှိပါ!');
+        return;
+      }
+      if (NovelV3Uploader.instance.onDownloadUploaderFile != null) {
+        NovelV3Uploader.instance.onDownloadUploaderFile?.call(context, file);
+        return;
+      }
+
       if (file.isDirectLink) {
         // direct download
       }

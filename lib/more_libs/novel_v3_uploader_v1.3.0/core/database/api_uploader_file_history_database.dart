@@ -13,19 +13,16 @@ class ApiUploaderFileHistoryDatabase
 
   @override
   UploaderFile fromMap(Map<String, dynamic> map) {
-    // TODO: implement fromMap
-    throw UnimplementedError();
+    return UploaderFile.fromMap(map);
   }
 
   @override
   String getId(UploaderFile value) {
-    // TODO: implement getId
-    throw UnimplementedError();
+    return value.id;
   }
 
   @override
   Map<String, dynamic> toMap(UploaderFile value) {
-    // TODO: implement toMap
-    throw UnimplementedError();
+    return value.toMap();
   }
 }
