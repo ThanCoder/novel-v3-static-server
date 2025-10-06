@@ -1,8 +1,9 @@
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/components/uploader_file_item.dart';
-import 'package:novel_v3_static_server/app/routes_helper.dart';
+import 'package:novel_v3_static_server/app/screens/form/edit_file_content_screen.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/novel_v3_uploader.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/routes_helper.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/than_pkg.dart';
 
@@ -18,14 +19,14 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen>
     with DatabaseListener {
   @override
   void initState() {
-    UploaderFileServices.getLocalDatabase.addListener(this);
+    UploaderFileServices.getLocalDatabase(widget.novel.id).addListener(this);
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((e) => init());
   }
 
   @override
   void dispose() {
-    UploaderFileServices.getLocalDatabase.removeListener(this);
+    UploaderFileServices.getLocalDatabase(widget.novel.id).removeListener(this);
     super.dispose();
   }
 
@@ -77,21 +78,9 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen>
             itemBuilder: (context, index) => UploaderFileItem(
               file: uploaderList[index],
               onClicked: (file) {
-                goEditContentFileScreen(
+                goRoute(
                   context,
-                  file,
-                  onUpdated: (file) async {
-                    try {
-                      // await UploaderFileServices.getLocalDatabase().update(
-                      //   file,
-                      // );
-                      if (!context.mounted) return;
-                      showTSnackBar(context, '${file.name} Updated');
-                    } catch (e) {
-                      if (!context.mounted) return;
-                      showTMessageDialogError(context, e.toString());
-                    }
-                  },
+                  builder: (context) => EditFileContentScreen(file: file),
                 );
               },
               onRightClicked: _onRightClicked,
@@ -104,21 +93,22 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen>
 
   Widget _getFloatingBtn() {
     return FloatingActionButton(
-      onPressed: () {
-        goEditContentFileScreen(
-          context,
-          UploaderFile.createEmpty(novelId: widget.novel.id),
-          onUpdated: (file) async {
-            try {
-              await UploaderFileServices.getLocalDatabase.add(file);
-              if (!mounted) return;
-              showTSnackBar(context, '${file.name} Added');
-            } catch (e) {
-              if (!context.mounted) return;
-              showTMessageDialogError(context, e.toString());
-            }
-          },
-        );
+      onPressed: () async {
+        try {
+          final file = UploaderFile.createEmpty(novelId: widget.novel.id);
+          await UploaderFileServices.getLocalDatabase(
+            widget.novel.id,
+          ).add(file);
+          if (!mounted) return;
+          // go edit
+          goRoute(
+            context,
+            builder: (context) => EditFileContentScreen(file: file),
+          );
+        } catch (e) {
+          if (!context.mounted) return;
+          showTMessageDialogError(context, e.toString());
+        }
       },
       child: Icon(Icons.add),
     );
@@ -155,7 +145,9 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen>
         submitText: 'Delete Forever',
         onSubmit: () {
           // context.read<UploaderFileServices>().delete(file);
-          // UploaderFileServices.getLocalDatabase().delete(file);
+          UploaderFileServices.getLocalDatabase(
+            widget.novel.id,
+          ).delete(file.id);
         },
       ),
     );

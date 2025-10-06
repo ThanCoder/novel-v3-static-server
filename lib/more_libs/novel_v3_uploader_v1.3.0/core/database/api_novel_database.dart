@@ -15,26 +15,13 @@ class ApiNovelDatabase extends ApiDatabaseInterface<Novel> {
   }
 
   @override
-  Future<void> add(Novel value) {
-    // TODO: implement add
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> delete(String id) {
-    // TODO: implement delete
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> update(String id, Novel value) {
-    // TODO: implement update
-    throw UnimplementedError();
-  }
-
-  @override
   Map<String, dynamic> toMap(Novel value) {
-    // TODO: implement toMap
-    throw UnimplementedError();
+    return value.toMap();
   }
+
+  @override
+  String getId(Novel value) {
+    return value.id;
+  }
+  
 }

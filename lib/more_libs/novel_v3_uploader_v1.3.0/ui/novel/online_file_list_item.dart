@@ -28,6 +28,8 @@ class OnlineFileListItem extends StatelessWidget {
                     Text('Type: ${file.type.name.toCaptalize()}'),
                     Text('Size: ${file.fileSize}'),
                     Text('ရက်စွဲ: ${file.date.toParseTime()}'),
+                    Text('Direct Link: ${file.isDirectLink ? 'Yes' : 'No'}'),
+                    _getDesc(file),
                     // download
                     IconButton(
                       color: Colors.teal,
@@ -42,5 +44,9 @@ class OnlineFileListItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _getDesc(UploaderFile file) {
+    return SizedBox.shrink();
   }
 }

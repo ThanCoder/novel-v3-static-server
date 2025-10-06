@@ -1,7 +1,8 @@
 enum UploaderFileTypes {
   v3Data,
   chapter,
-  pdf;
+  pdf,
+  unknown;
 
   static UploaderFileTypes getTypeFromPath(String path) {
     if (path.endsWith('.pdf')) {
@@ -10,7 +11,7 @@ enum UploaderFileTypes {
     if (path.endsWith('.npz')) {
       return v3Data;
     }
-    return v3Data;
+    return unknown;
   }
 
   static UploaderFileTypes getTypeString(String type) {
@@ -23,6 +24,6 @@ enum UploaderFileTypes {
     if (type == pdf.name) {
       return pdf;
     }
-    return v3Data;
+    return unknown;
   }
 }

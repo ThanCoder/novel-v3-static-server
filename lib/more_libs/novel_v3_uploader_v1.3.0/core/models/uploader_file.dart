@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
 import 'package:than_pkg/than_pkg.dart';
@@ -7,15 +8,16 @@ import '../../services/server_file_services.dart';
 import 'uploader_file_types.dart';
 
 class UploaderFile {
-  String id;
-  String novelId;
-  String name;
-  UploaderFileTypes type;
-  String filePath;
-  String fileUrl;
-  bool isDirectLink;
-  String fileSize;
-  DateTime date;
+  final String id;
+  final String novelId;
+  final String name;
+  final UploaderFileTypes type;
+  final String filePath;
+  final String fileUrl;
+  final bool isDirectLink;
+  final String fileSize;
+  final DateTime date;
+  final String description;
   // constrctor
   UploaderFile({
     required this.id,
@@ -27,6 +29,7 @@ class UploaderFile {
     required this.isDirectLink,
     required this.fileSize,
     required this.date,
+    required this.description,
   });
 
   factory UploaderFile.createEmpty({required String novelId}) {
@@ -45,6 +48,7 @@ class UploaderFile {
     required String fileUrl,
     required bool isDirectLink,
     required String fileSize,
+    String description = '',
     String name = 'Untitled',
     UploaderFileTypes type = UploaderFileTypes.v3Data,
   }) {
@@ -59,6 +63,7 @@ class UploaderFile {
       isDirectLink: isDirectLink,
       fileSize: fileSize,
       date: DateTime.now(),
+      description: description,
     );
   }
 
@@ -82,24 +87,20 @@ class UploaderFile {
 
   // map
   factory UploaderFile.fromMap(Map<String, dynamic> map) {
-    final dateFromMillisecondsSinceEpoch = MapServices.get<int>(map, [
-      'date',
-    ], defaultValue: 0);
-
-    final type = UploaderFileTypes.getTypeString(
-      MapServices.get(map, ['type'], defaultValue: ''),
-    );
+    final dateInt = map.getInt(['date']);
+    final type = UploaderFileTypes.getTypeString(map.getString(['type']));
 
     return UploaderFile(
-      id: MapServices.get(map, ['id'], defaultValue: ''),
-      name: MapServices.get(map, ['name'], defaultValue: 'Untitled'),
-      novelId: MapServices.get(map, ['novelId'], defaultValue: ''),
-      fileUrl: MapServices.get(map, ['fileUrl'], defaultValue: ''),
-      filePath: MapServices.get(map, ['filePath'], defaultValue: ''),
-      isDirectLink: MapServices.get(map, ['isDirectLink'], defaultValue: false),
-      fileSize: MapServices.get(map, ['fileSize'], defaultValue: '0'),
+      id: map.getString(['id']),
+      name: map.getString(['name']),
+      novelId: map.getString(['novelId']),
+      fileUrl: map.getString(['fileUrl']),
+      filePath: map.getString(['filePath']),
+      isDirectLink: map.getBool(['isDirectLink']),
+      fileSize: map.getString(['fileSize']),
       type: type,
-      date: DateTime.fromMillisecondsSinceEpoch(dateFromMillisecondsSinceEpoch),
+      date: DateTime.fromMillisecondsSinceEpoch(dateInt),
+      description: map.getString(['description']),
     );
   }
 
@@ -113,11 +114,38 @@ class UploaderFile {
     'fileSize': fileSize,
     'type': type.name,
     'date': date.millisecondsSinceEpoch,
+    'description': description,
   };
 
   String get getLocalSizeLable {
     final file = File(filePath);
     if (!file.existsSync()) return '';
     return file.statSync().size.toDouble().toFileSizeLabel();
+  }
+
+  UploaderFile copyWith({
+    String? id,
+    String? novelId,
+    String? name,
+    UploaderFileTypes? type,
+    String? filePath,
+    String? fileUrl,
+    bool? isDirectLink,
+    String? fileSize,
+    DateTime? date,
+    String? description,
+  }) {
+    return UploaderFile(
+      id: id ?? this.id,
+      novelId: novelId ?? this.novelId,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      filePath: filePath ?? this.filePath,
+      fileUrl: fileUrl ?? this.fileUrl,
+      isDirectLink: isDirectLink ?? this.isDirectLink,
+      fileSize: fileSize ?? this.fileSize,
+      date: date ?? this.date,
+      description: description ?? this.description,
+    );
   }
 }

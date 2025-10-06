@@ -19,20 +19,13 @@ class LocalNovelDatabase extends LocalDatabaseInterface<Novel> {
   }
 
   @override
-  Future<void> add(Novel value) {
-    // TODO: implement add
-    throw UnimplementedError();
+  String getId(Novel value) {
+    return value.id;
   }
-
+  
   @override
-  Future<void> delete(String id) {
-    // TODO: implement delete
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> update(String id, Novel value) {
-    // TODO: implement update
+  Future<Novel?> getOne({Map<String, dynamic> query = const {}}) {
+    // TODO: implement getOne
     throw UnimplementedError();
   }
 }

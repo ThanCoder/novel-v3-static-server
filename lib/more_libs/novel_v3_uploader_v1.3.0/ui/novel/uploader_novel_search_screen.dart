@@ -99,6 +99,11 @@ class _NovelSearchScreenState extends State<NovelSearchScreen> {
     final transList = widget.list.map((e) => e.translator).toSet().toList();
     final mcList = widget.list.map((e) => e.mc).toSet().toList();
     final tagsList = widget.list.expand((e) => e.getTags).toSet().toList();
+    authorList.sort((a, b) => a.compareTo(b));
+    transList.sort((a, b) => a.compareTo(b));
+    mcList.sort((a, b) => a.compareTo(b));
+    tagsList.sort((a, b) => a.compareTo(b));
+
     return CustomScrollView(
       slivers: [
         // is searching

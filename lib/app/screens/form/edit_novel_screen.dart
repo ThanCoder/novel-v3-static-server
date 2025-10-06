@@ -52,102 +52,6 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
     _checkAlreadyTitle();
   }
 
-  void _onSaved() async {
-    novel.title = titleController.text.trim();
-    novel.author = authorController.text.trim();
-    novel.translator = translatorController.text.trim();
-    novel.mc = mcController.text.trim();
-    novel.desc = descController.text;
-    novel.newDate();
-    Navigator.pop(context);
-
-    // on update
-    widget.onUpdated(novel);
-  }
-
-  void _checkAlreadyTitle() {
-    if (alreadyTitleList.contains(titleController.text)) {
-      errorTitle = 'title ရှိနေပြီးသားဖြစ်နေပါတယ်';
-    } else {
-      errorTitle = null;
-    }
-    setState(() {});
-  }
-
-  List<String> get _getAllTags {
-    final list = [];
-    List<String> allTags = [];
-    for (var novel in list) {
-      allTags.addAll(novel.getTags);
-    }
-    return allTags.toSet().toList();
-  }
-
-  void onDragDone(DropDoneDetails details) async {
-    try {
-      final files = details.files.map((e) => e.path).toList();
-      // cover files
-      final coverFiles = ServerFileServices.getAccessableCoverFiles(files);
-      if (coverFiles.isNotEmpty) {
-        final file = File(coverFiles.first);
-        final oldFile = File(novel.coverPath);
-        if (oldFile.existsSync()) {
-          oldFile.deleteSync();
-        }
-        file.renameSync(novel.coverPath);
-        coverUrlController.text = ServerFileServices.getImageUrl(
-          novel.coverPath.getName(),
-        );
-        setState(() {});
-        return;
-      }
-      // config
-      final configFiles = ServerFileServices.getAccessableConfigFiles(files);
-      if (configFiles.isEmpty) return;
-      // move file
-      final config = Novel.fromV3ConfigFile(configFiles.first);
-      //novel
-      novel.isAdult = config.isAdult;
-      novel.isCompleted = config.isCompleted;
-      novel.tags = config.tags;
-      novel.pageUrls = config.pageUrls;
-      // fields
-      titleController.text = config.title;
-      authorController.text = config.author;
-      translatorController.text = config.translator;
-      mcController.text = config.mc;
-      // coverUrlController.text = config.coverUrl;
-      descController.text = config.desc;
-      // title ရှိနေပြီးသားလား စစ်ဆေးမယ်
-      if (alreadyTitleList.contains(titleController.text)) {
-        errorTitle = 'title ရှိနေပြီးသားဖြစ်နေပါတယ်';
-      } else {
-        errorTitle = null;
-      }
-      // error မရှိနေရင် cover file ကို move မယ်
-      final coverFile = File(config.coverPath);
-      if (coverFile.existsSync()) {
-        final oldFile = File(novel.coverPath);
-        if (oldFile.existsSync()) {
-          oldFile.deleteSync();
-        }
-        // coverFile.renameSync(novel.coverPath);
-        coverFile.copySync(novel.coverPath);
-
-        coverUrlController.text = ServerFileServices.getImageUrl(
-          novel.coverPath.getName(),
-        );
-      }
-      setState(() {});
-
-      if (!mounted) return;
-      showTSnackBar(context, 'config Added');
-    } catch (e) {
-      if (!mounted) return;
-      showTMessageDialogError(context, e.toString());
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return DropTarget(
@@ -312,5 +216,101 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
               ),
       ),
     );
+  }
+
+  List<String> get _getAllTags {
+    final list = [];
+    List<String> allTags = [];
+    for (var novel in list) {
+      allTags.addAll(novel.getTags);
+    }
+    return allTags.toSet().toList();
+  }
+
+  void _checkAlreadyTitle() {
+    if (alreadyTitleList.contains(titleController.text)) {
+      errorTitle = 'title ရှိနေပြီးသားဖြစ်နေပါတယ်';
+    } else {
+      errorTitle = null;
+    }
+    setState(() {});
+  }
+
+  void onDragDone(DropDoneDetails details) async {
+    try {
+      final files = details.files.map((e) => e.path).toList();
+      // cover files
+      final coverFiles = ServerFileServices.getAccessableCoverFiles(files);
+      if (coverFiles.isNotEmpty) {
+        final file = File(coverFiles.first);
+        final oldFile = File(novel.coverPath);
+        if (oldFile.existsSync()) {
+          oldFile.deleteSync();
+        }
+        file.renameSync(novel.coverPath);
+        coverUrlController.text = ServerFileServices.getImageUrl(
+          novel.coverPath.getName(),
+        );
+        setState(() {});
+        return;
+      }
+      // config
+      final configFiles = ServerFileServices.getAccessableConfigFiles(files);
+      if (configFiles.isEmpty) return;
+      // move file
+      final config = Novel.fromV3ConfigFile(configFiles.first);
+      //novel
+      novel.isAdult = config.isAdult;
+      novel.isCompleted = config.isCompleted;
+      novel.tags = config.tags;
+      novel.pageUrls = config.pageUrls;
+      // fields
+      titleController.text = config.title;
+      authorController.text = config.author;
+      translatorController.text = config.translator;
+      mcController.text = config.mc;
+      // coverUrlController.text = config.coverUrl;
+      descController.text = config.desc;
+      // title ရှိနေပြီးသားလား စစ်ဆေးမယ်
+      if (alreadyTitleList.contains(titleController.text)) {
+        errorTitle = 'title ရှိနေပြီးသားဖြစ်နေပါတယ်';
+      } else {
+        errorTitle = null;
+      }
+      // error မရှိနေရင် cover file ကို move မယ်
+      final coverFile = File(config.coverPath);
+      if (coverFile.existsSync()) {
+        final oldFile = File(novel.coverPath);
+        if (oldFile.existsSync()) {
+          oldFile.deleteSync();
+        }
+        // coverFile.renameSync(novel.coverPath);
+        coverFile.copySync(novel.coverPath);
+
+        coverUrlController.text = ServerFileServices.getImageUrl(
+          novel.coverPath.getName(),
+        );
+      }
+      setState(() {});
+
+      if (!mounted) return;
+      showTSnackBar(context, 'config Added');
+    } catch (e) {
+      if (!mounted) return;
+      showTMessageDialogError(context, e.toString());
+    }
+  }
+
+  void _onSaved() async {
+    novel.title = titleController.text.trim();
+    novel.author = authorController.text.trim();
+    novel.translator = translatorController.text.trim();
+    novel.mc = mcController.text.trim();
+    novel.desc = descController.text;
+    novel.newDate();
+    Navigator.pop(context);
+
+    // on update
+    widget.onUpdated(novel);
   }
 }

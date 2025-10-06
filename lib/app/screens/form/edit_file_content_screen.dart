@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/app/components/uploader_file_chooser.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/core/models/uploader_file.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/services/uploader_file_services.dart';
 import 'package:t_widgets/t_widgets.dart';
 
 class EditFileContentScreen extends StatefulWidget {
-  UploaderFile file;
-  void Function(UploaderFile file) onUpdated;
-  EditFileContentScreen({
-    super.key,
-    required this.file,
-    required this.onUpdated,
-  });
+  final UploaderFile file;
+  const EditFileContentScreen({super.key, required this.file});
 
   @override
   State<EditFileContentScreen> createState() => _EditFileContentScreenState();
@@ -20,6 +16,7 @@ class _EditFileContentScreenState extends State<EditFileContentScreen> {
   final nameConstroller = TextEditingController();
   final fileUrlConstroller = TextEditingController();
   final fileSizeConstroller = TextEditingController();
+  final descriptionConstroller = TextEditingController();
   late UploaderFile file;
 
   @override
@@ -28,30 +25,14 @@ class _EditFileContentScreenState extends State<EditFileContentScreen> {
     nameConstroller.text = file.name;
     fileUrlConstroller.text = file.fileUrl;
     fileSizeConstroller.text = file.fileSize;
-    // nameConstroller.text = file.;
+    descriptionConstroller.text = file.description;
     super.initState();
-  }
-
-  void _onSaved() async {
-    try {
-      file.name = nameConstroller.text;
-      file.fileUrl = fileUrlConstroller.text;
-      file.fileSize = fileSizeConstroller.text;
-
-      if (!mounted) return;
-
-      Navigator.pop(context);
-      widget.onUpdated(file);
-    } catch (e) {
-      if (!mounted) return;
-      showTMessageDialogError(context, e.toString());
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Edit Content File')),
+      appBar: _getAppbar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -65,6 +46,7 @@ class _EditFileContentScreenState extends State<EditFileContentScreen> {
                 maxLines: 1,
                 isSelectedAll: true,
                 autofocus: true,
+                onSubmitted: (value) => _onSaved(),
               ),
               TTextField(
                 label: Text('File Url'),
@@ -79,23 +61,26 @@ class _EditFileContentScreenState extends State<EditFileContentScreen> {
                 // isSelectedAll: true,
                 onSubmitted: (value) => _onSaved(),
               ),
-              // types
-              UploaderFileChooser(
-                value: file.type,
-                onChanged: (value) {
-                  setState(() {
-                    file.type = value;
-                  });
-                },
+              TTextField(
+                label: Text('Description'),
+                controller: descriptionConstroller,
+                maxLines: null,
               ),
               // direct link
               SwitchListTile.adaptive(
                 title: Text('Is Direct Download Link'),
                 value: file.isDirectLink,
                 onChanged: (value) {
-                  setState(() {
-                    file.isDirectLink = value;
-                  });
+                  file = file.copyWith(isDirectLink: value);
+                  setState(() {});
+                },
+              ),
+              // types
+              UploaderFileChooser(
+                value: file.type,
+                onChanged: (value) {
+                  file = file.copyWith(type: value);
+                  setState(() {});
                 },
               ),
             ],
@@ -107,5 +92,60 @@ class _EditFileContentScreenState extends State<EditFileContentScreen> {
         child: Icon(Icons.save_as_rounded),
       ),
     );
+  }
+
+  AppBar _getAppbar() {
+    return AppBar(
+      title: Text('Edit Content File'),
+      actions: [
+        IconButton(
+          onPressed: _onDeleteConfirm,
+          color: Colors.red,
+          icon: Icon(Icons.delete_forever),
+        ),
+      ],
+    );
+  }
+
+  void _onDeleteConfirm() {
+    showTConfirmDialog(
+      context,
+      contentText: 'ဖျက်ချင်တာ သေချာပြီလား?',
+      submitText: 'Delete Forever!',
+      onSubmit: () async {
+        try {
+          await UploaderFileServices.getLocalDatabase(
+            widget.file.novelId,
+          ).delete(file.id);
+
+          if (!mounted) return;
+          Navigator.pop(context);
+        } catch (e) {
+          if (!mounted) return;
+          showTMessageDialogError(context, e.toString());
+        }
+      },
+    );
+  }
+
+  void _onSaved() async {
+    try {
+      file = file.copyWith(
+        name: nameConstroller.text,
+        fileUrl: fileUrlConstroller.text,
+        fileSize: fileSizeConstroller.text,
+        description: descriptionConstroller.text,
+      );
+
+      await UploaderFileServices.getLocalDatabase(
+        widget.file.novelId,
+      ).update(file.id, file);
+
+      if (!mounted) return;
+      Navigator.pop(context);
+    } catch (e) {
+      if (!mounted) return;
+      showTMessageDialogError(context, e.toString());
+    }
   }
 }

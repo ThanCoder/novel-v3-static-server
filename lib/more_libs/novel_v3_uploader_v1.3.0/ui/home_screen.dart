@@ -11,6 +11,7 @@ import 'novel/online_novel_grid_item.dart';
 import 'novel/online_novel_list_item.dart';
 import 'novel/online_novel_see_all_view.dart';
 import 'novel/uploader_novel_search_screen.dart';
+import 'uploader_file/uploader_file_history_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -188,6 +189,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         SliverToBoxAdapter(child: SizedBox(height: 10)),
 
+        // uploader file history list
+        SliverToBoxAdapter(child: UploaderFileHistoryPage(isApiList: true)),
+        SliverToBoxAdapter(child: SizedBox(height: 10)),
         SliverToBoxAdapter(
           child: OnlineNovelSeeAllView(
             title: 'ကျပန်း စာစဥ်များ',

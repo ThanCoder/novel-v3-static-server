@@ -3,9 +3,12 @@ import 'package:novel_v3_static_server/app/components/novel_grid_item.dart';
 import 'package:novel_v3_static_server/app/components/novel_list_item.dart';
 import 'package:novel_v3_static_server/app/components/novel_see_all_view.dart';
 import 'package:novel_v3_static_server/app/routes_helper.dart';
+import 'package:novel_v3_static_server/app/screens/form/edit_file_content_screen.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/novel_v3_uploader.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/routes_helper.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/ui/components/see_all_screen.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/ui/novel/uploader_novel_search_screen.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/ui/uploader_file/uploader_file_history_list.dart';
 import 'package:novel_v3_static_server/more_libs/terminal_app/terminal_button.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/than_pkg.dart';
@@ -33,8 +36,10 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
 
   @override
   void onDatabaseChanged(String? id, DatabaseListenerTypes listenerType) {
-    if (!mounted) return;
-    setState(() {});
+    if (listenerType == DatabaseListenerTypes.saved) {
+      if (!mounted) return;
+      setState(() {});
+    }
   }
 
   bool isListView = false;
@@ -115,10 +120,16 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
           ),
         ),
         SliverToBoxAdapter(child: const SizedBox(height: 10)),
+        // uploader file history list
+        SliverToBoxAdapter(
+          child: UploaderFileHistoryPage(onClicked: _goUploaderFormScreen),
+        ),
+        SliverToBoxAdapter(child: SizedBox(height: 10)),
+
         SliverToBoxAdapter(
           child: NovelSeeAllView(
             title: 'အသစ်များ',
-            titleColor: Colors.green,
+            // titleColor: Colors.green,
             list: list,
             onSeeAllClicked: _goSeeAllScreen,
             onClicked: _goContentPage,
@@ -129,7 +140,7 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
         SliverToBoxAdapter(
           child: NovelSeeAllView(
             title: 'ပြီးဆုံး',
-            titleColor: Colors.blue,
+            // titleColor: Colors.blue,
             list: completedList,
             onSeeAllClicked: _goSeeAllScreen,
             onClicked: _goContentPage,
@@ -140,7 +151,7 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
         SliverToBoxAdapter(
           child: NovelSeeAllView(
             title: 'ဘာသာပြန်နေဆဲ',
-            titleColor: Colors.amber,
+            // titleColor: Colors.amber,
             list: ongoingList,
             onSeeAllClicked: _goSeeAllScreen,
             onClicked: _goContentPage,
@@ -176,7 +187,7 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
             novel: newNovel,
             onUpdated: (novel) async {
               try {
-                await NovelServices.getLocalDatabase.update(novel.id,novel);
+                await NovelServices.getLocalDatabase.update(novel.id, novel);
                 if (!mounted) return;
                 goEditNovelContentScreen(context, novel);
 
@@ -193,19 +204,6 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
         }
       },
       child: Icon(Icons.add),
-    );
-  }
-
-  void _deleteNovelConfirm(Novel novel) {
-    showDialog(
-      context: context,
-      builder: (context) => TConfirmDialog(
-        contentText: 'ဖျက်ချင်တာ သေချာပြီလား?',
-        onSubmit: () {
-          // context.read<NovelServices>().delete(novel);
-          NovelServices.getLocalDatabase.delete(novel.id);
-        },
-      ),
     );
   }
 
@@ -249,17 +247,58 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
     goEditNovelContentScreen(context, novel);
   }
 
+  void _goUploaderFormScreen(UploaderFile file) {
+    goRoute(context, builder: (context) => EditFileContentScreen(file: file));
+  }
+
+  // item menu
+  void _showMenu(Novel novel) {
+    showTMenuBottomSheet(
+      context,
+      title: Text('Novel: ${novel.title}'),
+      children: [
+        ListTile(
+          leading: Icon(Icons.copy_all),
+          title: Text('Copy Title'),
+          onTap: () {
+            Navigator.pop(context);
+            ThanPkg.appUtil.copyText(novel.title);
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.edit_document),
+          title: Text('Edit'),
+          onTap: () {
+            Navigator.pop(context);
+            _updateNovel(novel);
+          },
+        ),
+        ListTile(
+          iconColor: Colors.red,
+          leading: Icon(Icons.delete_forever),
+          title: Text('Delete'),
+          onTap: () {
+            Navigator.pop(context);
+            _deleteNovelConfirm(novel);
+          },
+        ),
+      ],
+    );
+  }
+
   void _updateNovel(Novel novel) {
     goEditNovelScreen(
       context,
       novel: novel,
       onUpdated: (updatedNovel) async {
         try {
-          // await context.read<NovelServices>().update(updatedNovel);
+          await NovelServices.getLocalDatabase.update(
+            updatedNovel.id,
+            updatedNovel,
+          );
           if (!mounted) return;
-          // goEditNovelContentScreen(context, novel);
 
-          showTSnackBar(context, '${updatedNovel.title} Updated');
+          // showTSnackBar(context, '${updatedNovel.title} Updated');
         } catch (e) {
           if (!mounted) return;
           showTMessageDialogError(context, e.toString());
@@ -268,41 +307,16 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
     );
   }
 
-  void _showMenu(Novel novel) {
-    showTModalBottomSheet(
-      context,
-      child: Column(
-        spacing: 5,
-        children: [
-          ListTile(
-            title: Text(novel.title, maxLines: 2, textAlign: TextAlign.center),
-          ),
-          ListTile(
-            leading: Icon(Icons.copy_all),
-            title: Text('Copy Title'),
-            onTap: () {
-              Navigator.pop(context);
-              ThanPkg.appUtil.copyText(novel.title);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.edit_document),
-            title: Text('Edit'),
-            onTap: () {
-              Navigator.pop(context);
-              _updateNovel(novel);
-            },
-          ),
-          ListTile(
-            iconColor: Colors.red,
-            leading: Icon(Icons.delete_forever),
-            title: Text('Delete'),
-            onTap: () {
-              Navigator.pop(context);
-              _deleteNovelConfirm(novel);
-            },
-          ),
-        ],
+  void _deleteNovelConfirm(Novel novel) {
+    showDialog(
+      context: context,
+      builder: (context) => TConfirmDialog(
+        contentText: 'ဖျက်ချင်တာ သေချာပြီလား?',
+        submitText: 'Delete Forever',
+        onSubmit: () {
+          // context.read<NovelServices>().delete(novel);
+          NovelServices.getLocalDatabase.delete(novel.id);
+        },
       ),
     );
   }

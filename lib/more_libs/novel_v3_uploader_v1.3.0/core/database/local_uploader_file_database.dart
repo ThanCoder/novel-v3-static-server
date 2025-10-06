@@ -1,46 +1,31 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:than_pkg/services/t_map.dart';
-
 import '../../novel_v3_uploader.dart';
 
 class LocalUploaderFileDatabase extends LocalDatabaseInterface<UploaderFile> {
-  LocalUploaderFileDatabase()
+  LocalUploaderFileDatabase(String novelId)
     : super(
-        root: '${NovelV3Uploader.instance.getLocalServerPath()}/content_db',
+        root:
+            '${NovelV3Uploader.instance.getLocalServerPath()}/content_db/$novelId.db.json',
         storage: Storage(
           root: '${NovelV3Uploader.instance.getLocalServerPath()}/files',
         ),
       );
 
   @override
-  Future<List<UploaderFile>> getAll({
-    Map<String, dynamic> query = const {},
-  }) async {
-    List<UploaderFile> list = [];
-    try {
-      final id = query.getString(['id']);
-      final content = await getDBContent('$root/$id.db.json');
-      // print(content);
-      List<dynamic> mapList = jsonDecode(content);
-      list = mapList.map((map) => fromMap(map)).toList();
-    } catch (e) {
-      debugPrint('[LocalUploaderFileDatabase:getAll]: ${e.toString()}');
-    }
-    return list;
+  Future<void> add(UploaderFile value) async {
+    await UploaderFileServices.getLocalHistoryDatabase.add(value);
+    return super.add(value);
   }
 
   @override
-  Future<void> add(UploaderFile value) {
-    // TODO: implement add
-    throw UnimplementedError();
+  Future<void> delete(String id) async {
+    await UploaderFileServices.getLocalHistoryDatabase.delete(id);
+    return super.delete(id);
   }
 
   @override
-  Future<void> delete(String id) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<void> update(String id, UploaderFile value) async {
+    await UploaderFileServices.getLocalHistoryDatabase.update(id, value);
+    return super.update(id, value);
   }
 
   @override
@@ -54,8 +39,7 @@ class LocalUploaderFileDatabase extends LocalDatabaseInterface<UploaderFile> {
   }
 
   @override
-  Future<void> update(String id, UploaderFile value) {
-    // TODO: implement update
-    throw UnimplementedError();
+  String getId(UploaderFile value) {
+    return value.id;
   }
 }

@@ -8,14 +8,16 @@ class NovelServices {
 
   static DatabaseInterface<Novel> get getLocalDatabase {
     if (_dbCache['local'] == null) {
-      _dbCache['local'] = DatabaseFactory.create<Novel>(DatabaseTypes.local);
+      _dbCache['local'] = DatabaseFactory.create<Novel>(
+        type: DatabaseTypes.local,
+      );
     }
     return _dbCache['local']!;
   }
 
   static DatabaseInterface<Novel> get getApiDatabase {
     if (_dbCache['api'] == null) {
-      _dbCache['api'] = DatabaseFactory.create<Novel>(DatabaseTypes.api);
+      _dbCache['api'] = DatabaseFactory.create<Novel>(type: DatabaseTypes.api);
     }
     return _dbCache['api']!;
   }

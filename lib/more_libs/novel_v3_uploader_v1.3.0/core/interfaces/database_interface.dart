@@ -4,6 +4,8 @@ abstract class DatabaseInterface<T> {
   DatabaseInterface({required this.root, required this.storage});
 
   Future<List<T>> getAll({Map<String, dynamic> query = const {}});
+  Future<T?> getOne({Map<String, dynamic> query = const {}});
+  Future<T?> getById(String id);
   Future<void> add(T value);
   Future<void> update(String id, T value);
   Future<void> delete(String id);
