@@ -5,10 +5,10 @@ import 'package:than_pkg/than_pkg.dart';
 
 import '../components/status_text.dart';
 import '../components/tag_wrap_view.dart';
-import 'novel_content_screen.dart';
 import '../components/see_all_screen.dart';
-import 'online_novel_grid_item.dart';
-import 'online_novel_page_button.dart';
+import 'desktop_ui/online_novel_grid_item.dart';
+import 'desktop_ui/online_novel_page_button.dart';
+import 'novel_content_ui_switcher.dart';
 
 class HomePage extends StatefulWidget {
   Novel novel;
@@ -87,7 +87,9 @@ class _HomePageState extends State<HomePage> {
   void _goContentPage(Novel novel) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => NovelContentScreen(novel: novel)),
+      MaterialPageRoute(
+        builder: (context) => NovelContentUiSwitcher(novel: novel),
+      ),
     );
   }
 

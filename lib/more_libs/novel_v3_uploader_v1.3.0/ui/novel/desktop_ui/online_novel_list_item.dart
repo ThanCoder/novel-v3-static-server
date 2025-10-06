@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/extensions/datetime_extension.dart';
 
-import '../../novel_v3_uploader.dart';
-import '../components/status_text.dart';
-import '../components/tag_wrap_view.dart';
+import '../../../novel_v3_uploader.dart';
+import '../../components/status_text.dart';
+import '../../components/tag_wrap_view.dart';
 
 class OnlineNovelListItem extends StatelessWidget {
   Novel novel;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/core/models/novel.dart';
 import 'online_novel_grid_item.dart';
-import '../components/see_all_view.dart';
+import '../../components/see_all_view.dart';
 
 class OnlineNovelSeeAllView extends StatelessWidget {
   String title;

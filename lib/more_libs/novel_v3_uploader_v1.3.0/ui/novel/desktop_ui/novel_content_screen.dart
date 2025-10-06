@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../novel_v3_uploader.dart';
-import 'home_page.dart';
-import '../uploader_file/uploader_file_page.dart';
+import '../../../novel_v3_uploader.dart';
+import '../home_page.dart';
+import '../../uploader_file/uploader_file_page.dart';
 
 class NovelContentScreen extends StatefulWidget {
   Novel novel;

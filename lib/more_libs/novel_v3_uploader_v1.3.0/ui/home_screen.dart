@@ -6,11 +6,11 @@ import 'package:than_pkg/than_pkg.dart';
 import '../novel_v3_uploader.dart';
 import 'helper/helper_content_screen.dart';
 import 'helper/helper_see_all_view.dart';
-import 'novel/novel_content_screen.dart';
 import 'components/see_all_screen.dart';
-import 'novel/online_novel_grid_item.dart';
-import 'novel/online_novel_list_item.dart';
-import 'novel/online_novel_see_all_view.dart';
+import 'novel/desktop_ui/online_novel_grid_item.dart';
+import 'novel/desktop_ui/online_novel_list_item.dart';
+import 'novel/desktop_ui/online_novel_see_all_view.dart';
+import 'novel/novel_content_ui_switcher.dart';
 import 'novel/uploader_novel_search_screen.dart';
 import 'uploader_file/uploader_file_history_list.dart';
 
@@ -107,7 +107,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void _goContentPage(Novel novel) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => NovelContentScreen(novel: novel)),
+      MaterialPageRoute(
+        builder: (context) => NovelContentUiSwitcher(novel: novel),
+      ),
     );
   }
 
@@ -198,18 +200,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         SliverToBoxAdapter(child: SizedBox(height: 10)),
-        // Random
-        SliverToBoxAdapter(
-          child: OnlineNovelSeeAllView(
-            title: 'ကျပန်း စာစဥ်များ',
-            // titleColor: Colors.lime,
-            list: randomList,
-            showLines: 1,
-            onSeeAllClicked: _goSeeAllScreen,
-            onClicked: _goContentPage,
-          ),
-        ),
-        SliverToBoxAdapter(child: SizedBox(height: 10)),
 
         SliverToBoxAdapter(
           child: OnlineNovelSeeAllView(
@@ -236,6 +226,18 @@ class _HomeScreenState extends State<HomeScreen> {
             title: 'ဘာသာပြန်နေဆဲ',
             // titleColor: Colors.amber,
             list: ongoingList,
+            onSeeAllClicked: _goSeeAllScreen,
+            onClicked: _goContentPage,
+          ),
+        ),
+        SliverToBoxAdapter(child: SizedBox(height: 10)),
+        // Random
+        SliverToBoxAdapter(
+          child: OnlineNovelSeeAllView(
+            title: 'ကျပန်း စာစဥ်များ',
+            // titleColor: Colors.lime,
+            list: randomList,
+            showLines: 1,
             onSeeAllClicked: _goSeeAllScreen,
             onClicked: _goContentPage,
           ),
