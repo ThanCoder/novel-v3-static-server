@@ -33,63 +33,75 @@ class _EditFileContentScreenState extends State<EditFileContentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _getAppbar(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            spacing: 15,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TTextField(
-                label: Text('Name'),
-                controller: nameConstroller,
-                maxLines: 1,
-                isSelectedAll: true,
-                autofocus: true,
-                onSubmitted: (value) => _onSaved(),
-              ),
-              TTextField(
-                label: Text('File Url'),
-                controller: fileUrlConstroller,
-                maxLines: 1,
-                isSelectedAll: true,
-              ),
-              TTextField(
-                label: Text('File Size'),
-                controller: fileSizeConstroller,
-                maxLines: 1,
-                // isSelectedAll: true,
-                onSubmitted: (value) => _onSaved(),
-              ),
-              TTextField(
-                label: Text('Description'),
-                controller: descriptionConstroller,
-                maxLines: null,
-              ),
-              // direct link
-              SwitchListTile.adaptive(
-                title: Text('Is Direct Download Link'),
-                value: file.isDirectLink,
-                onChanged: (value) {
-                  file = file.copyWith(isDirectLink: value);
-                  setState(() {});
-                },
-              ),
-              // types
-              UploaderFileChooser(
-                value: file.type,
-                onChanged: (value) {
-                  file = file.copyWith(type: value);
-                  setState(() {});
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
+      body: _getForms(),
       floatingActionButton: FloatingActionButton(
         onPressed: _onSaved,
         child: Icon(Icons.save_as_rounded),
+      ),
+    );
+  }
+
+  Widget _getForms() {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          spacing: 15,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // name
+            TTagsWrapView(
+              title: Text('Name Tags'),
+              values: ['စာစဥ် (0-0)', 'book (0-0)', 'Chapter (0-0)'],
+              onClicked: (value) {
+                nameConstroller.text = '${nameConstroller.text} $value';
+              },
+            ),
+            TTextField(
+              label: Text('Name'),
+              controller: nameConstroller,
+              maxLines: 1,
+              isSelectedAll: true,
+              autofocus: true,
+              onSubmitted: (value) => _onSaved(),
+            ),
+            TTextField(
+              label: Text('File Url'),
+              controller: fileUrlConstroller,
+              maxLines: 1,
+              isSelectedAll: true,
+            ),
+            TTextField(
+              label: Text('File Size'),
+              controller: fileSizeConstroller,
+              maxLines: 1,
+              // isSelectedAll: true,
+              onSubmitted: (value) => _onSaved(),
+            ),
+            TTextField(
+              label: Text('Description'),
+              controller: descriptionConstroller,
+              maxLines: null,
+            ),
+            // direct link
+            SwitchListTile.adaptive(
+              title: Text('Is Direct Download Link'),
+              value: file.isDirectLink,
+              onChanged: (value) {
+                file = file.copyWith(isDirectLink: value);
+                setState(() {});
+              },
+            ),
+            // types
+            UploaderFileChooser(
+              value: file.type,
+              onChanged: (value) {
+                file = file.copyWith(type: value);
+                setState(() {});
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

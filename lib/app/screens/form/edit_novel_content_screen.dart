@@ -39,7 +39,7 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen>
   bool isLoading = false;
   List<UploaderFile> uploaderList = [];
 
-  void init() async {
+  Future<void> init() async {
     setState(() {
       isLoading = true;
     });
@@ -59,34 +59,70 @@ class _EditNovelContentScreenState extends State<EditNovelContentScreen>
         title: Text(widget.novel.title),
         actions: [IconButton(onPressed: init, icon: Icon(Icons.refresh))],
       ),
-      body: _getListWidget(),
+      body: _getView(),
       floatingActionButton: _getFloatingBtn(),
     );
   }
 
-  Widget _getListWidget() {
+  Widget _getView() {
     if (isLoading) {
       return Center(child: TLoaderRandom());
     }
     return DropTarget(
       enable: true,
       onDragDone: onDragDone,
-      child: CustomScrollView(
-        slivers: [
-          SliverList.builder(
-            itemCount: uploaderList.length,
-            itemBuilder: (context, index) => UploaderFileItem(
-              file: uploaderList[index],
-              onClicked: (file) {
-                goRoute(
-                  context,
-                  builder: (context) => EditFileContentScreen(file: file),
-                );
-              },
-              onRightClicked: _onRightClicked,
+      child: RefreshIndicator.adaptive(
+        onRefresh: init,
+        child: CustomScrollView(
+          slivers: [
+            _getHeaders(),
+            SliverToBoxAdapter(child: Divider()),
+            _getListWidget(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _getHeaders() {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            ExpansionTile(
+              title: Text('Tags'),
+              children: [
+                TTagsWrapView(
+                  values: widget.novel.getTags,
+                  type: TTagsTypes.text,
+                ),
+              ],
             ),
-          ),
-        ],
+            widget.novel.desc.isEmpty
+                ? SizedBox.shrink()
+                : ExpansionTile(
+                    title: Text('Description'),
+                    children: [SelectableText(widget.novel.desc)],
+                  ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  SliverList _getListWidget() {
+    return SliverList.builder(
+      itemCount: uploaderList.length,
+      itemBuilder: (context, index) => UploaderFileItem(
+        file: uploaderList[index],
+        onClicked: (file) {
+          goRoute(
+            context,
+            builder: (context) => EditFileContentScreen(file: file),
+          );
+        },
+        onRightClicked: _onRightClicked,
       ),
     );
   }

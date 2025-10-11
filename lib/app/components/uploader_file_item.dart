@@ -25,26 +25,23 @@ class UploaderFileItem extends StatelessWidget {
         cursor: SystemMouseCursors.click,
         child: Card(
           child: Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Row(
-              // crossAxisAlignment: CrossAxisAlignment.start,
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 5,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 5,
-                    children: [
-                      Text(file.name),
-                      Text('Type: ${file.type.name.toCaptalize()}'),
-                      Text('Size: ${file.fileSize}'),
-                      Text('Direct Url: ${file.isDirectLink ? 'Yes' : 'No'}'),
-                      Text('ရက်စွဲ: ${file.date.toParseTime()}'),
-                    ],
-                  ),
-                ),
+                Text(file.name),
+                Text('Type: ${file.type.name.toCaptalize()}'),
+                Text('Size: ${file.fileSize}'),
+                Text('Direct Url: ${file.isDirectLink ? 'Yes' : 'No'}'),
+                Text('ရက်စွဲ: ${file.date.toParseTime()}'),
+                file.description.isEmpty
+                    ? SizedBox.shrink()
+                    : ExpansionTile(
+                        title: Text('Description'),
+                        children: [Text(file.description)],
+                      ),
               ],
             ),
           ),

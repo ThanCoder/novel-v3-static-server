@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/core/models/novel.dart';
+import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/novel_v3_uploader.dart';
 import 'package:novel_v3_static_server/more_libs/novel_v3_uploader_v1.3.0/services/server_file_services.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/than_pkg.dart';
@@ -26,6 +27,7 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
   late Novel novel;
   String? errorTitle;
   List<String> alreadyTitleList = [];
+  List<Novel> novelList = [];
 
   @override
   void initState() {
@@ -41,13 +43,13 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
     WidgetsBinding.instance.addPostFrameCallback((e) => init());
   }
 
-  void init() {
-    // alreadyTitleList = context
-    //     .read<NovelServices>()
-    //     .getList
-    //     .where((e) => e.title != novel.title)
-    //     .map((e) => e.title)
-    //     .toList();
+  void init() async {
+    novelList = await NovelServices.getLocalDatabase.getAll();
+    alreadyTitleList = novelList
+        .where((e) => e.title != novel.title)
+        .map((e) => e.title)
+        .toList();
+    if (!mounted) return;
 
     _checkAlreadyTitle();
   }
@@ -219,9 +221,8 @@ class _EditNovelScreenState extends State<EditNovelScreen> {
   }
 
   List<String> get _getAllTags {
-    final list = [];
     List<String> allTags = [];
-    for (var novel in list) {
+    for (var novel in novelList) {
       allTags.addAll(novel.getTags);
     }
     return allTags.toSet().toList();
